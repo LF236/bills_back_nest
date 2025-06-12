@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Rol } from 'src/rols/entities/rol.entity';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
 @ObjectType()
@@ -21,4 +22,13 @@ export class User {
 	})
 	password: string;
 
+	@Column({
+		type: 'boolean',
+		default: false,
+	})
+	is_active: boolean;
+
+	@ManyToMany(() => Rol, (rol) => rol.users)
+	@JoinTable()
+	roles: Rol[];
 }

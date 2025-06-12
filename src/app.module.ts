@@ -6,6 +6,10 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { User } from './user/entities/user.entity';
+import { RolsModule } from './rols/rols.module';
+import { PermissionsModule } from './permissions/permissions.module';
+import { Rol } from './rols/entities/rol.entity';
+import { Permission } from './permissions/entities/permission.entity';
 @Module({
 	imports: [
 		ConfigModule.forRoot(),
@@ -19,9 +23,11 @@ import { User } from './user/entities/user.entity';
 			username: process.env.DB_USER || 'postgres',
 			password: process.env.DB_PASSWORD || 'password',
 			database: process.env.DB_NAME || 'mydatabase',
-			entities: [User],
+			entities: [User, Rol, Permission],
 			synchronize: false	
-		})
+		}),
+		RolsModule,
+		PermissionsModule
 	],
 	providers: [AppService],
 })
