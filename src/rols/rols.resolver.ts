@@ -6,30 +6,33 @@ import { UpdateRolInput } from './dto/update-rol.input';
 
 @Resolver(() => Rol)
 export class RolsResolver {
-  constructor(private readonly rolsService: RolsService) {}
+	constructor(private readonly rolsService: RolsService) {}
 
-  @Mutation(() => Rol)
-  createRol(@Args('createRolInput') createRolInput: CreateRolInput) {
-    return this.rolsService.create(createRolInput);
-  }
+	@Mutation(() => Rol)
+	createRol(@Args('createRolInput') createRolInput: CreateRolInput) {
+		console.log(createRolInput);
+		console.log('HOLA');
+		
+		return this.rolsService.create(createRolInput);
+	}
 
-  @Query(() => [Rol], { name: 'rols' })
-  findAll() {
-    return this.rolsService.findAll();
-  }
-
-  @Query(() => Rol, { name: 'rol' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.rolsService.findOne(id);
-  }
-
-  @Mutation(() => Rol)
-  updateRol(@Args('updateRolInput') updateRolInput: UpdateRolInput) {
-    return this.rolsService.update(updateRolInput.id, updateRolInput);
-  }
-
-  @Mutation(() => Rol)
-  removeRol(@Args('id', { type: () => Int }) id: number) {
-    return this.rolsService.remove(id);
-  }
+	// // @Query(() => [Rol], { name: 'rols' })
+	// // findAll() {
+	// // 	return this.rolsService.findAll();
+	// // }
+	// //
+	// // @Query(() => Rol, { name: 'rol' })
+	// // findOne(@Args('id', { type: () => Int }) id: number) {
+	// // 	return this.rolsService.findOne(id);
+	// // }
+	// //
+	// // @Mutation(() => Rol)
+	// // updateRol(@Args('updateRolInput') updateRolInput: UpdateRolInput) {
+	// // 	return this.rolsService.update(updateRolInput.id, updateRolInput);
+	// // }
+	//
+	// @Mutation(() => Rol)
+	// removeRol(@Args('id', { type: () => Int }) id: number) {
+	// 	return this.rolsService.remove(id);
+	// }
 }

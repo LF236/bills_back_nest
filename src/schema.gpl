@@ -1,0 +1,86 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Bill {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Rol {
+  id: ID!
+  name: String!
+  description: String
+  is_active: Boolean!
+}
+
+type User {
+  id: ID!
+  email: String!
+}
+
+type Permission {
+  id: ID!
+  name: String!
+  description: String
+  is_active: Boolean!
+}
+
+type Query {
+  bill(id: Int!): Bill!
+  user(id: Int!): User!
+  permissions: [Permission!]!
+  permission(id: Int!): Permission!
+}
+
+type Mutation {
+  createBill(createBillInput: CreateBillInput!): Bill!
+  updateBill(updateBillInput: UpdateBillInput!): Bill!
+  removeBill(id: Int!): Bill!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+  createRol(createRolInput: CreateRolInput!): Rol!
+  createPermission(createPermissionInput: CreatePermissionInput!): Permission!
+  updatePermission(updatePermissionInput: UpdatePermissionInput!): Permission!
+  removePermission(id: Int!): Permission!
+}
+
+input CreateBillInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateBillInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateRolInput {
+  name: String!
+  description: String
+  is_active: Boolean! = true
+}
+
+input CreatePermissionInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdatePermissionInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}

@@ -8,8 +8,9 @@ async function bootstrap() {
 	app.setGlobalPrefix('api');
 	app.useGlobalPipes(
 		new ValidationPipe({
-			whitelist: true,
-			forbidNonWhitelisted: true,
+			//whitelist: true,
+			//transform: true,
+			//forbidNonWhitelisted: true,
 			exceptionFactory: (errors: ValidationError[]) => {
 			    const formattedErrors = errors.reduce((acc, err) => {
 					if(err.constraints) {
@@ -31,11 +32,12 @@ async function bootstrap() {
 					}
 					return acc;
 				}, {} as Record<string, string[]>);
-				
+
 				return new BadRequestException({
 					statusCode: 400,
 					message: 'Bad Request',
 					errors: formattedErrors,
+					defails: formattedErrors
 				})
 			},
 		})

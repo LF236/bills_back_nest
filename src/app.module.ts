@@ -10,6 +10,11 @@ import { RolsModule } from './rols/rols.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { Rol } from './rols/entities/rol.entity';
 import { Permission } from './permissions/entities/permission.entity';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { join } from 'path';
+
+import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 @Module({
 	imports: [
 		ConfigModule.forRoot(),
@@ -26,6 +31,19 @@ import { Permission } from './permissions/entities/permission.entity';
 			entities: [User, Rol, Permission],
 			synchronize: false	
 		}),
+
+		GraphQLModule.forRootAsync({
+			driver: ApolloDriver,
+			useFactory: async () => ({
+				autoSchemaFile: join(process.cwd(), 'src/schema.gpl'),
+				playground: false,		
+				plugins: [
+					ApolloServerPluginLandingPageLocalDefault({ embed: true })
+				]
+			})
+		}),
+
+
 		RolsModule,
 		PermissionsModule
 	],

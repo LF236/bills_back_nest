@@ -5,6 +5,8 @@ import { UpdateRolInput } from './dto/update-rol.input';
 @Injectable()
 export class RolsService {
   create(createRolInput: CreateRolInput) {
+	  console.log(createRolInput);
+	  console.log(createRolInput);
     return 'This action adds a new rol';
   }
 
