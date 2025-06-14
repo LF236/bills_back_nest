@@ -15,6 +15,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
+import { CommonModule } from './common/common.module';
 @Module({
 	imports: [
 		ConfigModule.forRoot(),
@@ -45,7 +46,8 @@ import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin
 
 
 		RolsModule,
-		PermissionsModule
+		PermissionsModule,
+		CommonModule
 	],
 	providers: [AppService],
 })

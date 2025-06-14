@@ -17,4 +17,8 @@ export class CreateRolInput {
 	@IsBoolean()
 	@IsOptional()
 	is_active?: boolean;
+
+	@Field(() => [String], { nullable: true })
+	@IsOptional()
+	permissions?: string[];
 }

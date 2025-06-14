@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Rol } from 'src/rols/entities/rol.entity';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'permissions' })
 @ObjectType()
@@ -28,4 +29,32 @@ export class Permission {
 	})
 	@Field(() => Boolean, { defaultValue: true })
 	is_active: boolean;
+	
+	@Column({
+		type: 'timestamp',
+		default: () => 'CURRENT_TIMESTAMP',
+	})
+	@Field(() => Date, { defaultValue: new Date() })
+	created_at: Date;
+
+	@Column({
+		type: 'timestamp',
+		default: () => 'CURRENT_TIMESTAMP',
+	})
+	@Field(() => Date, { defaultValue: new Date() })
+	updated_at: Date;
+
+	@Column({
+		type: 'timestamp',
+		nullable: true,
+		default: null,
+	})
+	@Field(() => Date, { nullable: true })
+	deleted_at: Date | null;
+
+
+	@ManyToMany(() => Rol, (rol) => rol.permissions, {nullable: true, lazy: true})
+	@Field(() => [Rol], { nullable: true })
+	roles?: Rol[];
+
 }
