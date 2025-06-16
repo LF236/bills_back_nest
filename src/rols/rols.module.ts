@@ -13,5 +13,9 @@ import { PermissionsModule } from 'src/permissions/permissions.module';
 		TypeOrmModule.forFeature([Rol]),
 		PermissionsModule
 	],
+	exports: [
+		RolsService,
+		TypeOrmModule
+	]
 })
 export class RolsModule {}

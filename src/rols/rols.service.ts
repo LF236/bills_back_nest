@@ -93,11 +93,41 @@ export class RolsService {
 		return res;
 	}
 
-	update(id: number, updateRolInput: UpdateRolInput) {
-		return `This action updates a #${id} rol`;
+	async update(id: string, updateRolInput: UpdateRolInput) : Promise<Rol> {
+		const role = await this.findOne(id);
+		const { permissions = [], ...rest } = updateRolInput;
+
+		// Validate permissions
+		if (permissions && permissions.length > 0) {
+			const permissionsFound = await this.permissionsService.findByIds(permissions);
+			if (permissionsFound.length !== permissions.length) {
+				const notFoundPermissions = permissions.filter(p => !permissionsFound.some(pf => pf.id === p));
+				throw new BadRequestException(`Permissions with ids ${notFoundPermissions.join(', ')} not found`);
+			}
+
+			role.permissions = permissionsFound;
+		} else {
+			role.permissions = [];
+		}
+
+		Object.assign(role, rest);
+
+		return await this.roleRepository.save(role);
 	}
 
-	remove(id: number) {
-		return `This action removes a #${id} rol`;
+	async remove(id: string) : Promise<Rol> {
+		const role = await this.findOne(id);
+		
+		const query = this.roleRepository.createQueryBuilder()
+			.update()
+			.set({ is_active: false })
+			.where('id = :id', { id });
+
+		await query.execute();
+
+		return {
+			...role,
+			is_active: false
+		};
 	}
 }

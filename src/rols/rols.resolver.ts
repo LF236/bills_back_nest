@@ -5,6 +5,7 @@ import { CreateRolInput } from './dto/create-rol.input';
 import { UpdateRolInput } from './dto/update-rol.input';
 import { PaginationArgs } from 'src/common/dtos/args/pagination.args';
 import { SearchArgs } from 'src/common/dtos/args/search.args';
+import { ParseUUIDPipe } from '@nestjs/common';
 
 @Resolver(() => Rol)
 export class RolsResolver {
@@ -29,15 +30,15 @@ export class RolsResolver {
 	async findOne(@Args('id', { type: () => ID }) id: string) : Promise<Rol> {
 		return this.rolsService.findOne(id);
 	}
+	
+	@Mutation(() => Rol)
+	updateRol(@Args('updateRolInput') updateRolInput: UpdateRolInput) {
+		return this.rolsService.update(updateRolInput.id, updateRolInput);
+	}
 
 	
-	// // @Mutation(() => Rol)
-	// // updateRol(@Args('updateRolInput') updateRolInput: UpdateRolInput) {
-	// // 	return this.rolsService.update(updateRolInput.id, updateRolInput);
-	// // }
-	//
-	// @Mutation(() => Rol)
-	// removeRol(@Args('id', { type: () => Int }) id: number) {
-	// 	return this.rolsService.remove(id);
-	// }
+	@Mutation(() => Rol)
+	removeRol(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
+		return this.rolsService.remove(id);
+	}
 }

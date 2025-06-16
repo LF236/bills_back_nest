@@ -15,7 +15,6 @@ export class PermissionsResolver {
 	createPermission(
 		@Args('createPermissionInput') createPermissionInput: CreatePermissionInput
 	) {
-		console.log(createPermissionInput);
 		return this.permissionsService.create(createPermissionInput);
 	}
 

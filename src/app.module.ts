@@ -16,6 +16,7 @@ import { join } from 'path';
 
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 import { CommonModule } from './common/common.module';
+import { SeedModule } from './seed/seed.module';
 @Module({
 	imports: [
 		ConfigModule.forRoot(),
@@ -47,7 +48,8 @@ import { CommonModule } from './common/common.module';
 
 		RolsModule,
 		PermissionsModule,
-		CommonModule
+		CommonModule,
+		SeedModule
 	],
 	providers: [AppService],
 })

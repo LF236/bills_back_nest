@@ -10,7 +10,8 @@ import { Permission } from './entities/permission.entity';
 		TypeOrmModule.forFeature([Permission]),
 	],
 	exports: [
-		PermissionsService
+		PermissionsService,
+		TypeOrmModule
 	]
 })
 export class PermissionsModule {}

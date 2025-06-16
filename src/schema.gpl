@@ -56,9 +56,12 @@ type Mutation {
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
   createRol(createRolInput: CreateRolInput!): Rol!
+  updateRol(updateRolInput: UpdateRolInput!): Rol!
+  removeRol(id: ID!): Rol!
   createPermission(createPermissionInput: CreatePermissionInput!): Permission!
   updatePermission(updatePermissionInput: UpdatePermissionInput!): Permission!
   removePermission(id: ID!): Permission!
+  seedDatabase: Boolean!
 }
 
 input CreateBillInput {
@@ -88,6 +91,14 @@ input CreateRolInput {
   description: String
   is_active: Boolean! = true
   permissions: [String!]
+}
+
+input UpdateRolInput {
+  name: String
+  description: String
+  is_active: Boolean = true
+  permissions: [String!]
+  id: ID!
 }
 
 input CreatePermissionInput {
