@@ -11,19 +11,7 @@ export class AuthController {
 	create(
 		@Body() singUpDto: SingUpDto
 	) {
-		const {password, confirmPassword} = singUpDto;
-		if (password !== confirmPassword) {
-			throw new BadRequestException({
-				statusCode: 400,
-				message: 'Bad Request',
-				errors: {
-					confirmPassword: ['Passwords do not match'],
-				},
-			})
-		}
-
-		console.log(singUpDto);
-		return 1
+		return this.authService.createUser(singUpDto);
 	}
   
 }
