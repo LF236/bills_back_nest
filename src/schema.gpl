@@ -78,11 +78,13 @@ input UpdateBillInput {
 input CreateUserInput {
   email: String!
   password: String!
+  is_active: Boolean = false
 }
 
 input UpdateUserInput {
   email: String
   password: String
+  is_active: Boolean = false
   id: Int!
 }
 

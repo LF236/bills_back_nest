@@ -20,8 +20,11 @@ export class AuthService {
 			})
 		}
 
-		const user = await this.userService.create(singUpDto);
-		
+		const user = await this.userService.create({
+			...singUpDto,
+			is_active: false,
+		});
+		return user;		
 
 	}
 }
