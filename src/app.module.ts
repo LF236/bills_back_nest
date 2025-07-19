@@ -17,6 +17,9 @@ import { join } from 'path';
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 import { CommonModule } from './common/common.module';
 import { SeedModule } from './seed/seed.module';
+import { CommandModule } from 'nestjs-command';
+import { CreateSuperuserCommand } from './commands/create-superuser.command';
+import { AuthService } from './auth/auth.service';
 @Module({
 	imports: [
 		ConfigModule.forRoot(),
@@ -49,8 +52,14 @@ import { SeedModule } from './seed/seed.module';
 		RolsModule,
 		PermissionsModule,
 		CommonModule,
-		SeedModule
+		SeedModule,
+		CommandModule
 	],
-	providers: [AppService],
+	providers: [
+		AppService,
+		// COMMANDS
+		CreateSuperuserCommand
+	],
+	exports: [],
 })
 export class AppModule {}

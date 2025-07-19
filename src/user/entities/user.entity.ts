@@ -28,7 +28,7 @@ export class User {
 	})
 	is_active: boolean;
 
-	@ManyToMany(() => Rol, (rol) => rol.users)
+	@ManyToMany(() => Rol, (rol) => rol.users, { eager: true, cascade: true, onDelete: 'CASCADE' })
 	@JoinTable()
 	roles: Rol[];
 }
