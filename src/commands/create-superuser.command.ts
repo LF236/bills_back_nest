@@ -3,12 +3,13 @@ import { info } from "console";
 import { Command, Option } from "nestjs-command";
 import { AuthService } from "src/auth/auth.service";
 import { SingUpDto } from "src/auth/dto/singup.dto";
-import { UserService } from "src/user/user.service";
+//import { UserService } from "src/user/user.service";
 
+// TODO: Uncomment the UserService import when you have it implemented
 @Injectable()
 export class CreateSuperuserCommand {
 	constructor(
-		private readonly userService: UserService
+		//private readonly userService: UserService
 	) {};
 
 	@Command({
@@ -37,8 +38,8 @@ export class CreateSuperuserCommand {
 		singupDto.email = email;
 		singupDto.password = password;
 		singupDto.confirmPassword = password;
-		const user = await this.userService.create(singupDto, true);
+		//const user = await this.userService.create(singupDto, true);
 
-		console.log(user);
+		
 	}
 }

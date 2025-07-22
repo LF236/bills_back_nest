@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 import { Permission } from 'src/permissions/entities/permission.entity';
-import { User } from 'src/user/entities/user.entity';
+import { UserOrmEntity } from 'src/user/infrastructure/orm/typeorm/user.orm-entity';
+//import { User } from 'src/user/entities/user.entity';
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'roles' })
@@ -48,8 +49,8 @@ export class Rol {
 	deleted_at: Date | null;
 
 
-	@ManyToMany(() => User, (user) => user.roles)
-	users: User[];
+	@ManyToMany(() => UserOrmEntity, (user) => user.roles)
+	users: UserOrmEntity[];
 
 
 	@ManyToMany(() => Permission, (permission) => permission.roles, {cascade: true, lazy: true})

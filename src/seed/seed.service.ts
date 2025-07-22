@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Permission } from 'src/permissions/entities/permission.entity';
 import { PermissionsService } from 'src/permissions/permissions.service';
 import { Rol } from 'src/rols/entities/rol.entity';
-import { User } from 'src/user/entities/user.entity';
+// TODO: Uncomment when you have the User entity implemented
+//import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { SEED_PERMISSIONS, SEED_ROLES } from './data/data';
 import { RolsService } from 'src/rols/rols.service';
@@ -16,9 +17,9 @@ export class SeedService {
 
 		@InjectRepository(Permission)
 		private readonly permissionRepository: Repository<Permission>,
-
-		@InjectRepository(User)
-		private readonly userRepository: Repository<User>,
+		// TODO: Uncomment when you have the User entity implemented
+		// @InjectRepository(User)
+		// private readonly userRepository: Repository<User>,
 
 		private readonly permissionService: PermissionsService,
 		private readonly rolService: RolsService
@@ -47,10 +48,11 @@ export class SeedService {
 			.execute();
 
 		// Delete users
-		await this.userRepository.createQueryBuilder()
-			.delete()
-			.where({})
-			.execute();
+		// TODO: Uncomment when you have the User entity implemented
+		// await this.userRepository.createQueryBuilder()
+		// 	.delete()
+		// 	.where({})
+		// 	.execute();
 	}
 
 	private async createPermissions() : Promise<void> {

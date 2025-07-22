@@ -1,18 +1,14 @@
-import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 import { Rol } from 'src/rols/entities/rol.entity';
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
-@ObjectType()
-export class User {
+export class UserOrmEntity {
 	@PrimaryGeneratedColumn('uuid')
-	@Field(() => ID)
 	id: string;
 	
 	@Column({
 		unique: true,
 	})
-	@Field(() => String)
 	email: string;
 
 	@Column({
