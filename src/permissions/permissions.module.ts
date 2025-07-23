@@ -2,16 +2,30 @@ import { Module } from '@nestjs/common';
 import { PermissionsService } from './permissions.service';
 import { PermissionsResolver } from './permissions.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Permission } from './entities/permission.entity';
+import { PermissionOrmEntity } from './infrastructure/orm/typeorm/permission.orm-entity';
+import { PermissionOrmRepositoryImp } from './infrastructure/orm/typeorm/permission.repository.impl';
+import { CreatePermissionUseCase } from './application/uses-cases/crate-permission.use-case';
 
 @Module({
-	providers: [PermissionsResolver, PermissionsService],
+	providers: [
+		PermissionsResolver, 
+		PermissionsService,
+
+		{
+			provide: 'PermissionRepository',
+			useClass: PermissionOrmRepositoryImp
+		},
+
+		// Use Cases
+		CreatePermissionUseCase
+	],
 	imports: [
-		TypeOrmModule.forFeature([Permission]),
+		TypeOrmModule.forFeature([PermissionOrmEntity]),
 	],
 	exports: [
 		PermissionsService,
-		TypeOrmModule
+		TypeOrmModule,
+		'PermissionRepository'
 	]
 })
 export class PermissionsModule {}

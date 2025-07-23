@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePermissionInput } from './dto/create-permission.input';
-import { UpdatePermissionInput } from './dto/update-permission.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Permission } from './entities/permission.entity';
 import { Repository } from 'typeorm';
 import { PaginationArgs } from 'src/common/dtos/args/pagination.args';
 import { SearchArgs } from 'src/common/dtos/args/search.args';
-
+import { CreatePermissionInput } from './application/dto/inputs/create-permission.input';
+import { UpdatePermissionInput } from './application/dto/inputs/update-permission.input';
+CreatePermissionInput
 @Injectable()
 export class PermissionsService {
 	constructor(

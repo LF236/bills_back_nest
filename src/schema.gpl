@@ -41,12 +41,21 @@ type Rol {
   permissions: [Permission!]
 }
 
+type PermissionGraphQL {
+  id: ID!
+  name: String!
+  description: String
+  is_active: Boolean!
+  created_at: DateTime!
+  updated_at: DateTime!
+  deleted_at: DateTime
+  roles: [String!]
+}
+
 type Query {
   bill(id: Int!): Bill!
   rols(offset: Int = 0, limit: Int = 10, search: String): [Rol!]!
   rol(id: ID!): Rol!
-  permissions(offset: Int = 0, limit: Int = 10, search: String): [Permission!]!
-  permission(id: ID!): Permission!
 }
 
 type Mutation {
@@ -57,9 +66,7 @@ type Mutation {
   createRol(createRolInput: CreateRolInput!): Rol!
   updateRol(updateRolInput: UpdateRolInput!): Rol!
   removeRol(id: ID!): Rol!
-  createPermission(createPermissionInput: CreatePermissionInput!): Permission!
-  updatePermission(updatePermissionInput: UpdatePermissionInput!): Permission!
-  removePermission(id: ID!): Permission!
+  createPermission(createPermissionInput: CreatePermissionInput!): PermissionGraphQL!
   seedDatabase: Boolean!
 }
 
@@ -99,11 +106,4 @@ input CreatePermissionInput {
   name: String!
   description: String
   is_active: Boolean
-}
-
-input UpdatePermissionInput {
-  name: String
-  description: String
-  is_active: Boolean
-  id: ID!
 }
