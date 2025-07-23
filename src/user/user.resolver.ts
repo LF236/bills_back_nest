@@ -14,6 +14,5 @@ export class UserResolver {
 	@Mutation(() => UserGraphQL)
 	createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
 		return this.createUserUseCase.execute(createUserInput);
-
 	} 
 }

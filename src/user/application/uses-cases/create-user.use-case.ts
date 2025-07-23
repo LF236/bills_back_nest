@@ -1,6 +1,6 @@
 import { UserGraphQL } from "src/user/interface/graphql/user.graphql-type";
 import { CreateUserInput } from "../dto/create-user.input";
-import { Inject, Injectable } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { IUserRepository } from "src/user/domain/interfaces/iuser.repository";
 
 @Injectable()
@@ -11,11 +11,12 @@ export class CreateUserUseCase {
 	) {};
 
 	async execute(data: CreateUserInput) : Promise<UserGraphQL> {
-		return {
-			id: "1",
-			email: "jow@gmail.com",
-			is_active: true,
-			roles: ["admin", "user"]
+		const exists = await this.userRepository.findByEmail(data.email);
+		if (exists) {
+			throw new BadRequestException("User already exists with this email");
 		}
+
+		const createdUser = await this.userRepository.save(data);
+		return createdUser.getGraphQLType();
 	}
 }

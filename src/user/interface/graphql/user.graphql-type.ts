@@ -13,4 +13,11 @@ export class UserGraphQL {
 
 	@Field(() => [String])
 	roles: string[];
+
+	constructor(id: string, email: string, is_active: boolean, roles: string[]) {
+		this.id = id;
+		this.email = email;
+		this.is_active = is_active;
+		this.roles = roles;
+	}
 }
