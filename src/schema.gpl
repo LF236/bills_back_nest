@@ -7,6 +7,13 @@ type Bill {
   exampleField: Int!
 }
 
+type UserGraphQL {
+  id: ID!
+  email: String!
+  is_active: Boolean!
+  roles: [String!]!
+}
+
 type Permission {
   id: ID!
   name: String!
@@ -34,14 +41,8 @@ type Rol {
   permissions: [Permission!]
 }
 
-type User {
-  id: ID!
-  email: String!
-}
-
 type Query {
   bill(id: Int!): Bill!
-  user(id: Int!): User!
   rols(offset: Int = 0, limit: Int = 10, search: String): [Rol!]!
   rol(id: ID!): Rol!
   permissions(offset: Int = 0, limit: Int = 10, search: String): [Permission!]!
@@ -52,9 +53,7 @@ type Mutation {
   createBill(createBillInput: CreateBillInput!): Bill!
   updateBill(updateBillInput: UpdateBillInput!): Bill!
   removeBill(id: Int!): Bill!
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User!
+  createUser(createUserInput: CreateUserInput!): UserGraphQL!
   createRol(createRolInput: CreateRolInput!): Rol!
   updateRol(updateRolInput: UpdateRolInput!): Rol!
   removeRol(id: ID!): Rol!
@@ -79,13 +78,6 @@ input CreateUserInput {
   email: String!
   password: String!
   is_active: Boolean = false
-}
-
-input UpdateUserInput {
-  email: String
-  password: String
-  is_active: Boolean = false
-  id: Int!
 }
 
 input CreateRolInput {
