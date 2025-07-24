@@ -41,6 +41,9 @@ export class RolOrmEntity {
 	users: UserOrmEntity[];
 
 	
-	@ManyToMany(() => PermissionOrmEntity, (permission) => permission.roles, { cascade: true, lazy: true })
+	@ManyToMany(() => PermissionOrmEntity, (permission) => permission.roles, { 
+		cascade: ['insert', 'update'], 
+		lazy: true 
+	})
 	permissions?: PermissionOrmEntity[];	
 }

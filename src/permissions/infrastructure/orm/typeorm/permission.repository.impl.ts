@@ -4,6 +4,7 @@ import { IPermissionRepository } from "src/permissions/domain/interface/ipermiss
 import { PermissionOrmEntity } from "./permission.orm-entity";
 import { Repository } from "typeorm";
 import { Permission } from "src/permissions/domain/entities/permission.entity";
+import { CreatePermissionInput } from "src/permissions/application/dto/inputs/create-permission.input";
 
 @Injectable()
 export class PermissionOrmRepositoryImp implements IPermissionRepository {
@@ -12,9 +13,16 @@ export class PermissionOrmRepositoryImp implements IPermissionRepository {
 		private readonly repo: Repository<PermissionOrmEntity>
 	) {}
 
-	async create(permissionInput: any): Promise<Permission> {
-		// Implement the logic to save a permission
-		throw new Error("Method not implemented.");
+	async create(permissionInput: CreatePermissionInput): Promise<Permission> {
+		const { name, description } = permissionInput;		
+		let newPermission = this.repo.create({
+			name,
+			description
+		});
+
+		newPermission = await this.repo.save(newPermission);
+
+		return Permission.createFromObj(newPermission);	
 	}
 
 	async findAll(): Promise<Permission[]> {

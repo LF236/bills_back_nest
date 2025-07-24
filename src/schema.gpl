@@ -105,5 +105,4 @@ input UpdateRolInput {
 input CreatePermissionInput {
   name: String!
   description: String
-  is_active: Boolean
 }

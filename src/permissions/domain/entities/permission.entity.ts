@@ -1,3 +1,5 @@
+import { PermissionGraphQL } from "src/permissions/interface/graphql/permission.graphql-type";
+
 export class Permission {
 	constructor(
 		private readonly id: string,
@@ -18,6 +20,19 @@ export class Permission {
 			data.created_at,
 			data.updated_at,
 			data.roles || null
+		);
+	}
+
+	getGraphQLType() : PermissionGraphQL {
+		return new PermissionGraphQL(
+			this.id,
+			this.name,
+			this.description ?? '',
+			this.is_active,
+			this.created_at,
+			this.updated_at,
+			null, // deleted_at is not set in this context
+			this.roles ? this.roles.map(role => role.id) : []
 		);
 	}
 }

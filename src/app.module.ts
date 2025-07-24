@@ -20,6 +20,8 @@ import { CommandModule } from 'nestjs-command';
 import { CreateSuperuserCommand } from './commands/create-superuser.command';
 import { AuthService } from './auth/auth.service';
 import { UserOrmEntity } from './user/infrastructure/orm/typeorm/user.orm-entity';
+import { PermissionOrmEntity } from './permissions/infrastructure/orm/typeorm/permission.orm-entity';
+import { RolOrmEntity } from './rols/infrastructure/orm/typeorm/rol.orm-entity';
 @Module({
 	imports: [
 		ConfigModule.forRoot(),
@@ -33,7 +35,7 @@ import { UserOrmEntity } from './user/infrastructure/orm/typeorm/user.orm-entity
 			username: process.env.DB_USER || 'postgres',
 			password: process.env.DB_PASSWORD || 'password',
 			database: process.env.DB_NAME || 'mydatabase',
-			entities: [UserOrmEntity, Rol, Permission],
+			entities: [UserOrmEntity, PermissionOrmEntity, RolOrmEntity],
 			synchronize: false	
 		}),
 

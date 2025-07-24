@@ -1,7 +1,8 @@
+import { CreatePermissionInput } from "src/permissions/application/dto/inputs/create-permission.input";
 import { Permission } from "../entities/permission.entity";
 
 export interface IPermissionRepository {
-	create(createPermissionInput: any) : Promise<Permission>;
+	create(createPermissionInput: CreatePermissionInput) : Promise<Permission>;
 	findByName(name: string) : Promise<Permission | null>;
 	findAll() : Promise<Permission[]>;
 	findOne(id: string) : Promise<Permission>;

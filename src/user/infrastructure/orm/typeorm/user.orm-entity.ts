@@ -1,4 +1,5 @@
 import { Rol } from 'src/rols/entities/rol.entity';
+import { RolOrmEntity } from 'src/rols/infrastructure/orm/typeorm/rol.orm-entity';
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
@@ -24,7 +25,8 @@ export class UserOrmEntity {
 	})
 	is_active: boolean;
 
-	@ManyToMany(() => Rol, (rol) => rol.users, { eager: true, cascade: true, onDelete: 'CASCADE' })
+	@ManyToMany(() => RolOrmEntity, (rol) => rol.users, { eager: true, cascade: true, onDelete: 'CASCADE' })
 	@JoinTable()
-	roles: Rol[];
+	roles: RolOrmEntity[];
+
 }

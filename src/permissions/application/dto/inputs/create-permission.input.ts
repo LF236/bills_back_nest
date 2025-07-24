@@ -12,9 +12,4 @@ export class CreatePermissionInput {
 	@IsOptional()
 	@IsString()
 	description?: string;
-
-	@Field(() => Boolean, { nullable: true })
-	@IsOptional()
-	@IsBoolean()
-	is_active?: boolean;
 }
