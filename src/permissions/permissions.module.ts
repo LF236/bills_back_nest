@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PermissionOrmEntity } from './infrastructure/orm/typeorm/permission.orm-entity';
 import { PermissionOrmRepositoryImp } from './infrastructure/orm/typeorm/permission.repository.impl';
 import { CreatePermissionUseCase } from './application/uses-cases/crate-permission.use-case';
+import { GetPermissionsUseCase } from './application/uses-cases/get-permissions.use-case';
 
 @Module({
 	providers: [
@@ -17,7 +18,8 @@ import { CreatePermissionUseCase } from './application/uses-cases/crate-permissi
 		},
 
 		// Use Cases
-		CreatePermissionUseCase
+		CreatePermissionUseCase,
+		GetPermissionsUseCase
 	],
 	imports: [
 		TypeOrmModule.forFeature([PermissionOrmEntity]),

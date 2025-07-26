@@ -1,6 +1,6 @@
 import { PermissionOrmEntity } from "src/permissions/infrastructure/orm/typeorm/permission.orm-entity";
 import { UserOrmEntity } from "src/user/infrastructure/orm/typeorm/user.orm-entity";
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'roles' })
 export class RolOrmEntity {
@@ -43,7 +43,7 @@ export class RolOrmEntity {
 	
 	@ManyToMany(() => PermissionOrmEntity, (permission) => permission.roles, { 
 		cascade: ['insert', 'update'], 
-		lazy: true 
 	})
+	@JoinTable()
 	permissions?: PermissionOrmEntity[];	
 }

@@ -41,6 +41,18 @@ type Rol {
   permissions: [Permission!]
 }
 
+type RolsGraphql {
+  id: ID!
+  name: String!
+  description: String
+  is_active: Boolean!
+  created_at: DateTime!
+  updated_at: DateTime!
+  deleted_at: DateTime
+  users: [String!]
+  permissions: [PermissionGraphQL!]
+}
+
 type PermissionGraphQL {
   id: ID!
   name: String!
@@ -49,13 +61,14 @@ type PermissionGraphQL {
   created_at: DateTime!
   updated_at: DateTime!
   deleted_at: DateTime
-  roles: [String!]
+  roles: [RolsGraphql!]!
 }
 
 type Query {
   bill(id: Int!): Bill!
   rols(offset: Int = 0, limit: Int = 10, search: String): [Rol!]!
   rol(id: ID!): Rol!
+  permissions(offset: Int = 0, limit: Int = 10, search: String): [PermissionGraphQL!]!
 }
 
 type Mutation {

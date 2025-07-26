@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { Permission } from "src/permissions/domain/entities/permission.entity";
+import { RolsGraphql } from "src/rols/interfaces/graphql/rols.graphql-type";
 
 @ObjectType()
 export class PermissionGraphQL {
@@ -24,8 +25,8 @@ export class PermissionGraphQL {
 	@Field(() => Date, { nullable: true, defaultValue: null })
 	deleted_at: Date | null;
 
-	@Field(() => [String], { nullable: true })
-	roles?: string[];
+	@Field(() => [RolsGraphql])
+	roles: RolsGraphql[];
 
 	constructor(
 		id: string,
@@ -35,7 +36,7 @@ export class PermissionGraphQL {
 		created_at: Date = new Date(),
 		updated_at: Date = new Date(),
 		deleted_at: Date | null = null,
-		roles?: string[]
+		roles?: RolsGraphql[]
 	) {
 		this.id = id;
 		this.name = name;

@@ -1,17 +1,19 @@
 import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
 import { PermissionsService } from './permissions.service';
-import { PaginationArgs } from 'src/common/dtos/args/pagination.args';
-import { SearchArgs } from 'src/common/dtos/args/search.args';
 import { ParseUUIDPipe } from '@nestjs/common';
+import { PaginationArgs } from 'src/common/application/dto/args/pagination.args';
+import { SearchArgs } from 'src/common/application/dto/args/search.args';
 import { Permission } from './domain/entities/permission.entity';
 import { CreatePermissionUseCase } from './application/uses-cases/crate-permission.use-case';
 import { PermissionGraphQL } from './interface/graphql/permission.graphql-type';
 import { CreatePermissionInput } from './application/dto/inputs/create-permission.input';
+import { GetPermissionsUseCase } from './application/uses-cases/get-permissions.use-case';
 
 @Resolver(() => Permission)
 export class PermissionsResolver {
 	constructor(
-		private readonly createPermissionUseCase: CreatePermissionUseCase		
+		private readonly createPermissionUseCase: CreatePermissionUseCase,
+		private readonly getPermissionsUseCase: GetPermissionsUseCase	
 	) {};
 	
 	@Mutation(() => PermissionGraphQL)
@@ -20,6 +22,15 @@ export class PermissionsResolver {
 	) {
 		return this.createPermissionUseCase.execute(createPermissionInput);
 	}
+
+	@Query(() => [PermissionGraphQL], { name: 'permissions' })
+	findAll(
+		@Args() paginationArgs: PaginationArgs,
+		@Args() searchArgs: SearchArgs
+	) {
+		return this.getPermissionsUseCase.execute(paginationArgs, searchArgs);
+	}
+
 
 	// @Mutation(() => Permission)
 	// createPermission(

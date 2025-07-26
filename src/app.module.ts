@@ -14,7 +14,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
-import { CommonModule } from './common/common.module';
 import { SeedModule } from './seed/seed.module';
 import { CommandModule } from 'nestjs-command';
 import { CreateSuperuserCommand } from './commands/create-superuser.command';
@@ -53,7 +52,6 @@ import { RolOrmEntity } from './rols/infrastructure/orm/typeorm/rol.orm-entity';
 
 		RolsModule,
 		PermissionsModule,
-		CommonModule,
 		SeedModule,
 		CommandModule
 	],

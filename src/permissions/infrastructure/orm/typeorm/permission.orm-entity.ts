@@ -42,6 +42,6 @@ export class PermissionOrmEntity {
 	})
 	deleted_at: Date | null;
 
-	@ManyToMany(() => RolOrmEntity, (rol) => rol.permissions, { cascade: true, lazy: true })
+	@ManyToMany(() => RolOrmEntity, (rol) => rol.permissions, { cascade: true })
 	roles?: RolOrmEntity[];
 }

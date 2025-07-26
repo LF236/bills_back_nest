@@ -5,6 +5,9 @@ import { PermissionOrmEntity } from "./permission.orm-entity";
 import { Repository } from "typeorm";
 import { Permission } from "src/permissions/domain/entities/permission.entity";
 import { CreatePermissionInput } from "src/permissions/application/dto/inputs/create-permission.input";
+import { PaginationArgs } from "src/common/application/dto/args/pagination.args";
+import { SearchArgs } from "src/common/application/dto/args/search.args";
+import { throws } from "assert";
 
 @Injectable()
 export class PermissionOrmRepositoryImp implements IPermissionRepository {
@@ -25,14 +28,40 @@ export class PermissionOrmRepositoryImp implements IPermissionRepository {
 		return Permission.createFromObj(newPermission);	
 	}
 
-	async findAll(): Promise<Permission[]> {
-		// Implement the logic to find all permissions
+	async findAll(pagination: PaginationArgs, searchArgs: SearchArgs): Promise<Permission[]> {
+		const { limit, offset } = pagination;
+		const { search } = searchArgs;
+
+		const query = this.repo.createQueryBuilder('permissions')
+			.take(limit)
+			.skip(offset);
+
+		query.leftJoinAndSelect('permissions.roles', 'roles');
+
+		if( search ) {
+			query.where('UPPER(permissions.name) ILIKE UPPER(:search)', { search: `%${search}%` });
+		}
+
+		const permissions = await query.getMany();
+		console.log(permissions);
+		const permissionEntities = permissions.map(permission => {
+			console.log(permission);
+			return 1;
+		} )
+
+
+
 		throw new Error("Method not implemented.");
+		
+
 	}
 
 	async findByName(name: string): Promise<Permission | null> {
-		// Implement the logic to find a permission by name
-		throw new Error("Method not implemented.");
+		const permissionEntity = await this.repo.findOne({ where: { name } });
+		if (!permissionEntity) {
+			return null;
+		}
+		return Permission.createFromObj(permissionEntity);
 	}	
 
 	async delete(id: string): Promise<void> {
