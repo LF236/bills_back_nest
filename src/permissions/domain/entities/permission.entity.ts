@@ -21,11 +21,7 @@ export class Permission {
 			data.updated_at,
 
 		);
-		
-
 		return permission;
-		
-		
 	}
 
 	getGraphQLType() : PermissionGraphQL {

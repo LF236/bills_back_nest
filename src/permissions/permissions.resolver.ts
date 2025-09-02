@@ -31,22 +31,6 @@ export class PermissionsResolver {
 		return this.getPermissionsUseCase.execute(paginationArgs, searchArgs);
 	}
 
-
-	// @Mutation(() => Permission)
-	// createPermission(
-	// 	@Args('createPermissionInput') createPermissionInput: CreatePermissionInput
-	// ) {
-	// 	return this.permissionsService.create(createPermissionInput);
-	// }
-	//
-	// @Query(() => [Permission], { name: 'permissions' })
-	// findAll(
-	// 	@Args() paginationArgs: PaginationArgs,
-	// 	@Args() searchArgs: SearchArgs
-	// ) {
-	// 	return this.permissionsService.findAll(paginationArgs, searchArgs);
-	// }
-	//
 	// @Query(() => Permission, { name: 'permission' })
 	// findOne(@Args('id', { type: () => ID }) id: string) {
 	// 	return this.permissionsService.findOne(id);
