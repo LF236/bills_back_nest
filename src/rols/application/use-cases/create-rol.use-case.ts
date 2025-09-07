@@ -20,6 +20,8 @@ export class CreateRolUseCase {
         if(permissions.length > 0) {
             this.permissionRepository.findByIds(permissions);
         }
+
+        console.log('Right now this is not implemented');
         console.log(createRolInput);
     }
 }
