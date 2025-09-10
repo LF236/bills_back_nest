@@ -1,5 +1,6 @@
-import { Rol } from "src/rols/entities/rol.entity";
+import { CreateRolInput } from "src/rols/dto/create-rol.input";
+import { Rol } from "src/rols/domain/entities/rol.entity";
 
 export interface IRolRepository {
-    create(createRolInput: any) : Promise<Rol>;
+    create(createRolInput: CreateRolInput) : Promise<Rol>;
 }

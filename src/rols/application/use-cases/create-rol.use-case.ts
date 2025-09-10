@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { IRolRepository } from "src/rols/domain/interface/irol.repository";
 import { CreateRolInput } from "../dto/inputs/create-rol.input";
 import { IPermissionRepository } from "src/permissions/domain/interface/ipermission.repository";
@@ -18,10 +18,14 @@ export class CreateRolUseCase {
         const { permissions = [] } = createRolInput;
 
         if(permissions.length > 0) {
-            this.permissionRepository.findByIds(permissions);
+            const permissionsFromDb = await this.permissionRepository.findByIds(permissions);
+            if(permissionsFromDb.length !== permissions.length) {
+                throw new BadRequestException("One or more permissions do not exist, please check the IDs");
+            }
         }
 
-        console.log('Right now this is not implemented');
-        console.log(createRolInput);
+        
+        return await this.rolRepository.create(createRolInput);
+
     }
 }

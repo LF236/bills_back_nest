@@ -76,8 +76,11 @@ export class PermissionOrmRepositoryImp implements IPermissionRepository {
 
 	async findByIds(ids: string[]): Promise<Permission[]> {
 		// Implement the logic to find permissions by multiple IDs
-		console.log('LUIGI');
-		throw new Error("Method not implemented.");
+		let permissions = await this.repo.createQueryBuilder('permissions')
+			.where('permissions.id IN (:...ids)', { ids })
+			.getMany();
+
+		return permissions.map(permission => Permission.createFromObj(permission));
 	}
 
 	async findOne(id: string): Promise<Permission> {

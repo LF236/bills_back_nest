@@ -20,7 +20,7 @@ export class RolsResolver {
 	createRol(
 		@Args('createRolInput') createRolInput: CreateRolInput
 	) {
-		this.createRolUseCase.execute(createRolInput);
+		return this.createRolUseCase.execute(createRolInput);
 	}
 
 	// constructor(private readonly rolsService: RolsService) {}
