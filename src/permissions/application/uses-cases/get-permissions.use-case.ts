@@ -14,6 +14,7 @@ export class GetPermissionsUseCase {
 	async execute(pagination: PaginationArgs, serch: SearchArgs) : Promise<Permission[]> {
 	
 		const permissions = await this.permissionRepository.findAll(pagination, serch);
+		console.log(permissions);
 		return [];
 	}
 }

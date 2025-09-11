@@ -3,4 +3,5 @@ import { Rol } from "src/rols/domain/entities/rol.entity";
 
 export interface IRolRepository {
     create(createRolInput: CreateRolInput) : Promise<Rol>;
+    validateIfRolExistsByName(name: string) : Promise<boolean>;
 }

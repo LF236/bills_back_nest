@@ -27,4 +27,11 @@ export class RolOrmRepositoryImpl implements IRolRepository {
 
         return Rol.createFromObj(newRol);
     }
+
+    async validateIfRolExistsByName(name: string): Promise<boolean> {
+        const rol = await this.repo.createQueryBuilder('rol')
+            .where('rol.name = :name', { name })
+            .getExists();
+        return rol;
+    }
 }

@@ -24,8 +24,11 @@ export class CreateRolUseCase {
             }
         }
 
-        
-        return await this.rolRepository.create(createRolInput);
+        const rolAlreadyExists = await this.rolRepository.validateIfRolExistsByName(createRolInput.name);
+        if(rolAlreadyExists) {
+            throw new BadRequestException(`The rol with name ${createRolInput.name} already exists in the system`);
+        }
 
+        return await this.rolRepository.create(createRolInput);
     }
 }
