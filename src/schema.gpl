@@ -64,9 +64,15 @@ type RolsGraphql {
   permissions: [PermissionGraphQL!]
 }
 
+type GetPermissionsGraphQL {
+  items: [PermissionGraphQL!]!
+  total: Int!
+}
+
 type Query {
   bill(id: Int!): Bill!
-  permissions(offset: Int = 0, limit: Int = 10, search: String): [PermissionGraphQL!]!
+  permissions(offset: Int = 0, limit: Int = 10, search: String): GetPermissionsGraphQL!
+  permission(id: ID!): PermissionGraphQL!
 }
 
 type Mutation {

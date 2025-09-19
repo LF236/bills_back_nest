@@ -7,7 +7,8 @@ export interface IPermissionRepository {
 	create(createPermissionInput: CreatePermissionInput) : Promise<Permission>;
 	findByName(name: string) : Promise<Permission | null>;
 	findAll(pagination: PaginationArgs, search: SearchArgs) : Promise<Permission[]>;
-	findOne(id: string) : Promise<Permission>;
+	count(search: SearchArgs) : Promise<number>;
+	findOne(id: string) : Promise<Permission | null>;
 	update(id: string, updatePermissionInput: any) : Promise<Permission>;
 	delete(id: string) : Promise<void>;
 	findByIds(ids: string[]) : Promise<Permission[]>;

@@ -8,7 +8,7 @@ export class Permission {
 		private readonly is_active: boolean,
 		private readonly created_at: Date,
 		private readonly updated_at: Date,
-		private readonly roles?: any[] | null,
+		private roles?: any[] | null,
 	) {};
 
 	static createFromObj(data: any) : Permission {
@@ -24,16 +24,22 @@ export class Permission {
 		return permission;
 	}
 
+	setRoles(roles: any[]) {
+		this.roles = roles;
+	}
+
 	getGraphQLType() : PermissionGraphQL {
 		return new PermissionGraphQL(
-			this.id,
-			this.name,
-			this.description ?? '',
-			this.is_active,
-			this.created_at,
-			this.updated_at,
-			null, // deleted_at is not set in this context
-			this.roles ? this.roles.map(role => role.id) : []
+			{
+				id: this.id,
+				name: this.name,
+				description: this.description,
+				is_active: this.is_active,
+				created_at: this.created_at,
+				updated_at: this.updated_at,
+				deleted_at: null,
+				roles: this.roles ?? [],
+			}
 		);
 	}
 }

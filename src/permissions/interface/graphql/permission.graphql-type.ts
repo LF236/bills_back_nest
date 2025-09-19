@@ -28,23 +28,26 @@ export class PermissionGraphQL {
 	@Field(() => [RolsGraphql])
 	roles: RolsGraphql[];
 
-	constructor(
-		id: string,
-		name: string,
-		description: string,
-		is_active: boolean = true,
-		created_at: Date = new Date(),
-		updated_at: Date = new Date(),
-		deleted_at: Date | null = null,
-		roles?: RolsGraphql[]
-	) {
-		this.id = id;
-		this.name = name;
-		this.description = description ?? null;
-		this.is_active = is_active;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.deleted_at = deleted_at;
-		this.roles = roles || [];
+	constructor(data: any) {
+		this.id = data.id;
+		this.name = data.name;
+		this.description = data.description ?? null;
+		this.is_active = data.is_active;
+		this.created_at = data.created_at;
+		this.updated_at = data.updated_at;
+		this.deleted_at = data.deleted_at ?? null;
+		if(data.roles) {
+			this.roles = data.roles.map((role: any) => new RolsGraphql(
+				role.id,
+				role.name,
+				role.description,
+				role.is_active,
+				role.created_at,
+				role.updated_at,
+				role.deleted_at,
+			));
+		} else {
+			this.roles = [];
+		}
 	}
 }

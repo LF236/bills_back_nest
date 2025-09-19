@@ -8,6 +8,7 @@ import { CreatePermissionInput } from "src/permissions/application/dto/inputs/cr
 import { PaginationArgs } from "src/common/application/dto/args/pagination.args";
 import { SearchArgs } from "src/common/application/dto/args/search.args";
 import { throws } from "assert";
+import { Rol } from "src/rols/domain/entities/rol.entity";
 
 @Injectable()
 export class PermissionOrmRepositoryImp implements IPermissionRepository {
@@ -39,21 +40,36 @@ export class PermissionOrmRepositoryImp implements IPermissionRepository {
 		query.leftJoinAndSelect('permissions.roles', 'roles');
 
 		if( search ) {
-			query.where('UPPER(permissions.name) ILIKE UPPER(:search)', { search: `%${search}%` });
+            query.where('permissions.name ILIKE :search', { search: `%${search.trim()}%` });
+		}
+		
+		const permissions = await query.getMany();
+
+		const permissionEntities = permissions.map(permission => {
+			let roles: Rol[] = [];
+			if (permission.roles && permission.roles.length > 0) {
+				roles = permission.roles.map(roleOrm => Rol.createFromObj(roleOrm));
+			}
+			const entity = Permission.createFromObj(permission);
+			entity.setRoles(roles);
+			return entity;
+		});
+
+		return permissionEntities;
+	}
+
+	async count(searchArgs: SearchArgs) : Promise<number> {
+		const { search } = searchArgs;
+
+		const query = this.repo.createQueryBuilder('permissions')
+			.select('COUNT(permissions.id)', 'count');
+
+		if( search ) {
+			query.where('permissions.name ILIKE :search', { search: `%${search.trim()}%` });
 		}
 
-		const permissions = await query.getMany();
-		console.log(permissions);
-		const permissionEntities = permissions.map(permission => {
-			console.log(permission);
-			return 1;
-		} )
-
-
-
-		throw new Error("Method not implemented.");
-		
-
+		const result = await query.getRawOne();
+		return parseInt(result.count, 10);
 	}
 
 	async findByName(name: string): Promise<Permission | null> {
@@ -83,8 +99,22 @@ export class PermissionOrmRepositoryImp implements IPermissionRepository {
 		return permissions.map(permission => Permission.createFromObj(permission));
 	}
 
-	async findOne(id: string): Promise<Permission> {
-		// Implement the logic to find a permission by ID
-		throw new Error("Method not implemented.");
+	async findOne(id: string): Promise<Permission | null> {
+		const query = await this.repo.createQueryBuilder('permissions')
+			.where('permissions.id = :id', { id })
+			.leftJoinAndSelect('permissions.roles', 'roles')
+			.getOne();
+
+		if(!query) return null;
+
+		console.log(query);
+
+		const permissionEntity = Permission.createFromObj(query);
+		if(query.roles && query.roles.length > 0) {
+			const roles = query.roles.map(item => Rol.createFromObj(item));
+			permissionEntity.setRoles(roles);
+		}
+
+		return permissionEntity;
 	}
 }

@@ -8,7 +8,7 @@ export class Rol {
         private readonly updated_at: Date,
         private readonly deleted_at: Date | null = null,
         private readonly users?: any[] | null,
-        private readonly permissions?: any[] | null
+        private permissions?: any[] | null
     ) {};
 
 
@@ -24,5 +24,9 @@ export class Rol {
             data.deleted_at ?? null,
         );
         return rol;
+    }
+
+    setPermissions(permissions: any[]) {
+        this.permissions = permissions;
     }
 }
