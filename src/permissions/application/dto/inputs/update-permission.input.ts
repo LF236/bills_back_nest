@@ -6,4 +6,6 @@ export class UpdatePermissionInput extends PartialType(CreatePermissionInput) {
 	@Field(() => ID)
 	id: string;
 
+	@Field(() => Boolean, { nullable: true })
+	is_active?: boolean;
 }

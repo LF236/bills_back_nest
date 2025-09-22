@@ -7,6 +7,8 @@ import { PermissionOrmRepositoryImp } from './infrastructure/orm/typeorm/permiss
 import { CreatePermissionUseCase } from './application/uses-cases/crate-permission.use-case';
 import { GetPermissionsUseCase } from './application/uses-cases/get-permissions.use-case';
 import { GetOnePermissionUseCase } from './application/uses-cases/get-one-permission.use-case';
+import { UpdatePermissionUseCase } from './application/uses-cases/update-permission.use-case';
+import { DeletePermissionUseCase } from './application/uses-cases/delete-permission.use-case';
 
 @Module({
 	providers: [
@@ -21,7 +23,9 @@ import { GetOnePermissionUseCase } from './application/uses-cases/get-one-permis
 		// Use Cases
 		CreatePermissionUseCase,
 		GetPermissionsUseCase,
-		GetOnePermissionUseCase
+		GetOnePermissionUseCase,
+		UpdatePermissionUseCase,
+		DeletePermissionUseCase
 	],
 	imports: [
 		TypeOrmModule.forFeature([PermissionOrmEntity]),

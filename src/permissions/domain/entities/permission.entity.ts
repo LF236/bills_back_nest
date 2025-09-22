@@ -8,6 +8,7 @@ export class Permission {
 		private readonly is_active: boolean,
 		private readonly created_at: Date,
 		private readonly updated_at: Date,
+		private readonly deleted_at?: Date | null,
 		private roles?: any[] | null,
 	) {};
 
@@ -19,6 +20,7 @@ export class Permission {
 			data.is_active,
 			data.created_at,
 			data.updated_at,
+			data.deleted_at,
 
 		);
 		return permission;
@@ -37,7 +39,7 @@ export class Permission {
 				is_active: this.is_active,
 				created_at: this.created_at,
 				updated_at: this.updated_at,
-				deleted_at: null,
+				deleted_at: this.deleted_at,
 				roles: this.roles ?? [],
 			}
 		);

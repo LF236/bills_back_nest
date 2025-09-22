@@ -1,13 +1,14 @@
 import { RolOrmEntity } from "src/rols/infrastructure/orm/typeorm/rol.orm-entity";
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, Index, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'permissions' })
+@Index('uq_permission_name_active', ['name'], { unique: true, where: '"deleted_at" IS NULL' })
 export class PermissionOrmEntity {
 	@PrimaryGeneratedColumn('uuid')
 	id: string;
 
 	@Column({
-		unique: true
+		type: 'varchar',
 	})
 	name: string;
 
@@ -36,9 +37,9 @@ export class PermissionOrmEntity {
 	})
 	updated_at: Date;
 
-	@Column({
+	@DeleteDateColumn({
 		type: 'timestamp',
-		default: () => 'CURRENT_TIMESTAMP',
+		nullable: true
 	})
 	deleted_at: Date | null;
 

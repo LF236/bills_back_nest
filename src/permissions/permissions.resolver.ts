@@ -1,22 +1,25 @@
-import { Resolver, Query, Mutation, Args, Int, ID, ResolveField, Parent } from '@nestjs/graphql';
-import { PermissionsService } from './permissions.service';
+import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { ParseUUIDPipe } from '@nestjs/common';
 import { PaginationArgs } from 'src/common/application/dto/args/pagination.args';
 import { SearchArgs } from 'src/common/application/dto/args/search.args';
-import { Permission } from './domain/entities/permission.entity';
 import { CreatePermissionUseCase } from './application/uses-cases/crate-permission.use-case';
 import { PermissionGraphQL } from './interface/graphql/permission.graphql-type';
 import { CreatePermissionInput } from './application/dto/inputs/create-permission.input';
 import { GetPermissionsUseCase } from './application/uses-cases/get-permissions.use-case';
 import { GetPermissionsGraphQL } from './interface/graphql/get-permissions.graphql-type';
 import { GetOnePermissionUseCase } from './application/uses-cases/get-one-permission.use-case';
+import { UpdatePermissionInput } from './application/dto/inputs/update-permission.input';
+import { UpdatePermissionUseCase } from './application/uses-cases/update-permission.use-case';
+import { DeletePermissionUseCase } from './application/uses-cases/delete-permission.use-case';
 
 @Resolver(() => PermissionGraphQL)
 export class PermissionsResolver {
 	constructor(
 		private readonly createPermissionUseCase: CreatePermissionUseCase,
 		private readonly getPermissionsUseCase: GetPermissionsUseCase,
-		private readonly getOnePermissionUseCase: GetOnePermissionUseCase
+		private readonly getOnePermissionUseCase: GetOnePermissionUseCase,
+		private readonly updatePermissionUseCase: UpdatePermissionUseCase,
+		private readonly deletePermissionUseCase: DeletePermissionUseCase
 	) {};
 	
 	@Mutation(() => PermissionGraphQL)
@@ -44,17 +47,19 @@ export class PermissionsResolver {
 	) {
 		return this.getOnePermissionUseCase.execute(id);
 	}
+
+	@Mutation(() => PermissionGraphQL)
+	updatePermission(
+		@Args('updatePermissionInput') updatePermissionInput: UpdatePermissionInput
+	) {
+		return this.updatePermissionUseCase.execute(updatePermissionInput);
+	}
 	
-	// @Mutation(() => Permission)
-	// updatePermission(@Args('updatePermissionInput') updatePermissionInput: UpdatePermissionInput) {
-	// 	return this.permissionsService.update(updatePermissionInput.id, updatePermissionInput);
-	// }
-	//
-	//
-	// @Mutation(() => Permission)
-	// async removePermission(
-	// 	@Args('id', { type: () => ID }, ParseUUIDPipe) id: string
-	// ) : Promise<Permission> {
-	// 	return this.permissionsService.remove(id);
-	// }
+	@Mutation(() => Boolean)
+	async removePermission(
+		@Args('id', { type: () => ID }, ParseUUIDPipe) id: string
+	) : Promise<Boolean> {
+		const isDeleted = await this.deletePermissionUseCase.execute(id);
+		return isDeleted;
+	}
 }

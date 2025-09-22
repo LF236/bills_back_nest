@@ -82,6 +82,8 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): UserGraphQL!
   createRol(createRolInput: CreateRolInput!): RolsGraphql!
   createPermission(createPermissionInput: CreatePermissionInput!): PermissionGraphQL!
+  updatePermission(updatePermissionInput: UpdatePermissionInput!): PermissionGraphQL!
+  removePermission(id: ID!): Boolean!
   seedDatabase: Boolean!
 }
 
@@ -112,4 +114,11 @@ input CreateRolInput {
 input CreatePermissionInput {
   name: String!
   description: String
+}
+
+input UpdatePermissionInput {
+  name: String
+  description: String
+  id: ID!
+  is_active: Boolean
 }
