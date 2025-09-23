@@ -12,8 +12,6 @@ export class CreateRolUseCase {
         private readonly permissionRepository: IPermissionRepository
     ) {};
 
-
-
     async execute(createRolInput: CreateRolInput) {
         const { permissions = [] } = createRolInput;
 
@@ -23,6 +21,7 @@ export class CreateRolUseCase {
                 throw new BadRequestException("One or more permissions do not exist, please check the IDs");
             }
         }
+
 
         const rolAlreadyExists = await this.rolRepository.validateIfRolExistsByName(createRolInput.name);
         if(rolAlreadyExists) {

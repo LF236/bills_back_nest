@@ -125,6 +125,7 @@ export class PermissionOrmRepositoryImp implements IPermissionRepository {
 	async findByIds(ids: string[]): Promise<Permission[]> {
 		let permissions = await this.repo.createQueryBuilder('permissions')
 			.where('permissions.id IN (:...ids)', { ids })
+			.andWhere('permissions.deleted_at IS NULL')
 			.getMany();
 
 		return permissions.map(permission => Permission.createFromObj(permission));
