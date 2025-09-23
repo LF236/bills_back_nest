@@ -45,6 +45,7 @@ export class PermissionOrmRepositoryImp implements IPermissionRepository {
 		}
 		query.andWhere('permissions.deleted_at IS NULL');
 		query.andWhere('roles.deleted_at IS NULL');
+		query.andWhere('roles.is_active = true OR roles.id IS NULL');
 		const permissions = await query.getMany();
 
 		const permissionEntities = permissions.map(permission => {
@@ -139,7 +140,7 @@ export class PermissionOrmRepositoryImp implements IPermissionRepository {
 			.getOne();
 
 		if(!query) return null;
-		console.log(query);
+		
 		const permissionEntity = Permission.createFromObj(query);
 		if(query.roles && query.roles.length > 0) {
 			const roles = query.roles.map(item => Rol.createFromObj(item));

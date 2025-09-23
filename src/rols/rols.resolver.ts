@@ -8,11 +8,19 @@ import { ParseUUIDPipe } from '@nestjs/common';
 import { CreateRolUseCase } from './application/use-cases/create-rol.use-case';
 import { RolsGraphql } from './interfaces/graphql/rols.graphql-type';
 import { CreateRolInput } from './application/dto/inputs/create-rol.input';
+import { FindOneRolUseCase } from './application/use-cases/find-one-rol.use-case';
+import { UpdateRolUseCase } from './application/use-cases/update-rol.use-case';
+import { GetRolesUseCase } from './application/use-cases/get-roles.use-case';
+import { DeleteRolUseCase } from './application/use-cases/delete-rol.use-case';
 CreateRolInput;
-@Resolver(() => Rol)
+@Resolver(() => RolsGraphql)
 export class RolsResolver {
 	constructor(
-		private readonly createRolUseCase: CreateRolUseCase
+		private readonly createRolUseCase: CreateRolUseCase,
+		private readonly findOneRolUseCase: FindOneRolUseCase,
+		private readonly updateRolUseCase: UpdateRolUseCase,
+		private readonly getRolsUseCae: GetRolesUseCase,
+		private readonly deleteRolUseCase: DeleteRolUseCase
 	) {};
 
 
@@ -23,36 +31,32 @@ export class RolsResolver {
 		return this.createRolUseCase.execute(createRolInput);
 	}
 
-	// constructor(private readonly rolsService: RolsService) {}
+	@Query(() => [RolsGraphql], { name: 'rols' })
+	findAll(
+		@Args() paginationArgs: PaginationArgs,
+		@Args() searchArgs: SearchArgs
+	) {
+		return this.getRolsUseCae.execute(paginationArgs, searchArgs);
+	}
 
-	// @Mutation(() => Rol)
-	// async createRol(
-	// 	@Args('createRolInput') createRolInput: CreateRolInput
-	// ) : Promise<Rol> {	
-	// 	return this.rolsService.create(createRolInput);
-	// }
+	@Query(() => RolsGraphql, { name: 'rol' })
+	findOne(
+		@Args('id', { type: () => ID }, ParseUUIDPipe) id: string
+	) {
+		return this.findOneRolUseCase.execute(id);
+	}
 
-	// @Query(() => [Rol], { name: 'rols' })
-	// async findAll(
-	// 	@Args() paginationArgs: PaginationArgs,
-	// 	@Args() searchArgs: SearchArgs
-	// ) {		 
-	// 	return this.rolsService.findAll(paginationArgs, searchArgs);
-	// }
-	
-	// @Query(() => Rol, { name: 'rol' })
-	// async findOne(@Args('id', { type: () => ID }) id: string) : Promise<Rol> {
-	// 	return this.rolsService.findOne(id);
-	// }
-	
-	// @Mutation(() => Rol)
-	// updateRol(@Args('updateRolInput') updateRolInput: UpdateRolInput) {
-	// 	return this.rolsService.update(updateRolInput.id, updateRolInput);
-	// }
+	@Mutation(() => RolsGraphql, { name: 'updateRol' })
+	updateRol(
+		@Args('updateRolInput') updateRolInput: UpdateRolInput
+	) {
+		return this.updateRolUseCase.execute(updateRolInput);
+	}
 
-	
-	// @Mutation(() => Rol)
-	// removeRol(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
-	// 	return this.rolsService.remove(id);
-	// }
+	@Mutation(() => Boolean, { name: 'deleteRol' })
+	removeRol(
+		@Args('id', { type: () => ID }, ParseUUIDPipe) id: string
+	) {
+		return this.deleteRolUseCase.execute(id);
+	}
 }

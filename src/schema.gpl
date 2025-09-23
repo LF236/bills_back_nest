@@ -71,6 +71,8 @@ type GetPermissionsGraphQL {
 
 type Query {
   bill(id: Int!): Bill!
+  rols(offset: Int = 0, limit: Int = 10, search: String): [RolsGraphql!]!
+  rol(id: ID!): RolsGraphql!
   permissions(offset: Int = 0, limit: Int = 10, search: String): GetPermissionsGraphQL!
   permission(id: ID!): PermissionGraphQL!
 }
@@ -81,6 +83,8 @@ type Mutation {
   removeBill(id: Int!): Bill!
   createUser(createUserInput: CreateUserInput!): UserGraphQL!
   createRol(createRolInput: CreateRolInput!): RolsGraphql!
+  updateRol(updateRolInput: UpdateRolInput!): RolsGraphql!
+  deleteRol(id: ID!): Boolean!
   createPermission(createPermissionInput: CreatePermissionInput!): PermissionGraphQL!
   updatePermission(updatePermissionInput: UpdatePermissionInput!): PermissionGraphQL!
   removePermission(id: ID!): Boolean!
@@ -109,6 +113,14 @@ input CreateRolInput {
   description: String
   is_active: Boolean! = true
   permissions: [String!]
+}
+
+input UpdateRolInput {
+  name: String
+  description: String
+  is_active: Boolean = true
+  permissions: [String!]
+  id: ID!
 }
 
 input CreatePermissionInput {
