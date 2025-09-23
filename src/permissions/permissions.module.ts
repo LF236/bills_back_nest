@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { PermissionsService } from './permissions.service';
 import { PermissionsResolver } from './permissions.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PermissionOrmEntity } from './infrastructure/orm/typeorm/permission.orm-entity';
@@ -12,9 +11,7 @@ import { DeletePermissionUseCase } from './application/uses-cases/delete-permiss
 
 @Module({
 	providers: [
-		PermissionsResolver, 
-		PermissionsService,
-
+		PermissionsResolver,
 		{
 			provide: 'PermissionRepository',
 			useClass: PermissionOrmRepositoryImp
@@ -31,7 +28,6 @@ import { DeletePermissionUseCase } from './application/uses-cases/delete-permiss
 		TypeOrmModule.forFeature([PermissionOrmEntity]),
 	],
 	exports: [
-		PermissionsService,
 		TypeOrmModule,
 		'PermissionRepository'
 	]

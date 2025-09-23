@@ -5,4 +5,5 @@ export interface IUserRepository {
 	save(user: CreateUserInput) : Promise<User>;
 	findAll(): Promise<User[]>;
 	findByEmail(email: string) : Promise<User | null>;
+	deleteAllUsers(): Promise<void>;
 }

@@ -13,4 +13,5 @@ export interface IPermissionRepository {
 	update(id: string, updatePermissionInput: UpdatePermissionInput) : Promise<Permission>;
 	delete(id: string) : Promise<boolean>;
 	findByIds(ids: string[]) : Promise<Permission[]>;
+	dropAllPermissions() : Promise<void>;
 }

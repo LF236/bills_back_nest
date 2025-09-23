@@ -149,4 +149,11 @@ export class PermissionOrmRepositoryImp implements IPermissionRepository {
 
 		return permissionEntity;
 	}
+	
+	async dropAllPermissions(): Promise<void> {
+		await this.repo.createQueryBuilder()
+			.delete()
+			.where({})
+			.execute();
+	}
 }

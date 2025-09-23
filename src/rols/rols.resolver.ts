@@ -1,6 +1,4 @@
 import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
-import { RolsService } from './rols.service';
-import { Rol } from './entities/rol.entity';
 import { UpdateRolInput } from './dto/update-rol.input';
 import { PaginationArgs } from 'src/common/dtos/args/pagination.args';
 import { SearchArgs } from 'src/common/dtos/args/search.args';

@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
-import { RolsService } from './rols.service';
 import { RolsResolver } from './rols.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Rol } from './entities/rol.entity';
 import { PermissionsModule } from 'src/permissions/permissions.module';
 import { RolOrmEntity } from './infrastructure/orm/typeorm/rol.orm-entity';
 import { RolOrmRepositoryImpl } from './infrastructure/orm/typeorm/rol.repository.impl';
@@ -15,7 +13,6 @@ import { DeleteRolUseCase } from './application/use-cases/delete-rol.use-case';
 @Module({
 	providers: [
 		RolsResolver, 
-		RolsService,
 
 		{
 			provide: 'RolRepository',
@@ -30,11 +27,10 @@ import { DeleteRolUseCase } from './application/use-cases/delete-rol.use-case';
 		DeleteRolUseCase
 	],
 	imports: [
-		TypeOrmModule.forFeature([RolOrmEntity, Rol]),
+		TypeOrmModule.forFeature([RolOrmEntity]),
 		PermissionsModule
 	],
 	exports: [
-		RolsService,
 		TypeOrmModule,
 		'RolRepository'
 	]

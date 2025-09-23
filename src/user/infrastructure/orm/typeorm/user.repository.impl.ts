@@ -37,4 +37,11 @@ export class UserOrmRepository implements IUserRepository {
 		if(!user) return null;
 		return User.createFromObj(user);	
 	}
+
+	async deleteAllUsers(): Promise<void> {
+		await this.repo.createQueryBuilder()
+			.delete()
+			.where({})
+			.execute();
+	}
 }

@@ -7,8 +7,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { RolsModule } from './rols/rols.module';
 import { PermissionsModule } from './permissions/permissions.module';
-import { Rol } from './rols/entities/rol.entity';
-import { Permission } from './permissions/entities/permission.entity';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';

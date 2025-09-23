@@ -11,4 +11,5 @@ export interface IRolRepository {
     update(updateRolInput: UpdateRolInput) : Promise<Rol>;
     delete(id: string) : Promise<boolean>;
     validateIfRolExistsByName(name: string) : Promise<boolean>;
+    dropAllRols() : Promise<void>;
 }

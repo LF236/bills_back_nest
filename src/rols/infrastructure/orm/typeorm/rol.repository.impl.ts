@@ -127,4 +127,12 @@ export class RolOrmRepositoryImpl implements IRolRepository {
         if(query.affected && query.affected > 0) return true;
         return false;
     }
+
+    async dropAllRols(): Promise<void> {
+        await this.repo.createQueryBuilder()
+            .delete()
+            .from(RolOrmEntity)
+            .execute();
+        return;
+    }
 }

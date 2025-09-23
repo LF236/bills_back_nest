@@ -14,33 +14,6 @@ type UserGraphQL {
   roles: [String!]!
 }
 
-type Permission {
-  id: ID!
-  name: String!
-  description: String
-  is_active: Boolean!
-  created_at: DateTime!
-  updated_at: DateTime!
-  deleted_at: DateTime
-  roles: [Rol!]
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type Rol {
-  id: ID!
-  name: String!
-  description: String
-  is_active: Boolean!
-  created_at: DateTime!
-  updated_at: DateTime!
-  deleted_at: DateTime
-  permissions: [Permission!]
-}
-
 type PermissionGraphQL {
   id: ID!
   name: String!
@@ -51,6 +24,11 @@ type PermissionGraphQL {
   deleted_at: DateTime
   roles: [RolsGraphql!]!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type RolsGraphql {
   id: ID!

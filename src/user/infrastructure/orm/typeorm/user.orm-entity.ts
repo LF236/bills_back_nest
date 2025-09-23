@@ -1,4 +1,3 @@
-import { Rol } from 'src/rols/entities/rol.entity';
 import { RolOrmEntity } from 'src/rols/infrastructure/orm/typeorm/rol.orm-entity';
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
