@@ -135,4 +135,14 @@ export class RolOrmRepositoryImpl implements IRolRepository {
             .execute();
         return;
     }
+
+    async findByName(name: string): Promise<Rol | null> {
+        const rol = await this.repo.createQueryBuilder('rol')
+            .where('rol.name = :name', { name })
+            .andWhere('rol.deleted_at IS NULL')
+            .getOne();
+        
+        if(!rol) return null;
+        return Rol.createFromObj(rol);
+    }
 }

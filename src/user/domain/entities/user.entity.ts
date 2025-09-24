@@ -6,6 +6,7 @@ export class User {
 		public readonly email: string,
 		public readonly password: string,
 		public readonly is_active: boolean,
+		public roles?: any[]
 	) {};
 
 
@@ -16,6 +17,10 @@ export class User {
 			data.password,
 			data.is_active
 		);
+	}
+
+	setRoles(roles: any[]) {
+		this.roles = roles;
 	}
 
 	getGraphQLType() : UserGraphQL {

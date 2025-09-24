@@ -26,6 +26,10 @@ export class Rol {
         return rol;
     }
 
+    getId() : string {
+        return this.id;
+    }
+
     setPermissions(permissions: any[]) {
         this.permissions = permissions;
     }

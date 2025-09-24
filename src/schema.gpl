@@ -49,6 +49,7 @@ type GetPermissionsGraphQL {
 
 type Query {
   bill(id: Int!): Bill!
+  users(offset: Int = 0, limit: Int = 10, search: String): [UserGraphQL!]!
   rols(offset: Int = 0, limit: Int = 10, search: String): [RolsGraphql!]!
   rol(id: ID!): RolsGraphql!
   permissions(offset: Int = 0, limit: Int = 10, search: String): GetPermissionsGraphQL!
@@ -83,7 +84,6 @@ input UpdateBillInput {
 input CreateUserInput {
   email: String!
   password: String!
-  is_active: Boolean = false
 }
 
 input CreateRolInput {

@@ -10,8 +10,4 @@ export class CreateUserInput {
 	@Field(() => String, { nullable: false })
 	@IsString()
 	password: string;
-
-
-	@Field(() => Boolean, { nullable: true, defaultValue: false })
-	is_active?: boolean;
 }

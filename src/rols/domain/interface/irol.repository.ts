@@ -12,4 +12,5 @@ export interface IRolRepository {
     delete(id: string) : Promise<boolean>;
     validateIfRolExistsByName(name: string) : Promise<boolean>;
     dropAllRols() : Promise<void>;
+    findByName(name: string) : Promise<Rol | null>;
 }

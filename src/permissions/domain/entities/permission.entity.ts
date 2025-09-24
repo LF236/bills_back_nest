@@ -30,6 +30,10 @@ export class Permission {
 		this.roles = roles;
 	}
 
+	getId() : string {
+		return this.id;
+	}
+	
 	getGraphQLType() : PermissionGraphQL {
 		return new PermissionGraphQL(
 			{

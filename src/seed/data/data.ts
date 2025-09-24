@@ -80,10 +80,14 @@ export const SEED_ROLES = [
 ];
 
 
-export const SEED_USERS = [
-	{
-		email: 'superadmin@local.com',
-		password: 'superadmin',
-		is_active: true
-	}
-];
+export const SEED_USERS_ADMIN ={
+	email: 'superadmin@local.com',
+	password: 'superadmin',
+	is_active: true
+};
+
+export const SEED_USERS_DEFAULT = {
+	email: 'defaultuser@local.com',
+	password: 'defaultuser',
+	is_active: true
+};

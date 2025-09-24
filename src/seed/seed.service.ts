@@ -5,6 +5,7 @@ import { IUserRepository } from 'src/user/domain/interfaces/iuser.repository';
 import { IPermissionRepository } from 'src/permissions/domain/interface/ipermission.repository';
 import { IRolRepository } from 'src/rols/domain/interface/irol.repository';
 import { Permission } from 'src/permissions/domain/entities/permission.entity';
+import { PermissionOrmEntity } from 'src/permissions/infrastructure/orm/typeorm/permission.orm-entity';
 
 @Injectable()
 export class SeedService {
@@ -15,17 +16,15 @@ export class SeedService {
 		private readonly rolRepository: IRolRepository,
 		@Inject('PermissionRepository')
 		private readonly permissionRepository: IPermissionRepository,
-
 	) {};
 
 	async seedDatabase() : Promise<boolean> {
 		await this.deleteDatabase();
 		await this.createPermissions();
-		// await this.createRolSuperAdmin();
-		// await this.createRolDefaultUser();
+		await this.createRolSuperAdmin();
+		await this.createRolDefaultUser();
 		return true;
 	}
-
 	
 	private async deleteDatabase() : Promise<void> {
 		// Delete users
@@ -55,42 +54,39 @@ export class SeedService {
 	}
 
 	private async createRolSuperAdmin() : Promise<void> {
-		// const super_user = SEED_ROLES.find(rol => rol.name === 'super_admin');
+		const super_admin = SEED_ROLES.find(rol => rol.name === 'super_admin');
+		if(super_admin) {
+			const allPermission = await this.permissionRepository.findAll({
+				limit: 100,
+				offset: 0,
+			}, { search: '' });
 
-		// if(super_user) {
-		// 	const rol = await this.rolService.create(super_user);
-				
-		// 	if(!rol) {
-		// 		throw new Error('Error creating super admin role');
-		// 	}
+			const idsPermission = allPermission.map(permission => permission.getId());
 
-		// 	let permissions = await this.permissionRepository.find();
-		// 	const ids_permissions : string[] = permissions.map(item => item.id);
-	
-		// 	await this.rolService.update(rol.id, {
-		// 		id: rol.id,	
-		// 		permissions: ids_permissions
-		// 	});
-		// }		
+			const rol = await this.rolRepository.create({
+				name: super_admin.name,
+				description: super_admin.description,
+				permissions: idsPermission.map( id => id ),
+				is_active: true
+			});
+		}
 	}
 
 	private async createRolDefaultUser() : Promise<void> {
-		// const default_user = SEED_ROLES.find(rol => rol.name === 'default_user');
-		// if(default_user) {
-		// 	const rol = await this.rolService.create(default_user);
-		// 	if(!rol) {
-		// 		throw new Error('Error creating default user role');
-		// 	}
+		const default_user = SEED_ROLES.find(rol => rol.name === 'default_user');
 
-		// 	const defaul_permission = await this.permissionService.findByName('view_dashboard');
-		// 	if(!defaul_permission) {
-		// 		throw new Error('Default permission not found');
-		// 	}
-
-		// 	await this.rolService.update(rol.id, {
-		// 		id: rol.id,
-		// 		permissions: [defaul_permission.id]
-		// 	});		
-		// }
+		if(default_user) {
+			const basicPermission = await this.permissionRepository.findByName('view_dashboard');
+			if(!basicPermission) {
+				throw new Error('Basic permission not found');
+			}
+			
+			const rol = await this.rolRepository.create({
+				name: default_user.name,
+				description: default_user.description,
+				permissions: [basicPermission.getId()],
+				is_active: true
+			});
+		}
 	}
 }
