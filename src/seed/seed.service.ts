@@ -4,6 +4,7 @@ import { SEED_PERMISSIONS, SEED_ROLES } from './data/data';
 import { IUserRepository } from 'src/user/domain/interfaces/iuser.repository';
 import { IPermissionRepository } from 'src/permissions/domain/interface/ipermission.repository';
 import { IRolRepository } from 'src/rols/domain/interface/irol.repository';
+import { Permission } from 'src/permissions/domain/entities/permission.entity';
 
 @Injectable()
 export class SeedService {
@@ -19,7 +20,7 @@ export class SeedService {
 
 	async seedDatabase() : Promise<boolean> {
 		await this.deleteDatabase();
-		// await this.createPermissions();
+		await this.createPermissions();
 		// await this.createRolSuperAdmin();
 		// await this.createRolDefaultUser();
 		return true;
@@ -35,9 +36,21 @@ export class SeedService {
 		await this.permissionRepository.dropAllPermissions();
 	}
 
-	private async createPermissions() : Promise<void> {
+	private async createPermissions() : Promise<boolean> {
+		const promises : Promise<Permission>[] = [];
 		for(const permission of SEED_PERMISSIONS) {
-			// await this.permissionService.create(permission);
+			promises.push(
+				this.permissionRepository.create({
+					name: permission.name,
+					description: permission.description,
+				})
+			);
+		}
+		try {
+			await Promise.all(promises);
+			return true;
+		} catch (err) {
+			return false;
 		}
 	}
 

@@ -6,12 +6,12 @@ export const SEED_PERMISSIONS = [
 	},
 	{
 		name: 'manage_users',
-		is_is_active: true,
+		is_active: true,
 		description: 'Permission to manage users',
 	},
 	{
 		name: 'manage_roles',
-		is_is_active: true,
+		is_active: true,
 		description: 'Permission to manage roles',
 	},
 	{
