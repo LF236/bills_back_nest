@@ -1,3 +1,5 @@
+import { Rol } from "src/rols/domain/entities/rol.entity";
+import { RolsGraphql } from "src/rols/interfaces/graphql/rols.graphql-type";
 import { UserGraphQL } from "src/user/interface/graphql/user.graphql-type";
 
 export class User {
@@ -6,7 +8,7 @@ export class User {
 		public readonly email: string,
 		public readonly password: string,
 		public readonly is_active: boolean,
-		public roles?: any[]
+		public roles?: Rol[]
 	) {};
 
 
@@ -23,12 +25,16 @@ export class User {
 		this.roles = roles;
 	}
 
+	getEmail() : string {
+		return this.email;
+	}
+
 	getGraphQLType() : UserGraphQL {
 		return new UserGraphQL(
 			this.id,
 			this.email,
 			this.is_active,
-			[]
+			this.roles ? this.roles.map( role => RolsGraphql.createFromObj(role) ) : []
 		);	
 	}
 }

@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ID, Parent, ResolveField } from '@nestjs/graphql';
 import { UpdateRolInput } from './dto/update-rol.input';
 import { PaginationArgs } from 'src/common/dtos/args/pagination.args';
 import { SearchArgs } from 'src/common/dtos/args/search.args';
@@ -10,6 +10,9 @@ import { FindOneRolUseCase } from './application/use-cases/find-one-rol.use-case
 import { UpdateRolUseCase } from './application/use-cases/update-rol.use-case';
 import { GetRolesUseCase } from './application/use-cases/get-roles.use-case';
 import { DeleteRolUseCase } from './application/use-cases/delete-rol.use-case';
+import { PermissionsLoader } from 'src/permissions/infrastructure/orm/typeorm/loaders/permissions.loader';
+import { PermissionGraphQL } from 'src/permissions/interface/graphql/permission.graphql-type';
+import { GetOnlyPermissionGraphQL } from 'src/permissions/interface/graphql/get-only-permission.graphql-type';
 CreateRolInput;
 @Resolver(() => RolsGraphql)
 export class RolsResolver {
@@ -18,7 +21,8 @@ export class RolsResolver {
 		private readonly findOneRolUseCase: FindOneRolUseCase,
 		private readonly updateRolUseCase: UpdateRolUseCase,
 		private readonly getRolsUseCae: GetRolesUseCase,
-		private readonly deleteRolUseCase: DeleteRolUseCase
+		private readonly deleteRolUseCase: DeleteRolUseCase,
+		private readonly permissionsLoader: PermissionsLoader
 	) {};
 
 
@@ -56,5 +60,13 @@ export class RolsResolver {
 		@Args('id', { type: () => ID }, ParseUUIDPipe) id: string
 	) {
 		return this.deleteRolUseCase.execute(id);
+	}
+
+	@ResolveField(() => [ GetOnlyPermissionGraphQL ])
+	async permissionsList(
+		@Parent() rol: RolsGraphql
+	) {
+		const { id } = rol;
+		return this.permissionsLoader.getLoader().load(id);
 	}
 }

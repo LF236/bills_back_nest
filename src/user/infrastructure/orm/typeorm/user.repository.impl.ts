@@ -33,7 +33,7 @@ export class UserOrmRepository implements IUserRepository {
 		return User.createFromObj(newUser);
 	}
 
-	async findAll(paginationArgs: PaginationArgs, searchArgs: SearchArgs): Promise<any[]> {
+	async findAll(paginationArgs: PaginationArgs, searchArgs: SearchArgs): Promise<User[]> {
 		const query = this.repo.createQueryBuilder('user')
 			.leftJoinAndSelect('user.roles', 'role')
 			.where('role.is_active = :is_active', { is_active: true })
@@ -52,9 +52,7 @@ export class UserOrmRepository implements IUserRepository {
 			results.push(userEntity);
 		}
 
-		console.log(results);
-
-		throw new Error("Method not implemented.");
+		return results;
 	}
 
 	async findByEmail(email: string): Promise<User | null> {

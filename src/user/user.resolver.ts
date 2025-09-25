@@ -7,7 +7,7 @@ import { SearchArgs } from 'src/common/dtos/args/search.args';
 import { FindAllUsersUseCase } from './application/uses-cases/find-all-users.use-case';
 
 
-@Resolver(() => String)
+@Resolver(() => UserGraphQL)
 export class UserResolver {
 	constructor(
 		private readonly createUserUseCase: CreateUserUseCase,

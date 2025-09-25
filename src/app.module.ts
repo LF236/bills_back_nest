@@ -19,6 +19,7 @@ import { AuthService } from './auth/auth.service';
 import { UserOrmEntity } from './user/infrastructure/orm/typeorm/user.orm-entity';
 import { PermissionOrmEntity } from './permissions/infrastructure/orm/typeorm/permission.orm-entity';
 import { RolOrmEntity } from './rols/infrastructure/orm/typeorm/rol.orm-entity';
+import { EmailModule } from './email/email.module';
 @Module({
 	imports: [
 		ConfigModule.forRoot(),
@@ -51,7 +52,8 @@ import { RolOrmEntity } from './rols/infrastructure/orm/typeorm/rol.orm-entity';
 		RolsModule,
 		PermissionsModule,
 		SeedModule,
-		CommandModule
+		CommandModule,
+		EmailModule
 	],
 	providers: [
 		AppService,

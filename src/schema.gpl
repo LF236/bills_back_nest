@@ -7,13 +7,6 @@ type Bill {
   exampleField: Int!
 }
 
-type UserGraphQL {
-  id: ID!
-  email: String!
-  is_active: Boolean!
-  roles: [String!]!
-}
-
 type PermissionGraphQL {
   id: ID!
   name: String!
@@ -40,6 +33,24 @@ type RolsGraphql {
   deleted_at: DateTime
   users: [String!]
   permissions: [PermissionGraphQL!]
+  permissionsList: [GetOnlyPermission!]!
+}
+
+type UserGraphQL {
+  id: ID!
+  email: String!
+  is_active: Boolean!
+  roles: [RolsGraphql!]!
+}
+
+type GetOnlyPermission {
+  id: ID!
+  name: String!
+  description: String
+  is_active: Boolean!
+  created_at: DateTime!
+  updated_at: DateTime!
+  deleted_at: DateTime
 }
 
 type GetPermissionsGraphQL {

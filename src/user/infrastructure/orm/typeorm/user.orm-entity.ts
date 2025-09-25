@@ -28,4 +28,29 @@ export class UserOrmEntity {
 	@JoinTable()
 	roles: RolOrmEntity[];
 
+
+	@Column({
+		type: 'timestamp',
+		nullable: true,
+	})
+	verified_at: Date | null;
+
+	@Column({
+		type: 'timestamp',
+		default: () => 'CURRENT_TIMESTAMP'
+	})
+	created_at: Date;
+
+	@Column({
+		type: 'timestamp',
+		default: () => 'CURRENT_TIMESTAMP'
+	})
+	updated_at: Date;
+
+	@Column({
+		type: 'timestamp',
+		nullable: true,
+	})
+	deleted_at: Date | null;
+
 }

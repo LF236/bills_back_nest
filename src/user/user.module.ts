@@ -6,6 +6,7 @@ import { UserOrmEntity } from './infrastructure/orm/typeorm/user.orm-entity';
 import { CreateUserUseCase } from './application/uses-cases/create-user.use-case';
 import { UserOrmRepository } from './infrastructure/orm/typeorm/user.repository.impl';
 import { FindAllUsersUseCase } from './application/uses-cases/find-all-users.use-case';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
 	providers: [
@@ -20,7 +21,8 @@ import { FindAllUsersUseCase } from './application/uses-cases/find-all-users.use
 	],
 	imports: [
 		RolsModule,
-		TypeOrmModule.forFeature([UserOrmEntity])
+		TypeOrmModule.forFeature([UserOrmEntity]),
+		EmailModule
 	],
 	exports: [
 		TypeOrmModule,

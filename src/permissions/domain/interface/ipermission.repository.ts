@@ -3,6 +3,8 @@ import { Permission } from "../entities/permission.entity";
 import { PaginationArgs } from "src/common/application/dto/args/pagination.args";
 import { SearchArgs } from "src/common/application/dto/args/search.args";
 import { UpdatePermissionInput } from "src/permissions/application/dto/inputs/update-permission.input";
+import * as DataLoader from 'dataloader';
+
 
 export interface IPermissionRepository {
 	create(createPermissionInput: CreatePermissionInput) : Promise<Permission>;
@@ -14,4 +16,5 @@ export interface IPermissionRepository {
 	delete(id: string) : Promise<boolean>;
 	findByIds(ids: string[]) : Promise<Permission[]>;
 	dropAllPermissions() : Promise<void>;
+	batchPermissions() : DataLoader<string, Permission[]>;
 }

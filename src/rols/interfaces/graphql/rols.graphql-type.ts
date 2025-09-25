@@ -52,4 +52,18 @@ export class RolsGraphql {
 		this.users = users || [];
 		this.permissions = permissions || [];
 	}
+
+	public static createFromObj(data: any) : RolsGraphql {
+		return new RolsGraphql(
+			data.id,
+			data.name,
+			data.description,
+			data.is_active,
+			data.created_at,
+			data.updated_at,
+			data.deleted_at,
+			data.users,
+			data.permissions
+		);
+	}
 }

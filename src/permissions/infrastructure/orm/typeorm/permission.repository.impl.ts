@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import * as DataLoader from 'dataloader';
 import { InjectRepository } from "@nestjs/typeorm";
 import { IPermissionRepository } from "src/permissions/domain/interface/ipermission.repository";
 import { PermissionOrmEntity } from "./permission.orm-entity";
@@ -7,7 +8,6 @@ import { Permission } from "src/permissions/domain/entities/permission.entity";
 import { CreatePermissionInput } from "src/permissions/application/dto/inputs/create-permission.input";
 import { PaginationArgs } from "src/common/application/dto/args/pagination.args";
 import { SearchArgs } from "src/common/application/dto/args/search.args";
-import { throws } from "assert";
 import { Rol } from "src/rols/domain/entities/rol.entity";
 import { UpdatePermissionInput } from "src/permissions/application/dto/inputs/update-permission.input";
 
@@ -156,4 +156,27 @@ export class PermissionOrmRepositoryImp implements IPermissionRepository {
 			.where({})
 			.execute();
 	}
+
+	batchPermissions(): DataLoader<string, Permission[]> {
+		return new DataLoader<string, Permission[]>( async ( rolesIds: readonly string[] ) => {
+			const query = await this.repo.createQueryBuilder('permissions')
+				.leftJoinAndSelect('permissions.roles', 'roles')
+				.where('roles.id IN (:...rolesIds)', { rolesIds })
+				.andWhere('permissions.deleted_at IS NULL')
+				.andWhere('roles.deleted_at IS NULL')
+				.getMany();
+
+			const map = new Map<string, Permission[]>();
+
+			rolesIds.forEach( id => map.set(id, []) );
+
+			query.forEach(permission => {
+				permission.roles?.forEach( roleItem => {
+					map.get(roleItem.id)?.push( Permission.createFromObj(permission) );
+				} )
+			})
+
+			return rolesIds.map( id => map.get(id)! );
+		} );
+	} 
 }
