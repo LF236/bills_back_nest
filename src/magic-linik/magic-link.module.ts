@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { MagicLinikController } from './magic-linik.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MagicLinkOrmEntity } from './infraestructure/orm/typeorm/magic-link.orm-entity';
 import { MaginLickOrmImpl } from './infraestructure/orm/typeorm/magic-link.orm.impl';
 import { CreatemagicLinkUseCase } from './application/use-cases/create-magic-link.use-case';
+import { MagicLinkController } from './magic-link.controller';
 
 @Module({
-	controllers: [MagicLinikController],
+	controllers: [MagicLinkController],
 	providers: [
 		{
 			provide: 'MagicLinkRepository',
