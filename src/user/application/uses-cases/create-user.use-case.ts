@@ -4,6 +4,9 @@ import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { IUserRepository } from "src/user/domain/interfaces/iuser.repository";
 import { IRolRepository } from "src/rols/domain/interface/irol.repository";
 import { SendEmailUseCase } from "src/email/application/use-cases/send-email.use-case";
+import { CreatemagicLinkUseCase } from "src/magic-linik/application/use-cases/create-magic-link.use-case";
+import { UuidGeneratorPort } from "src/common/domain/port/uuid-generator.port";
+import { SendValidationEmailUseCase } from "src/email/application/use-cases/send-validation-email.use-case";
 
 @Injectable()
 export class CreateUserUseCase {
@@ -12,7 +15,11 @@ export class CreateUserUseCase {
 		private readonly userRepository: IUserRepository,
 		@Inject('RolRepository')
 		private readonly rolsRepository: IRolRepository,
-		private readonly sendEmailUseCase: SendEmailUseCase
+		@Inject('UuidGeneratorPort')
+		private readonly uuidGenerator: UuidGeneratorPort,
+		private readonly sendValidationEmailUseCase: SendValidationEmailUseCase,
+		private readonly createMagicLinkUseCase: CreatemagicLinkUseCase
+		
 	) {};
 
 	async execute(data: CreateUserInput) : Promise<UserGraphQL> {
@@ -28,11 +35,18 @@ export class CreateUserUseCase {
 
 		const createdUser = await this.userRepository.save(data, role_ids);
 		if(createdUser) {
-			await this.sendEmailUseCase.execute(
+			const token = await this.createMagicLinkUseCase.execute({
+				user_id: createdUser.getId(),
+				expires_at: new Date(Date.now() + 1000 * 60 * 15),
+				token: this.uuidGenerator.generate()
+			});
+
+			await this.sendValidationEmailUseCase.execute(
 				createdUser.getEmail(),
 				'Welcome to Our Service',
-				`Hello ${createdUser.getEmail()},\n\nThank you for registering with us! We're excited to have you on board.\n\nBest regards,\nThe Team`,
-				'validate-email.template.js'
+				``,
+				'validate-email.template.js',
+				token.getToken()
 			);
 		}
 		return createdUser.getGraphQLType();

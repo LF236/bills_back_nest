@@ -5,6 +5,7 @@ import { PermissionsModule } from 'src/permissions/permissions.module';
 import { UserModule } from 'src/user/user.module';
 import { SeedService } from './seed.service';
 import { ConfigModule } from '@nestjs/config';
+import { MagicLinkModule } from 'src/magic-linik/magic-link.module';
 
 @Module({
 	providers: [
@@ -15,7 +16,8 @@ import { ConfigModule } from '@nestjs/config';
 		ConfigModule,
 		RolsModule,
 		PermissionsModule,
-		UserModule
+		UserModule,
+		MagicLinkModule
 	]
 })
 export class SeedModule {}

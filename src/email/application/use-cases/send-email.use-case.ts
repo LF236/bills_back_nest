@@ -8,7 +8,7 @@ export class SendEmailUseCase {
         private readonly emailService: EmailServicePort
     ) {};
 
-    async execute(to: string, subject: string, body: string, template: string) : Promise<void> {
+    async execute(to: string, subject: string, body: string, template: string, token: string) : Promise<void> {
         await this.emailService.sendEmail({ to, subject, body, template });
     }
 }

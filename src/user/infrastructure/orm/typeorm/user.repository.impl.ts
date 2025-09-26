@@ -26,7 +26,7 @@ export class UserOrmRepository implements IUserRepository {
 		const newUser = await this.repo.save({
 			email: email,
 			password: hashSync(password, 10),
-			is_active: true,
+			is_active: false,
 			roles: rols.map( id => ({ id }) )
 		});
 

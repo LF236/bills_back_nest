@@ -29,6 +29,10 @@ export class User {
 		return this.email;
 	}
 
+	getId() : string {
+		return this.id;
+	}
+
 	getGraphQLType() : UserGraphQL {
 		return new UserGraphQL(
 			this.id,

@@ -24,10 +24,27 @@ export class NodemailerEmailService implements EmailServicePort {
 
     async sendEmail(email: EmailEntity): Promise<boolean> {
         try {
+            let html = email.body;
+
+            await this.transporter.sendMail({
+                from: process.env.EMAIL_USER,
+                to: email.to,
+                subject: email.subject,
+                html: html,
+            });
+            return true;
+        } catch(error) {
+            this.logger.error(`Error sending email to ${email.to}: ${error}`);
+            return false;
+        }
+    }
+
+    async sendValidateAccountEmail(email: EmailEntity, link: string) : Promise<boolean> {
+        try {
             let html = '';
             if(email.template) {
                 const Template = (await import(join(__dirname, 'templates', `${email.template}`))).default;
-                const element = React.createElement(Template, { email: email.to, link: 'www.google.com' });
+                const element = React.createElement(Template, { email: email.to, link: link });
                 html = await render(element);
             }
 

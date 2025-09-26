@@ -6,6 +6,7 @@ import { IPermissionRepository } from 'src/permissions/domain/interface/ipermiss
 import { IRolRepository } from 'src/rols/domain/interface/irol.repository';
 import { Permission } from 'src/permissions/domain/entities/permission.entity';
 import { PermissionOrmEntity } from 'src/permissions/infrastructure/orm/typeorm/permission.orm-entity';
+import { MagicLinkRepositoryPort } from 'src/magic-linik/domain/ports/magic-link-repository.port';
 
 @Injectable()
 export class SeedService {
@@ -16,6 +17,8 @@ export class SeedService {
 		private readonly rolRepository: IRolRepository,
 		@Inject('PermissionRepository')
 		private readonly permissionRepository: IPermissionRepository,
+		@Inject('MagicLinkRepository')
+		private readonly magicLinkRepository: MagicLinkRepositoryPort
 	) {};
 
 	async seedDatabase() : Promise<boolean> {
@@ -33,6 +36,9 @@ export class SeedService {
 		await this.rolRepository.dropAllRols();
 		// Delete permissions
 		await this.permissionRepository.dropAllPermissions();
+		// Delete magic links
+		await this.magicLinkRepository.dropAllToken();
+	
 	}
 
 	private async createPermissions() : Promise<boolean> {

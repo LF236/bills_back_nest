@@ -20,12 +20,17 @@ import { UserOrmEntity } from './user/infrastructure/orm/typeorm/user.orm-entity
 import { PermissionOrmEntity } from './permissions/infrastructure/orm/typeorm/permission.orm-entity';
 import { RolOrmEntity } from './rols/infrastructure/orm/typeorm/rol.orm-entity';
 import { EmailModule } from './email/email.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { MagicLinkOrmEntity } from './magic-linik/infraestructure/orm/typeorm/magic-link.orm-entity';
+import { MagicLinkModule } from './magic-linik/magic-link.module';
+import { CommonModule } from './common/common.module';
 @Module({
 	imports: [
 		ConfigModule.forRoot(),
 		BillModule, 
 		UserModule, 
 		AuthModule,
+		CommonModule,
 		TypeOrmModule.forRoot({
 			type: 'postgres',
 			host: process.env.DB_HOST || 'localhost',
@@ -33,7 +38,7 @@ import { EmailModule } from './email/email.module';
 			username: process.env.DB_USER || 'postgres',
 			password: process.env.DB_PASSWORD || 'password',
 			database: process.env.DB_NAME || 'mydatabase',
-			entities: [UserOrmEntity, PermissionOrmEntity, RolOrmEntity],
+			entities: [UserOrmEntity, PermissionOrmEntity, RolOrmEntity, MagicLinkOrmEntity],
 			synchronize: false	
 		}),
 
@@ -48,12 +53,17 @@ import { EmailModule } from './email/email.module';
 			})
 		}),
 
+		ServeStaticModule.forRoot({
+			rootPath: join(__dirname, '..', 'public'),
+		}),
+
 
 		RolsModule,
 		PermissionsModule,
 		SeedModule,
 		CommandModule,
-		EmailModule
+		EmailModule,
+		MagicLinkModule
 	],
 	providers: [
 		AppService,
