@@ -15,7 +15,6 @@ import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin
 import { SeedModule } from './seed/seed.module';
 import { CommandModule } from 'nestjs-command';
 import { CreateSuperuserCommand } from './commands/create-superuser.command';
-import { AuthService } from './auth/auth.service';
 import { UserOrmEntity } from './user/infrastructure/orm/typeorm/user.orm-entity';
 import { PermissionOrmEntity } from './permissions/infrastructure/orm/typeorm/permission.orm-entity';
 import { RolOrmEntity } from './rols/infrastructure/orm/typeorm/rol.orm-entity';

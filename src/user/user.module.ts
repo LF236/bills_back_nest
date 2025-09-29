@@ -10,6 +10,7 @@ import { EmailModule } from 'src/email/email.module';
 import { CommonModule } from 'src/common/common.module';
 import { MagicLinkModule } from 'src/magic-linik/magic-link.module';
 import { forwardRef } from '@nestjs/common';
+import { FindOneUserUseCase } from './application/uses-cases/find-one-user.use-case';
 
 @Module({
 	providers: [
@@ -20,7 +21,8 @@ import { forwardRef } from '@nestjs/common';
 		},
 		// Use cases
 		CreateUserUseCase,
-		FindAllUsersUseCase
+		FindAllUsersUseCase,
+		FindOneUserUseCase
 	],
 	imports: [
 		RolsModule,

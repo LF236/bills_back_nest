@@ -62,9 +62,23 @@ export class UserOrmRepository implements IUserRepository {
 	}
 
 	async findById(id: string): Promise<User | null> {
-		const user = await this.repo.findOneBy({ id });
+		const query = this.repo.createQueryBuilder('user')
+			.leftJoinAndSelect('user.roles', 'role', 'role.is_active = :is_active AND (role.deleted_at IS NULL OR role.id IS NULL)', { is_active: true })
+			.where('user.id = :id', { id });
+
+		const user = await query.getOne();
+		
 		if(!user) return null;
-		return User.createFromObj(user);
+
+		const roles : Rol[] = [];
+		for(const role of user.roles) {
+			const rolEntity = Rol.createFromObj(role);
+			roles.push(rolEntity);
+		}
+		const userEntity = User.createFromObj(user);
+		userEntity.setRoles(roles);
+
+		return userEntity;
 	}
 
 	async setUserAsVerified(id: string): Promise<boolean> {
