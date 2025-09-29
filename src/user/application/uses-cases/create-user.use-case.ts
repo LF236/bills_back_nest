@@ -19,7 +19,6 @@ export class CreateUserUseCase {
 		private readonly uuidGenerator: UuidGeneratorPort,
 		private readonly sendValidationEmailUseCase: SendValidationEmailUseCase,
 		private readonly createMagicLinkUseCase: CreatemagicLinkUseCase
-		
 	) {};
 
 	async execute(data: CreateUserInput) : Promise<UserGraphQL> {

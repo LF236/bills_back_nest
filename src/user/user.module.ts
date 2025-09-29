@@ -7,8 +7,9 @@ import { CreateUserUseCase } from './application/uses-cases/create-user.use-case
 import { UserOrmRepository } from './infrastructure/orm/typeorm/user.repository.impl';
 import { FindAllUsersUseCase } from './application/uses-cases/find-all-users.use-case';
 import { EmailModule } from 'src/email/email.module';
-import { MagicLinkModule } from 'src/magic-linik/magic-link.module';
 import { CommonModule } from 'src/common/common.module';
+import { MagicLinkModule } from 'src/magic-linik/magic-link.module';
+import { forwardRef } from '@nestjs/common';
 
 @Module({
 	providers: [
@@ -25,7 +26,7 @@ import { CommonModule } from 'src/common/common.module';
 		RolsModule,
 		TypeOrmModule.forFeature([UserOrmEntity]),
 		EmailModule,
-		MagicLinkModule,
+		forwardRef(() => MagicLinkModule),
 		CommonModule
 	],
 	exports: [

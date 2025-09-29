@@ -8,6 +8,7 @@ export class User {
 		public readonly email: string,
 		public readonly password: string,
 		public readonly is_active: boolean,
+		public readonly verified_at?: Date,
 		public roles?: Rol[]
 	) {};
 
@@ -17,7 +18,8 @@ export class User {
 			data.id,
 			data.email,
 			data.password,
-			data.is_active
+			data.is_active,
+			data.verified_at,
 		);
 	}
 

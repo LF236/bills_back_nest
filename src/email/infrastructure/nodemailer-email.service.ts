@@ -25,7 +25,6 @@ export class NodemailerEmailService implements EmailServicePort {
     async sendEmail(email: EmailEntity): Promise<boolean> {
         try {
             let html = email.body;
-
             await this.transporter.sendMail({
                 from: process.env.EMAIL_USER,
                 to: email.to,

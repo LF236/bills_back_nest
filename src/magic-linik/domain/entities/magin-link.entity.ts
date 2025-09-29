@@ -23,4 +23,12 @@ export class MaginLinkEntity {
     getToken() : string {
         return this.token;
     }
+
+    tokenIsExpired() : boolean {
+        return this.expires_at < new Date();
+    }
+
+    isUsed() : boolean {
+        return this.used_at !== null;
+    }
 }

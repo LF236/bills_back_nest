@@ -61,6 +61,23 @@ export class UserOrmRepository implements IUserRepository {
 		return User.createFromObj(user);	
 	}
 
+	async findById(id: string): Promise<User | null> {
+		const user = await this.repo.findOneBy({ id });
+		if(!user) return null;
+		return User.createFromObj(user);
+	}
+
+	async setUserAsVerified(id: string): Promise<boolean> {
+		const query = await this.repo.createQueryBuilder()
+			.update(UserOrmEntity)
+			.set({ verified_at: new Date(), is_active: true })
+			.where('id = :id', { id })
+			.execute();
+
+		if(!query.affected) return false;
+		return query.affected > 0;
+	}
+
 	async deleteAllUsers(): Promise<void> {
 		await this.repo.createQueryBuilder()
 			.delete()
