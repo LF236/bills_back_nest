@@ -33,4 +33,8 @@ export class Rol {
     setPermissions(permissions: any[]) {
         this.permissions = permissions;
     }
+
+    getName() : string {
+        return this.name;
+    }
 }

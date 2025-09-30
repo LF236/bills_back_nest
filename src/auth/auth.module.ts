@@ -6,16 +6,19 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GenerateJwtUseCase } from './application/use-cases/generate-jwt.use-case';
+import { JwtStrategy } from './infraestructure/strategies/jwt.strategy';
 
 @Module({
 	controllers: [AuthController],
 	providers: [
 		// UseCases
 		SignInUseCase,
-		GenerateJwtUseCase
+		GenerateJwtUseCase,
+		JwtStrategy
 	],
 	imports: [
 		UserModule,
+		ConfigModule,
 		PassportModule.register({
 			defaultStrategy: 'jwt'
 		}),
@@ -30,6 +33,6 @@ import { GenerateJwtUseCase } from './application/use-cases/generate-jwt.use-cas
 			})
 		})
 	],
-	exports: [ JwtModule, PassportModule, JwtModule ]
+	exports: [ JwtModule, PassportModule, JwtModule, JwtStrategy ]
 })
 export class AuthModule {}

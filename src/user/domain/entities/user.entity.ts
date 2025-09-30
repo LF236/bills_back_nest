@@ -43,4 +43,9 @@ export class User {
 			this.roles ? this.roles.map( role => RolsGraphql.createFromObj(role) ) : []
 		);	
 	}
+
+	getPlainRoles() : string[] {
+		if(!this.roles) return [];
+		return this.roles.map( role => role.getName() );
+	}
 }

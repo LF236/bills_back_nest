@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
+import { JwtPayloadInterface } from "src/auth/domain/interface/jwt-payload.interface";
 
 @Injectable()
 export class GenerateJwtUseCase {
@@ -9,7 +10,7 @@ export class GenerateJwtUseCase {
         private readonly jwtService: JwtService
     ) {};
     
-    async execute(payload: any) {
+    async execute(payload: JwtPayloadInterface) {
         return this.jwtService.sign(payload);
     }
 }

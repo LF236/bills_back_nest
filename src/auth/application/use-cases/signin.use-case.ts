@@ -18,7 +18,7 @@ export class SignInUseCase {
 
         if(!bcrypt.compareSync(password, userByEmail.password)) throw new UnauthorizedException('Email or password invalid');
 
-        const token = await this.generateJwtUseCase.execute({ id: userByEmail.id, email: userByEmail.email });
+        const token = await this.generateJwtUseCase.execute({ id: userByEmail.id });
         
         return { token };
     }
