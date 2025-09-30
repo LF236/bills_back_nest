@@ -5,13 +5,14 @@ import { SignInUseCase } from './application/use-cases/signin.use-case';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { GenerateJwtUseCase } from './application/use-cases/generate-jwt.use-case';
 
 @Module({
 	controllers: [AuthController],
 	providers: [
 		// UseCases
-		SignInUseCase
-
+		SignInUseCase,
+		GenerateJwtUseCase
 	],
 	imports: [
 		UserModule,
