@@ -5,9 +5,11 @@ import { CreateUserUseCase } from './application/uses-cases/create-user.use-case
 import { PaginationArgs } from 'src/common/dtos/args/pagination.args';
 import { SearchArgs } from 'src/common/dtos/args/search.args';
 import { FindAllUsersUseCase } from './application/uses-cases/find-all-users.use-case';
-import { UUID } from 'typeorm/driver/mongodb/bson.typings';
 import { ParseUUIDPipe } from '@nestjs/common';
 import { FindOneUserUseCase } from './application/uses-cases/find-one-user.use-case';
+import { GplAuthDecorator } from 'src/auth/infraestructure/decorators/gpl-auth.decorator';
+import { GetUserDecorator } from 'src/auth/infraestructure/decorators/get-user.decorator';
+import { User } from './domain/entities/user.entity';
 
 @Resolver(() => UserGraphQL)
 export class UserResolver {
@@ -35,5 +37,13 @@ export class UserResolver {
 		@Args('id', { type: () => String }, ParseUUIDPipe) id: string
 	) {
 		return this.findOneUserUseCase.execute(id);
+	}
+
+	@Query(() => UserGraphQL, { name: 'me' })
+	@GplAuthDecorator('admin', 'default_user')
+	me(
+		@GetUserDecorator() user: User
+	) {
+		return user.getGraphQLType();
 	}
 }

@@ -3,6 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { User } from 'src/user/domain/entities/user.entity';
 import { META_ROLES } from '../decorators/role-protected.decorator';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class UserRoleGuard implements CanActivate {
@@ -17,7 +18,10 @@ export class UserRoleGuard implements CanActivate {
         if (!validRoles) return true;
         if (validRoles.length === 0) return true;
 
-        const req = context.switchToHttp().getRequest();
+        let req = context.switchToHttp().getRequest();
+        if(!req) req = GqlExecutionContext.create(context).getContext().req;
+
+        
         const user = req.user as User;
         if (!user) throw new BadRequestException('User not provided');
 
