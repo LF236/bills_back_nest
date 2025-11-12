@@ -10,3 +10,9 @@ services:
       POSTGRES_USER: "${DB_USER}"
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
+    networks:
+      - laravel-dev
+networks:
+  laravel-dev:
+    driver: bridge
+    external: true
