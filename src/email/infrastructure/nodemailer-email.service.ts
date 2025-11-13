@@ -8,55 +8,84 @@ import * as React from 'react';
 
 @Injectable()
 export class NodemailerEmailService implements EmailServicePort {
-    private transporter : nodemailer.Transporter;
-    private readonly logger = new Logger(NodemailerEmailService.name, { timestamp: true });
+	private transporter: nodemailer.Transporter;
+	private readonly logger = new Logger(NodemailerEmailService.name, { timestamp: true });
 
-    constructor(
-    ) {
-        this.transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            }
-        })
-    }
+	constructor(
+	) {
+		if(process.env.NODE_ENV === 'production') {
+			this.transporter = nodemailer.createTransport({
+				service: 'gmail',
+				auth: {
+					user: process.env.EMAIL_USER,
+					pass: process.env.EMAIL_PASS,
+				}
+			})
+		} else {
+			this.transporter = nodemailer.createTransport({
+				host: 'smtp.ethereal.email',
+				secure: false,
+				port: 587,
+				auth: {
+					user: process.env.EMAIL_TEST_USER,
+					pass: process.env.EMAIL_TEST_PASS,
+				}
+			})
+		}
+	}
 
-    async sendEmail(email: EmailEntity): Promise<boolean> {
-        try {
-            let html = email.body;
-            await this.transporter.sendMail({
-                from: process.env.EMAIL_USER,
-                to: email.to,
-                subject: email.subject,
-                html: html,
-            });
-            return true;
-        } catch(error) {
-            this.logger.error(`Error sending email to ${email.to}: ${error}`);
-            return false;
-        }
-    }
+	async sendEmail(email: EmailEntity): Promise<boolean> {
+		try {
+			let html = email.body;
+			await this.transporter.sendMail({
+				from: process.env.EMAIL_USER,
+				to: email.to,
+				subject: email.subject,
+				html: html,
+			});
+			if(process.env.NODE_ENV !== 'production') {
+				this.logger.log(`Preview URL: ${nodemailer.getTestMessageUrl(await this.transporter.sendMail({
+					from: process.env.EMAIL_USER,
+					to: email.to,
+					subject: email.subject,
+					html: html,
+				}))}`);
+			}
+			return true;
+		} catch (error) {
+			this.logger.error(`Error sending email to ${email.to}: ${error}`);
+			return false;
+		}
+	}
 
-    async sendValidateAccountEmail(email: EmailEntity, link: string) : Promise<boolean> {
-        try {
-            let html = '';
-            if(email.template) {
-                const Template = (await import(join(__dirname, 'templates', `${email.template}`))).default;
-                const element = React.createElement(Template, { email: email.to, link: link });
-                html = await render(element);
-            }
+	async sendValidateAccountEmail(email: EmailEntity, link: string): Promise<boolean> {
+		try {
+			let html = '';
+			if (email.template) {
+				const Template = (await import(join(__dirname, 'templates', `${email.template}`))).default;
+				const element = React.createElement(Template, { email: email.to, link: link });
+				html = await render(element);
+			}
 
-            await this.transporter.sendMail({
-                from: process.env.EMAIL_USER,
-                to: email.to,
-                subject: email.subject,
-                html: html,
-            });
-            return true;
-        } catch(error) {
-            this.logger.error(`Error sending email to ${email.to}: ${error}`);
-            return false;
-        }
-    }
+			await this.transporter.sendMail({
+				from: process.env.EMAIL_USER,
+				to: email.to,
+				subject: email.subject,
+				html: html,
+			});
+
+			if(process.env.NODE_ENV !== 'production') {
+				this.logger.log(`Preview URL: ${nodemailer.getTestMessageUrl(await this.transporter.sendMail({
+					from: process.env.EMAIL_USER,
+					to: email.to,
+					subject: email.subject,
+					html: html,
+				}))}`);
+			}
+			return true;
+		} catch (error) {
+			this.logger.error(`Error sending email to ${email.to}: ${error}`);
+			return false;
+		}
+	}
 }

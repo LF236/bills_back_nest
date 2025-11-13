@@ -15,6 +15,8 @@ export class SignInUseCase {
         const { email, password } = signInDto;
         const userByEmail = await this.userRepository.findByEmail(email);
         if(!userByEmail) throw new UnauthorizedException('Email or password invalid');
+        if(userByEmail.verified_at === null) throw new BadRequestException('User not verified - Please verify your email');
+        if(userByEmail.is_active === false) throw new UnauthorizedException('User is inactive');
 
         if(!bcrypt.compareSync(password, userByEmail.password)) throw new UnauthorizedException('Email or password invalid');
 

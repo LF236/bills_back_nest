@@ -12,6 +12,11 @@ export class UserOrmEntity {
 	email: string;
 
 	@Column({
+		unique: true
+	})
+	name: string;
+
+	@Column({
 		type: 'varchar',
 		length: 255,
 		nullable: false,

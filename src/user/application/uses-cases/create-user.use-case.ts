@@ -27,6 +27,11 @@ export class CreateUserUseCase {
 			throw new BadRequestException("User already exists with this email");
 		}
 
+		const findByName = await this.userRepository.findByName(data.name);
+		if (findByName) {
+			throw new BadRequestException("User already exists with this name");
+		}
+
 		let role_ids : string[] = [];
 		const default_role = await this.rolsRepository.findByName('default_user');
 

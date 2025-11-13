@@ -33,6 +33,7 @@ import { FindOneUserUseCase } from './application/uses-cases/find-one-user.use-c
 	],
 	exports: [
 		TypeOrmModule,
+		CreateUserUseCase,
 		'UserRepository',
 	]
 })

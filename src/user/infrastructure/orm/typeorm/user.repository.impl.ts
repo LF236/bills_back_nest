@@ -20,13 +20,15 @@ export class UserOrmRepository implements IUserRepository {
 	async save(user: CreateUserInput, rols: string[] = []): Promise<User> {
 		const {
 			email,
-			password
+			password,
+			name
 		} = user;
 		
 		const newUser = await this.repo.save({
 			email: email,
 			password: hashSync(password, 10),
-			is_active: false,
+			name: name,
+			is_active: true,
 			roles: rols.map( id => ({ id }) )
 		});
 
@@ -60,6 +62,12 @@ export class UserOrmRepository implements IUserRepository {
 		if(!user) return null;
 		return User.createFromObj(user);	
 	}
+
+	async findByName(name: string): Promise<User | null> {
+		const user = await this.repo.findOneBy({ name: name });
+		if(!user) return null;
+		return User.createFromObj(user);
+	}	
 
 	async findById(id: string): Promise<User | null> {
 		const query = this.repo.createQueryBuilder('user')

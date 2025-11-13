@@ -96,7 +96,9 @@ input UpdateBillInput {
 
 input CreateUserInput {
   email: String!
+  name: String!
   password: String!
+  confirmPassword: String!
 }
 
 input CreateRolInput {
