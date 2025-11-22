@@ -25,7 +25,10 @@ import { MagicLinkModule } from './magic-linik/magic-link.module';
 import { CommonModule } from './common/common.module';
 @Module({
 	imports: [
-		ConfigModule.forRoot(),
+		ConfigModule.forRoot({
+			isGlobal: true,
+			envFilePath: `.env`
+		}),
 		BillModule, 
 		UserModule, 
 		AuthModule,
