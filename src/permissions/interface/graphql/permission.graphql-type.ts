@@ -1,5 +1,4 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Permission } from "src/permissions/domain/entities/permission.entity";
 import { RolsGraphql } from "src/rols/interfaces/graphql/rols.graphql-type";
 
 @ObjectType()

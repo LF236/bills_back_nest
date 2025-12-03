@@ -23,6 +23,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { MagicLinkOrmEntity } from './magic-linik/infraestructure/orm/typeorm/magic-link.orm-entity';
 import { MagicLinkModule } from './magic-linik/magic-link.module';
 import { CommonModule } from './common/common.module';
+import { PersonModule } from './person/person.module';
+import { PersonOrmEntity } from './person/infrastructure/orm/typeorm/person.orm-entity';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -40,7 +42,7 @@ import { CommonModule } from './common/common.module';
 			username: process.env.DB_USER || 'postgres',
 			password: process.env.DB_PASSWORD || 'password',
 			database: process.env.DB_NAME || 'mydatabase',
-			entities: [UserOrmEntity, PermissionOrmEntity, RolOrmEntity, MagicLinkOrmEntity],
+			entities: [UserOrmEntity, PermissionOrmEntity, RolOrmEntity, MagicLinkOrmEntity, PersonOrmEntity],
 			synchronize: false	
 		}),
 
@@ -65,7 +67,8 @@ import { CommonModule } from './common/common.module';
 		SeedModule,
 		CommandModule,
 		EmailModule,
-		MagicLinkModule
+		MagicLinkModule,
+		PersonModule
 	],
 	providers: [
 		AppService,

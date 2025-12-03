@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
 import { CreateUserInput } from './application/dto/create-user.input';
 import { UserGraphQL } from './interface/graphql/user.graphql-type';
 import { CreateUserUseCase } from './application/uses-cases/create-user.use-case';
@@ -10,13 +10,16 @@ import { FindOneUserUseCase } from './application/uses-cases/find-one-user.use-c
 import { GplAuthDecorator } from 'src/auth/infraestructure/decorators/gpl-auth.decorator';
 import { GetUserDecorator } from 'src/auth/infraestructure/decorators/get-user.decorator';
 import { User } from './domain/entities/user.entity';
+import { PersonGraphqlType } from 'src/person/interface/person.graphql-type';
+import { GetPersonByUserIdUseCase } from 'src/person/application/use-cases/get-person-by-user-id.use-case';
 
 @Resolver(() => UserGraphQL)
 export class UserResolver {
 	constructor(
 		private readonly createUserUseCase: CreateUserUseCase,
 		private readonly findAllUsersUseCase: FindAllUsersUseCase,
-		private readonly findOneUserUseCase: FindOneUserUseCase
+		private readonly findOneUserUseCase: FindOneUserUseCase,
+		private readonly getPersonByUerIdUseCase: GetPersonByUserIdUseCase
 	) {};
 	
 	@Mutation(() => UserGraphQL)
@@ -45,5 +48,13 @@ export class UserResolver {
 		@GetUserDecorator() user: User
 	) {
 		return user.getGraphQLType();
+	}
+
+	@ResolveField(() => PersonGraphqlType, { nullable: true })
+	async person(
+		@Parent() user: UserGraphQL
+	) {
+		const person = await this.getPersonByUerIdUseCase.execute(user.id);
+		return person;
 	}
 }

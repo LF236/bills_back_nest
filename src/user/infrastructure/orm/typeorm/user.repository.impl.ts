@@ -100,6 +100,14 @@ export class UserOrmRepository implements IUserRepository {
 		return query.affected > 0;
 	}
 
+	async existsById(id: string): Promise<boolean> {
+		const userExists = await this.repo.createQueryBuilder('user')
+			.where('user.id = :id', { id })
+			.getExists();
+
+		return userExists;
+	}
+
 	async deleteAllUsers(): Promise<void> {
 		await this.repo.createQueryBuilder()
 			.delete()

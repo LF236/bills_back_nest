@@ -5,6 +5,7 @@ import { UserGraphQL } from "src/user/interface/graphql/user.graphql-type";
 export class User {
 	constructor(
 		public readonly id: string,
+		public readonly name: string,
 		public readonly email: string,
 		public readonly password: string,
 		public readonly is_active: boolean,
@@ -16,6 +17,7 @@ export class User {
 	static createFromObj(data : any) : User {
 		return new User(
 			data.id,
+			data.name,
 			data.email,
 			data.password,
 			data.is_active,
@@ -38,6 +40,7 @@ export class User {
 	getGraphQLType() : UserGraphQL {
 		return new UserGraphQL(
 			this.id,
+			this.name,
 			this.email,
 			this.is_active,
 			this.roles ? this.roles.map( role => RolsGraphql.createFromObj(role) ) : []

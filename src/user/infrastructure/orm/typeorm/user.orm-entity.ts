@@ -1,5 +1,6 @@
+import { PersonOrmEntity } from 'src/person/infrastructure/orm/typeorm/person.orm-entity';
 import { RolOrmEntity } from 'src/rols/infrastructure/orm/typeorm/rol.orm-entity';
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class UserOrmEntity {
@@ -58,4 +59,7 @@ export class UserOrmEntity {
 	})
 	deleted_at: Date | null;
 
+	@OneToOne(() => PersonOrmEntity, (person) => person.user, { cascade: true })
+	person: PersonOrmEntity
+	
 }

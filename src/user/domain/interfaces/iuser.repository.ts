@@ -11,4 +11,5 @@ export interface IUserRepository {
 	setUserAsVerified(id: string) : Promise<boolean>;
 	findById(id: string) : Promise<User | null>;
 	deleteAllUsers(): Promise<void>;
+	existsById(id: string): Promise<boolean>;
 }

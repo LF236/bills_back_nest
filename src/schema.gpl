@@ -38,9 +38,32 @@ type RolsGraphql {
 
 type UserGraphQL {
   id: ID!
+  name: String!
   email: String!
   is_active: Boolean!
   roles: [RolsGraphql!]!
+  person: PersonGraphqlType
+}
+
+type PersonGraphqlType {
+  id: ID!
+  first_name: String!
+  last_name: String!
+  second_last_name: String
+  sex: Sex!
+  birh_date: DateTime
+  curp: String
+  rfc: String
+  created_at: DateTime!
+  updated_at: DateTime!
+  deleted_at: DateTime
+}
+
+"""Gender of a person"""
+enum Sex {
+  Male
+  Female
+  Other
 }
 
 type GetOnlyPermission {
@@ -80,6 +103,8 @@ type Mutation {
   createPermission(createPermissionInput: CreatePermissionInput!): PermissionGraphQL!
   updatePermission(updatePermissionInput: UpdatePermissionInput!): PermissionGraphQL!
   removePermission(id: ID!): Boolean!
+  createPerson(createPersonInput: CreatePersonInput!): PersonGraphqlType!
+  updatePerson(updatePersonInput: UpdatePersonInput!): PersonGraphqlType!
   seedDatabase: Boolean!
 }
 
@@ -126,4 +151,27 @@ input UpdatePermissionInput {
   description: String
   id: ID!
   is_active: Boolean
+}
+
+input CreatePersonInput {
+  id_user: ID!
+  first_name: String!
+  last_name: String!
+  second_last_name: String
+  sex: Sex!
+  birth_date: DateTime
+  curp: String
+  rfc: String
+}
+
+input UpdatePersonInput {
+  id_user: ID
+  first_name: String
+  last_name: String
+  second_last_name: String
+  sex: Sex
+  birth_date: DateTime
+  curp: String
+  rfc: String
+  id: ID!
 }

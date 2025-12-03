@@ -17,11 +17,15 @@ export class SignInUseCase {
         if(!userByEmail) throw new UnauthorizedException('Email or password invalid');
         if(userByEmail.verified_at === null) throw new BadRequestException('User not verified - Please verify your email');
         if(userByEmail.is_active === false) throw new UnauthorizedException('User is inactive');
-
+        console.log({
+            password,
+            dbPassword: userByEmail.password,
+            // compare: bcrypt.compareSync(password, userByEmail.password)
+        })
         if(!bcrypt.compareSync(password, userByEmail.password)) throw new UnauthorizedException('Email or password invalid');
 
         const token = await this.generateJwtUseCase.execute({ id: userByEmail.id });
-        
+
         return { token };
     }
 }

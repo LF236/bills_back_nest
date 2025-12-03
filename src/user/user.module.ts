@@ -11,6 +11,7 @@ import { CommonModule } from 'src/common/common.module';
 import { MagicLinkModule } from 'src/magic-linik/magic-link.module';
 import { forwardRef } from '@nestjs/common';
 import { FindOneUserUseCase } from './application/uses-cases/find-one-user.use-case';
+import { PersonModule } from 'src/person/person.module';
 
 @Module({
 	providers: [
@@ -28,8 +29,9 @@ import { FindOneUserUseCase } from './application/uses-cases/find-one-user.use-c
 		RolsModule,
 		TypeOrmModule.forFeature([UserOrmEntity]),
 		EmailModule,
+		forwardRef(() => PersonModule),
 		forwardRef(() => MagicLinkModule),
-		CommonModule
+		CommonModule,
 	],
 	exports: [
 		TypeOrmModule,
