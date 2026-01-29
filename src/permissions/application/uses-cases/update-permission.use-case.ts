@@ -15,7 +15,7 @@ export class UpdatePermissionUseCase {
 
         if(updatePermissionInput.name) {
             const findByName = await this.permissionRepository.findByName(`${updatePermissionInput.name.trim()}`);
-            if(findByName) {
+            if(findByName?.getId() !== updatePermissionInput.id && findByName) {
                 throw new Error(`Permission with name ${updatePermissionInput.name} already exists`);
             }
         }   

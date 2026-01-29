@@ -46,6 +46,7 @@ export class PermissionOrmRepositoryImp implements IPermissionRepository {
 		query.andWhere('permissions.deleted_at IS NULL');
 		query.andWhere('roles.deleted_at IS NULL');
 		query.andWhere('roles.is_active = true OR roles.id IS NULL');
+		query.orderBy('permissions.created_at', 'DESC');
 		const permissions = await query.getMany();
 
 		const permissionEntities = permissions.map(permission => {
