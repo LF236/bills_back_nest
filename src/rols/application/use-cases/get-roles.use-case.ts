@@ -5,12 +5,17 @@ import { IRolRepository } from "src/rols/domain/interface/irol.repository";
 
 @Injectable()
 export class GetRolesUseCase {
-    constructor(
-        @Inject('RolRepository')
-        private readonly rolRepository: IRolRepository
-    ) {};
+	constructor(
+		@Inject('RolRepository')
+		private readonly rolRepository: IRolRepository
+	) { };
 
-    async execute(paginationArgs: PaginationArgs, searchArgs: SearchArgs) {
-        return this.rolRepository.get(paginationArgs, searchArgs);
-    }
+	async execute(paginationArgs: PaginationArgs, searchArgs: SearchArgs) {
+		const items = await this.rolRepository.get(paginationArgs, searchArgs);
+		const count = await this.rolRepository.count(searchArgs);
+		return {
+			items: items,
+			total: count
+		}
+	}
 }

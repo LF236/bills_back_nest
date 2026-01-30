@@ -6,6 +6,7 @@ import { SearchArgs } from "src/common/dtos/args/search.args";
 
 export interface IRolRepository {
     get(pagionationArgs: PaginationArgs, searchArgs: SearchArgs) : Promise<Rol[]>;
+    count(searchArgs: SearchArgs) : Promise<number>;
     create(createRolInput: CreateRolInput) : Promise<Rol>;
     findOne(id: string) : Promise<Rol | null>;
     update(updateRolInput: UpdateRolInput) : Promise<Rol>;

@@ -13,6 +13,7 @@ import { DeleteRolUseCase } from './application/use-cases/delete-rol.use-case';
 import { PermissionsLoader } from 'src/permissions/infrastructure/orm/typeorm/loaders/permissions.loader';
 import { PermissionGraphQL } from 'src/permissions/interface/graphql/permission.graphql-type';
 import { GetOnlyPermissionGraphQL } from 'src/permissions/interface/graphql/get-only-permission.graphql-type';
+import { GetRolsGraphQL } from './interfaces/graphql/get-rols.graphql-type';
 CreateRolInput;
 @Resolver(() => RolsGraphql)
 export class RolsResolver {
@@ -33,7 +34,7 @@ export class RolsResolver {
 		return this.createRolUseCase.execute(createRolInput);
 	}
 
-	@Query(() => [RolsGraphql], { name: 'rols' })
+	@Query(() => GetRolsGraphQL, { name: 'rols' })
 	findAll(
 		@Args() paginationArgs: PaginationArgs,
 		@Args() searchArgs: SearchArgs

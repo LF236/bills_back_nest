@@ -76,6 +76,11 @@ type GetOnlyPermission {
   deleted_at: DateTime
 }
 
+type GetRolsGraphQL {
+  items: [RolsGraphql!]!
+  total: Float!
+}
+
 type GetPermissionsGraphQL {
   items: [PermissionGraphQL!]!
   total: Int!
@@ -86,7 +91,7 @@ type Query {
   users(offset: Int = 0, limit: Int = 10, search: String): [UserGraphQL!]!
   user(id: String!): UserGraphQL!
   me: UserGraphQL!
-  rols(offset: Int = 0, limit: Int = 10, search: String): [RolsGraphql!]!
+  rols(offset: Int = 0, limit: Int = 10, search: String): GetRolsGraphQL!
   rol(id: ID!): RolsGraphql!
   permissions(offset: Int = 0, limit: Int = 10, search: String): GetPermissionsGraphQL!
   permission(id: ID!): PermissionGraphQL!

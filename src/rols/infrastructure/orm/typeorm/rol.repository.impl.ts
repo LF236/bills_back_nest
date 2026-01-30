@@ -62,6 +62,17 @@ export class RolOrmRepositoryImpl implements IRolRepository {
         return [];
     }
 
+    async count(searchArgs: SearchArgs) : Promise<number> {
+        const query = this.repo.createQueryBuilder('rol');
+
+        if(searchArgs.search) {
+            query.where('(rol.name ILIKE :search OR rol.description ILIKE :search)', { search: `%${searchArgs.search.trim()}%` });
+        }
+
+        const count = await query.getCount();
+        return count || 0;
+    }
+
     async findOne(id: string) : Promise<Rol | null> {
         const query = this.repo.createQueryBuilder('rol')
             .leftJoinAndSelect('rol.permissions', 'permission')
