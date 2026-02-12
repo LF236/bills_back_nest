@@ -16,8 +16,8 @@ export class UpdateRolUseCase {
         if(!findById) throw new BadRequestException(`The rol with id ${updateRolInput.id} does not exist in the system`);
 
         if(updateRolInput.name) {
-            const findByName = await this.rolRepository.validateIfRolExistsByName(updateRolInput.name);
-            if(findByName) throw new BadRequestException(`The rol with name ${updateRolInput.name} already exists in the system`);
+            const findByName = await this.rolRepository.findByName(updateRolInput.name);
+            if(findByName?.getId() !== updateRolInput.id && findByName) throw new BadRequestException(`The rol with name ${updateRolInput.name} already exists in the system`);            
         }
 
         if(updateRolInput.permissions && updateRolInput.permissions.length > 0) {

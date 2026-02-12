@@ -15,4 +15,8 @@ export class PaginationArgs {
 	@IsOptional()
 	@Min(1)
 	limit?: number = 10;
+
+	@Field(() => Boolean, { nullable: true })
+	@IsOptional()
+	paginate?: boolean = true;
 }

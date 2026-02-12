@@ -93,7 +93,7 @@ type Query {
   me: UserGraphQL!
   rols(offset: Int = 0, limit: Int = 10, search: String): GetRolsGraphQL!
   rol(id: ID!): RolsGraphql!
-  permissions(offset: Int = 0, limit: Int = 10, search: String): GetPermissionsGraphQL!
+  permissions(offset: Int = 0, limit: Int = 10, paginate: Boolean = true, search: String): GetPermissionsGraphQL!
   permission(id: ID!): PermissionGraphQL!
 }
 

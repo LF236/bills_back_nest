@@ -34,9 +34,13 @@ export class PermissionOrmRepositoryImp implements IPermissionRepository {
 		const { limit, offset } = pagination;
 		const { search } = searchArgs;
 
-		const query = this.repo.createQueryBuilder('permissions')
+		const query = this.repo.createQueryBuilder('permissions');
+
+		if( pagination.paginate === true ) {
+			query
 			.take(limit)
 			.skip(offset);
+		}
 
 		query.leftJoinAndSelect('permissions.roles', 'roles');
 
