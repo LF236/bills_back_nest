@@ -11,6 +11,12 @@ export class FindAllUsersUseCase {
     ) {};
 
     async execute(paginationArgs: PaginationArgs, searchArgs: SearchArgs) {
-        return this.userRepository.findAll(paginationArgs, searchArgs);
+        const users = await this.userRepository.findAll(paginationArgs, searchArgs);
+        const count = await this.userRepository.count(searchArgs);
+
+        return {
+            users: users,
+            total: count
+        }
     }
 }

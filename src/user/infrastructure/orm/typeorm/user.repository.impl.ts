@@ -41,6 +41,10 @@ export class UserOrmRepository implements IUserRepository {
 			.where('role.is_active = :is_active', { is_active: true })
 			.andWhere('role.deleted_at IS NULL OR role.id IS NULL');
 
+		if(searchArgs.search) {
+			query.where('user.name ILIKE :name', { name: `%${searchArgs.search}%` });
+		}
+
 		
 		let data = await query.getMany();
 		
@@ -55,6 +59,17 @@ export class UserOrmRepository implements IUserRepository {
 		}
 
 		return results;
+	}
+
+	async count(searchArgs: SearchArgs) : Promise<number> {
+		const query = this.repo.createQueryBuilder('user');
+
+		if(searchArgs.search) {
+			query.where('user.name ILIKE :name', { name: `%${searchArgs.search}%` });
+		}
+		
+		let data = await query.getCount();
+		return data;
 	}
 
 	async findByEmail(email: string): Promise<User | null> {

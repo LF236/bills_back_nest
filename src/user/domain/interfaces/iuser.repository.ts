@@ -6,6 +6,7 @@ import { SearchArgs } from "src/common/dtos/args/search.args";
 export interface IUserRepository {
 	save(user: CreateUserInput, rols: string[] ) : Promise<User>;
 	findAll(paginationArgs: PaginationArgs, searchArgs: SearchArgs): Promise<User[]>;
+	count(searchArgs: SearchArgs) : Promise<number>;
 	findByEmail(email: string) : Promise<User | null>;
 	findByName(name: string) : Promise<User | null>;
 	setUserAsVerified(id: string) : Promise<boolean>;

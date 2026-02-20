@@ -51,4 +51,8 @@ export class User {
 		if(!this.roles) return [];
 		return this.roles.map( role => role.getName() );
 	}
+
+	getUserEntity() : User {
+		return this;
+	}
 }

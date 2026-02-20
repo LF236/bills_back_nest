@@ -66,6 +66,11 @@ enum Sex {
   Other
 }
 
+type GetUsersGraphQL {
+  users: [UserGraphQL!]!
+  total: Float!
+}
+
 type GetOnlyPermission {
   id: ID!
   name: String!
@@ -88,7 +93,7 @@ type GetPermissionsGraphQL {
 
 type Query {
   bill(id: Int!): Bill!
-  users(offset: Int = 0, limit: Int = 10, search: String): [UserGraphQL!]!
+  users(offset: Int = 0, limit: Int = 10, search: String): GetUsersGraphQL!
   user(id: String!): UserGraphQL!
   me: UserGraphQL!
   rols(offset: Int = 0, limit: Int = 10, search: String): GetRolsGraphQL!

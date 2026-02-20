@@ -12,6 +12,7 @@ import { GetUserDecorator } from 'src/auth/infraestructure/decorators/get-user.d
 import { User } from './domain/entities/user.entity';
 import { PersonGraphqlType } from 'src/person/interface/person.graphql-type';
 import { GetPersonByUserIdUseCase } from 'src/person/application/use-cases/get-person-by-user-id.use-case';
+import { GetUsersGraphQL } from './interface/graphql/get-users.graphql-type';
 
 @Resolver(() => UserGraphQL)
 export class UserResolver {
@@ -27,7 +28,7 @@ export class UserResolver {
 		return this.createUserUseCase.execute(createUserInput);
 	}
 
-	@Query(() => [UserGraphQL], { name: 'users' })
+	@Query(() => GetUsersGraphQL, { name: 'users' })
 	findAll(
 		@Args() paginationArgs: PaginationArgs,
 		@Args() searchArgs: SearchArgs

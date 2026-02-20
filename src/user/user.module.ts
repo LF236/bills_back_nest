@@ -12,6 +12,7 @@ import { MagicLinkModule } from 'src/magic-linik/magic-link.module';
 import { forwardRef } from '@nestjs/common';
 import { FindOneUserUseCase } from './application/uses-cases/find-one-user.use-case';
 import { PersonModule } from 'src/person/person.module';
+import { CreateSuperUserUseCase } from './application/uses-cases/create-super-user.use-case';
 
 @Module({
 	providers: [
@@ -23,7 +24,8 @@ import { PersonModule } from 'src/person/person.module';
 		// Use cases
 		CreateUserUseCase,
 		FindAllUsersUseCase,
-		FindOneUserUseCase
+		FindOneUserUseCase,
+		CreateSuperUserUseCase
 	],
 	imports: [
 		RolsModule,
@@ -36,6 +38,7 @@ import { PersonModule } from 'src/person/person.module';
 	exports: [
 		TypeOrmModule,
 		CreateUserUseCase,
+		CreateSuperUserUseCase,
 		'UserRepository',
 	]
 })
