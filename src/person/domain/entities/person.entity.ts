@@ -11,6 +11,8 @@ export class Person {
     private readonly created_at: Date,
     private readonly updated_at: Date,
     private readonly deleted_at: Date | null = null,
+    private readonly person_type: string = 'physical',
+    private readonly company_name: string | null = null,
   ) {};
 
   static createFromObj(data : any) : Person {
@@ -27,6 +29,8 @@ export class Person {
       data.created_at,
       data.updated_at,
       data.deleted_at ?? null,
+      data.person_type ?? 'physical',
+      data.company_name ?? null,
     );
     return person;
   }

@@ -6,6 +6,7 @@ import { PersonOrmEntity } from './person.orm-entity';
 import { Person } from 'src/person/domain/entities/person.entity';
 import { CreatePersonInput } from 'src/person/application/dto/create-person.input';
 import { UpdatePersonInput } from 'src/person/application/dto/update-person.input';
+import { PersonTypes } from 'src/common/domain/enums/person-types.enum';
 
 @Injectable()
 export class PersonOrmRepositoryImpl implements PersonRepositoryPort {
@@ -36,6 +37,10 @@ export class PersonOrmRepositoryImpl implements PersonRepositoryPort {
   }
 
   async save(person: CreatePersonInput): Promise<Person> {
+    if(person.person_type === PersonTypes.physical) {
+      person.company_name = undefined;
+    }
+
     await this.repo.save({
       first_name: person.first_name,
       last_name: person.last_name,
@@ -44,7 +49,9 @@ export class PersonOrmRepositoryImpl implements PersonRepositoryPort {
       birth_date: person.birth_date,
       curp: person.curp ?? null,
       rfc: person.rfc ?? null,
-      userId: person.id_user
+      userId: person.id_user,
+      person_type: person.person_type ?? 'physical',
+      company_name: person.company_name ?? null,
     });
 
     const savedPerson = await this.findByUserId(person.id_user);
@@ -66,6 +73,10 @@ export class PersonOrmRepositoryImpl implements PersonRepositoryPort {
       .andWhere('person.deleted_at IS NULL')
       .getOne())!;
 
+    if(updatePersonInput.person_type === PersonTypes.physical) {
+      updatePersonInput.company_name = undefined;
+    }
+
     if(updatePersonInput.first_name !== undefined) {
       personToUpdate.first_name = updatePersonInput.first_name;
     }
@@ -86,6 +97,17 @@ export class PersonOrmRepositoryImpl implements PersonRepositoryPort {
     }
     if(updatePersonInput.rfc !== undefined) {
       personToUpdate.rfc = updatePersonInput.rfc;
+    }
+
+    if(updatePersonInput.person_type !== undefined) {
+      personToUpdate.person_type = updatePersonInput.person_type;
+    }
+
+    if(updatePersonInput.person_type !== undefined && updatePersonInput.person_type === PersonTypes.physical) {
+      updatePersonInput.company_name = undefined;
+      personToUpdate.company_name = null;
+    } else if(updatePersonInput.company_name !== undefined) {
+      personToUpdate.company_name = updatePersonInput.company_name;
     }
 
     await this.repo.save(personToUpdate);

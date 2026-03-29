@@ -36,6 +36,12 @@ export class PersonGraphqlType {
   @Field(() => Date, { nullable: true })
   deleted_at: Date | null;
 
+  @Field(() => String)
+  person_type: string;
+
+  @Field(() => String, { nullable: true })
+  company_name: string | null;
+
   constructor(data: any) {
     this.id = data.id;
     this.first_name = data.first_name;
@@ -48,5 +54,7 @@ export class PersonGraphqlType {
     this.created_at = data.created_at;
     this.updated_at = data.updated_at;
     this.deleted_at = data.deleted_at ?? null;
+    this.person_type = data.person_type ?? 'physical';
+    this.company_name = data.company_name ?? null;
   }
 }

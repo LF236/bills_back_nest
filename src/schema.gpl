@@ -57,6 +57,8 @@ type PersonGraphqlType {
   created_at: DateTime!
   updated_at: DateTime!
   deleted_at: DateTime
+  person_type: String!
+  company_name: String
 }
 
 """Gender of a person"""
@@ -172,6 +174,14 @@ input CreatePersonInput {
   birth_date: DateTime
   curp: String
   rfc: String
+  person_type: PersonTypes!
+  company_name: String
+}
+
+"""Type of a person, either physical or moral"""
+enum PersonTypes {
+  physical
+  moral
 }
 
 input UpdatePersonInput {
@@ -183,5 +193,7 @@ input UpdatePersonInput {
   birth_date: DateTime
   curp: String
   rfc: String
+  person_type: PersonTypes
+  company_name: String
   id: ID!
 }

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { UuidAdapter } from './infraestructure/adapters/uuid.adapter';
 import { registerEnumType } from '@nestjs/graphql';
 import { Sex } from './domain/enums/sex.enum';
+import { PersonTypes } from './domain/enums/person-types.enum';
 
 @Module({
     providers: [
@@ -17,6 +18,10 @@ export class CommonModule {
         registerEnumType(Sex, {
             name: 'Sex',
             description: 'Gender of a person'
+        }),
+        registerEnumType(PersonTypes, {
+            name: 'PersonTypes',
+            description: 'Type of a person, either physical or moral'
         })
     }
 };

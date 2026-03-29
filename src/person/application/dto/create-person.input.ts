@@ -1,5 +1,6 @@
 import { Field, ID, InputType } from "@nestjs/graphql";
-import { IsNotEmpty, IsOptional } from "class-validator";
+import { IsNotEmpty, IsOptional, ValidateIf } from "class-validator";
+import { PersonTypes } from "src/common/domain/enums/person-types.enum";
 import { Sex } from "src/common/domain/enums/sex.enum";
 
 @InputType()
@@ -35,4 +36,13 @@ export class CreatePersonInput {
   @Field(() => String, { nullable: true })
   @IsOptional()
   rfc?: string;
+
+  @Field(() => PersonTypes, { nullable: false })
+  @IsNotEmpty()
+  person_type: PersonTypes;
+
+  @Field(() => String, { nullable: true })
+  @ValidateIf((o) => o.person_type === PersonTypes.moral)
+  @IsNotEmpty({ message: 'company_name is required when person_type is moral' })
+  company_name?: string;
 }

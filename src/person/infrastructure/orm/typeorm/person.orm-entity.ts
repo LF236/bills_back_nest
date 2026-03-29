@@ -36,6 +36,12 @@ export class PersonOrmEntity {
   @Column({ type: 'timestamp', nullable: true })
   deleted_at: Date | null;
 
+  @Column({ name: 'person_type', type: 'varchar', length: 255, default: 'physical' })
+  person_type: string;
+
+  @Column({ name: 'company_name', type: 'varchar', length: 255, nullable: true, default: null })
+  company_name: string | null;
+
   @Column({ name: 'user_id', type: 'uuid' })
   userId: string;
 
