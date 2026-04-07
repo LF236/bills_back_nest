@@ -57,3 +57,9 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 .vscode
 postgres_data/
+
+static/bills/*
+!static/bills/.gitkeep
+static/user/*
+static/user/**/*
+!static/user/.gitkeep

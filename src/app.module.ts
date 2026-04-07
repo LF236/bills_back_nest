@@ -25,6 +25,7 @@ import { MagicLinkModule } from './magic-linik/magic-link.module';
 import { CommonModule } from './common/common.module';
 import { PersonModule } from './person/person.module';
 import { PersonOrmEntity } from './person/infrastructure/orm/typeorm/person.orm-entity';
+import { FilesModule } from './files/files.module';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -68,7 +69,8 @@ import { PersonOrmEntity } from './person/infrastructure/orm/typeorm/person.orm-
 		CommandModule,
 		EmailModule,
 		MagicLinkModule,
-		PersonModule
+		PersonModule,
+		FilesModule
 	],
 	providers: [
 		AppService,
