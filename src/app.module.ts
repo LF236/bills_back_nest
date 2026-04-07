@@ -26,6 +26,7 @@ import { CommonModule } from './common/common.module';
 import { PersonModule } from './person/person.module';
 import { PersonOrmEntity } from './person/infrastructure/orm/typeorm/person.orm-entity';
 import { FilesModule } from './files/files.module';
+import { FileOrmEntity } from './files/infrastructure/orm/typeorm/file.orm.entity';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -43,7 +44,10 @@ import { FilesModule } from './files/files.module';
 			username: process.env.DB_USER || 'postgres',
 			password: process.env.DB_PASSWORD || 'password',
 			database: process.env.DB_NAME || 'mydatabase',
-			entities: [UserOrmEntity, PermissionOrmEntity, RolOrmEntity, MagicLinkOrmEntity, PersonOrmEntity],
+			entities: [UserOrmEntity, PermissionOrmEntity, 
+				RolOrmEntity, MagicLinkOrmEntity, PersonOrmEntity,
+				FileOrmEntity
+			],
 			synchronize: false	
 		}),
 

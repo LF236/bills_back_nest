@@ -1,16 +1,18 @@
 import { BadRequestException, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { FilesService } from './files.service';
 import { GplAuthDecorator } from 'src/auth/infraestructure/decorators/gpl-auth.decorator';
 import { User } from 'src/user/domain/entities/user.entity';
 import { GetUserDecorator } from 'src/auth/infraestructure/decorators/get-user.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { imageValidatorHelper } from './infrastructure/helpers/image-validator.helper';
-import { diskStorage } from 'multer';
 import { saveImageWithUserIdHelper } from './infrastructure/helpers/save-image-with-user-id.helper';
+import { CreateFileDto } from './application/dtos/create-file.dto';
+import { CreateFileUseCase } from './application/use-cases/create-file.use-case';
 
 @Controller('files')
 export class FilesController {
-  constructor(private readonly filesService: FilesService) {}
+  constructor(
+    private readonly createFileUseCase: CreateFileUseCase
+  ) {};
 
   @Post('upload/avatar')
   @GplAuthDecorator('admin', 'default_user')
@@ -18,7 +20,7 @@ export class FilesController {
     fileFilter: imageValidatorHelper,
     storage: saveImageWithUserIdHelper,
   }))
-  uplaodUserImage(
+  async uploadUserImage(
     @GetUserDecorator() user: User,
     @UploadedFile() file: Express.Multer.File
   ) {
@@ -26,6 +28,16 @@ export class FilesController {
       throw new BadRequestException('Invalid file type. Only images are allowed.')
     }
 
-    return 'upload user image';
+    const relativePath = file.path.split('static')[1];
+
+    const data : CreateFileDto = {
+      name: file.filename,
+      extension: file.mimetype.split('/')[1],
+      path: relativePath,
+      type: 'user_avatar'
+    };
+
+    const fileCreated = await this.createFileUseCase.execute(data);
+    return fileCreated;
   }
 }
