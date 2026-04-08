@@ -10,7 +10,9 @@ export class User {
 		public readonly password: string,
 		public readonly is_active: boolean,
 		public readonly verified_at?: Date,
-		public roles?: Rol[]
+		public avatar_file_id?: string,
+		public roles?: Rol[],
+		
 	) {};
 
 
@@ -22,6 +24,7 @@ export class User {
 			data.password,
 			data.is_active,
 			data.verified_at,
+			data.avatar_file_id
 		);
 	}
 
@@ -43,7 +46,8 @@ export class User {
 			this.name,
 			this.email,
 			this.is_active,
-			this.roles ? this.roles.map( role => RolsGraphql.createFromObj(role) ) : []
+			this.roles ? this.roles.map( role => RolsGraphql.createFromObj(role) ) : [],
+			this.avatar_file_id
 		);	
 	}
 

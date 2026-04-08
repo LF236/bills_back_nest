@@ -34,7 +34,6 @@ export class UserOrmEntity {
 	@JoinTable()
 	roles: RolOrmEntity[];
 
-
 	@Column({
 		type: 'timestamp',
 		nullable: true,
@@ -60,6 +59,12 @@ export class UserOrmEntity {
 	deleted_at: Date | null;
 
 	@OneToOne(() => PersonOrmEntity, (person) => person.user, { cascade: true })
-	person: PersonOrmEntity
-	
+	person: PersonOrmEntity;
+
+	@Column({
+		type: 'varchar',
+		length: 255,
+		nullable: true,
+	})
+	avatar_file_id: string | null;
 }

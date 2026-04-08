@@ -4,6 +4,8 @@ import { FileRepositoryImpl } from './infrastructure/orm/typeorm/file.repository
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FileOrmEntity } from './infrastructure/orm/typeorm/file.orm.entity';
 import { CreateFileUseCase } from './application/use-cases/create-file.use-case';
+import { UserModule } from 'src/user/user.module';
+import { GetAvatarUseCase } from './application/use-cases/get-avatar.use-case';
 
 @Module({
   controllers: [FilesController],
@@ -13,11 +15,13 @@ import { CreateFileUseCase } from './application/use-cases/create-file.use-case'
       useClass: FileRepositoryImpl
     },
     // uses cases
-    CreateFileUseCase
+    CreateFileUseCase,
+    GetAvatarUseCase
   ],
 
   imports: [
-    TypeOrmModule.forFeature([FileOrmEntity])
+    TypeOrmModule.forFeature([FileOrmEntity]),
+    UserModule
   ],
 
   exports: [

@@ -13,4 +13,5 @@ export interface IUserRepository {
 	findById(id: string) : Promise<User | null>;
 	deleteAllUsers(): Promise<void>;
 	existsById(id: string): Promise<boolean>;
+	updateAvatar(id_file: string, user_id: string) : Promise<boolean>;
 }

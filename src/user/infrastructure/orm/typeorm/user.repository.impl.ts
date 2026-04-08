@@ -90,7 +90,7 @@ export class UserOrmRepository implements IUserRepository {
 			.where('user.id = :id', { id });
 
 		const user = await query.getOne();
-		
+
 		if(!user) return null;
 
 		const roles : Rol[] = [];
@@ -128,5 +128,17 @@ export class UserOrmRepository implements IUserRepository {
 			.delete()
 			.where({})
 			.execute();
+	}
+
+	async updateAvatar(id_file: string, user_id: string): Promise<boolean> {
+		const updated = await this.repo.createQueryBuilder()
+			.update(UserOrmEntity)
+			.set({ avatar_file_id: id_file })
+			.where('id = :id', { id: user_id })
+			.execute();
+
+		if(!updated.affected) return false;
+
+		return true;
 	}
 }

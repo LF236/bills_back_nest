@@ -20,7 +20,6 @@ export class UserRoleGuard implements CanActivate {
 
         let req = context.switchToHttp().getRequest();
         if(!req) req = GqlExecutionContext.create(context).getContext().req;
-
         
         const user = req.user as User;
         if (!user) throw new BadRequestException('User not provided');

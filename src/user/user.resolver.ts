@@ -48,6 +48,7 @@ export class UserResolver {
 	me(
 		@GetUserDecorator() user: User
 	) {
+		// console.log(user);
 		return user.getGraphQLType();
 	}
 
@@ -57,5 +58,15 @@ export class UserResolver {
 	) {
 		const person = await this.getPersonByUerIdUseCase.execute(user.id);
 		return person;
+	}
+
+	
+	@ResolveField(() => String, { nullable: true })
+	async avatarUrl(
+		@Parent() user: UserGraphQL,
+	) {
+		const url = process.env.UPLOADS_URL || 'http://localhost:3000/api/files/avatar/';
+		const avatarUrl = user.avatar_file_id ? `${url}${user.avatar_file_id}` : null;
+		return avatarUrl || null;
 	}
 }

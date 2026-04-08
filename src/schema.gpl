@@ -42,7 +42,9 @@ type UserGraphQL {
   email: String!
   is_active: Boolean!
   roles: [RolsGraphql!]!
+  avatar_file_id: String
   person: PersonGraphqlType
+  avatarUrl: String
 }
 
 type PersonGraphqlType {
