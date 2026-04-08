@@ -13,6 +13,7 @@ import { forwardRef } from '@nestjs/common';
 import { FindOneUserUseCase } from './application/uses-cases/find-one-user.use-case';
 import { PersonModule } from 'src/person/person.module';
 import { CreateSuperUserUseCase } from './application/uses-cases/create-super-user.use-case';
+import { FilesModule } from 'src/files/files.module';
 
 @Module({
 	providers: [
@@ -33,6 +34,7 @@ import { CreateSuperUserUseCase } from './application/uses-cases/create-super-us
 		EmailModule,
 		forwardRef(() => PersonModule),
 		forwardRef(() => MagicLinkModule),
+		forwardRef(() => FilesModule),
 		CommonModule,
 	],
 	exports: [

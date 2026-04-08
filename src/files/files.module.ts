@@ -7,6 +7,8 @@ import { CreateFileUseCase } from './application/use-cases/create-file.use-case'
 import { UserModule } from 'src/user/user.module';
 import { GetAvatarUseCase } from './application/use-cases/get-avatar.use-case';
 import { CreateCleanFileUseCase } from './application/use-cases/create-clean-file.use-case';
+import { forwardRef } from '@nestjs/common';
+
 
 @Module({
   controllers: [FilesController],
@@ -23,13 +25,13 @@ import { CreateCleanFileUseCase } from './application/use-cases/create-clean-fil
 
   imports: [
     TypeOrmModule.forFeature([FileOrmEntity]),
-    UserModule
+    forwardRef(() => UserModule)
   ],
 
   exports: [
     TypeOrmModule,
     'FileRepository',
-    CreateCleanFileUseCase
+    CreateCleanFileUseCase,
   ]
 })
 export class FilesModule {}

@@ -7,6 +7,7 @@ import { SendEmailUseCase } from "src/email/application/use-cases/send-email.use
 import { CreatemagicLinkUseCase } from "src/magic-linik/application/use-cases/create-magic-link.use-case";
 import { UuidGeneratorPort } from "src/common/domain/port/uuid-generator.port";
 import { SendValidationEmailUseCase } from "src/email/application/use-cases/send-validation-email.use-case";
+import { FileRepositoryPort } from "src/files/domain/ports/file-repository.port";
 
 @Injectable()
 export class CreateUserUseCase {
@@ -15,6 +16,8 @@ export class CreateUserUseCase {
 		private readonly userRepository: IUserRepository,
 		@Inject('RolRepository')
 		private readonly rolsRepository: IRolRepository,
+		@Inject('FileRepository')
+		private readonly fileRepository: FileRepositoryPort,
 		@Inject('UuidGeneratorPort')
 		private readonly uuidGenerator: UuidGeneratorPort,
 		private readonly sendValidationEmailUseCase: SendValidationEmailUseCase,
@@ -44,6 +47,11 @@ export class CreateUserUseCase {
 				expires_at: new Date(Date.now() + 1000 * 60 * 15),
 				token: this.uuidGenerator.generate()
 			});
+
+			const avatarDefault = await this.fileRepository.getDefaultAvatar('user_avatar_any_default');
+			if(avatarDefault) {
+				await this.userRepository.updateAvatar(avatarDefault.getId(), createdUser.getId());
+			}
 
 			await this.sendValidationEmailUseCase.execute(
 				createdUser.getEmail(),

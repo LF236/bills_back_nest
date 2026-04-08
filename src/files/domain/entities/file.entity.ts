@@ -22,4 +22,8 @@ export class FileEntity {
       data.deleted_at
     );
   }
+
+  getId() : string {
+    return this.id;
+  }
 }

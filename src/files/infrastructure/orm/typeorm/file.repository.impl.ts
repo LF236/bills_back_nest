@@ -35,4 +35,15 @@ export class FileRepositoryImpl implements FileRepositoryPort {
 
     return FileEntity.createFromObj(query);
   }
+
+  async getDefaultAvatar(type: string = 'any_default') : Promise<FileEntity | null> {
+    const query = await this.repo.createQueryBuilder('file')
+      .select(['file.id', 'file.name', 'file.extension', 'file.path', 'file.type'])
+      .where('file.type = :type', { type })
+      .getOne();
+
+    if(!query) return null;
+
+    return FileEntity.createFromObj(query);
+  }
 }
