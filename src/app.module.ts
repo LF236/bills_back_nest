@@ -27,6 +27,7 @@ import { PersonModule } from './person/person.module';
 import { PersonOrmEntity } from './person/infrastructure/orm/typeorm/person.orm-entity';
 import { FilesModule } from './files/files.module';
 import { FileOrmEntity } from './files/infrastructure/orm/typeorm/file.orm.entity';
+import { AddDefaultImagesCommand } from './commands/add-default-images.command';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -79,7 +80,8 @@ import { FileOrmEntity } from './files/infrastructure/orm/typeorm/file.orm.entit
 	providers: [
 		AppService,
 		// COMMANDS
-		CreateSuperuserCommand
+		CreateSuperuserCommand,
+		AddDefaultImagesCommand
 	],
 	exports: [],
 })

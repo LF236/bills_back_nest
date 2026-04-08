@@ -6,6 +6,7 @@ import { FileOrmEntity } from './infrastructure/orm/typeorm/file.orm.entity';
 import { CreateFileUseCase } from './application/use-cases/create-file.use-case';
 import { UserModule } from 'src/user/user.module';
 import { GetAvatarUseCase } from './application/use-cases/get-avatar.use-case';
+import { CreateCleanFileUseCase } from './application/use-cases/create-clean-file.use-case';
 
 @Module({
   controllers: [FilesController],
@@ -16,7 +17,8 @@ import { GetAvatarUseCase } from './application/use-cases/get-avatar.use-case';
     },
     // uses cases
     CreateFileUseCase,
-    GetAvatarUseCase
+    GetAvatarUseCase,
+    CreateCleanFileUseCase
   ],
 
   imports: [
@@ -26,7 +28,8 @@ import { GetAvatarUseCase } from './application/use-cases/get-avatar.use-case';
 
   exports: [
     TypeOrmModule,
-    'FileRepository'
+    'FileRepository',
+    CreateCleanFileUseCase
   ]
 })
 export class FilesModule {}
