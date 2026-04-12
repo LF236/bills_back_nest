@@ -14,13 +14,13 @@ const DEFAULT_IMAGES : CreateFileDto[] = [
   {
     name: 'woman_default',
     extension: 'svg',
-    path: '/default/images/women.svg',
+    path: '/default_images/women.svg',
     type: 'user_avatar_women_default'
   },
   {
     name: 'any_default',
     extension: 'jpg',
-    path: '/default/images/cat.jpg',
+    path: '/default_images/cat.jpg',
     type: 'user_avatar_any_default'
   }
 ]
