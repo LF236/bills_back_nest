@@ -13,9 +13,16 @@ export class CreateFileUseCase {
     private readonly userRepository: IUserRepository,
   ) {};
 
+  private static generateSecureUrl(id_image: string): string {
+    const url = process.env.UPLOADS_URL || 'http://localhost:3000/api/files/avatar/';
+    return `${url}${id_image}`;
+  }
+
   async execute(data: CreateFileDto, user_id: string) : Promise<FileEntity> {
     const newFile = await this.fileRepository.save(data);
     this.userRepository.updateAvatar(newFile.id, user_id);
+    const secureUrl = CreateFileUseCase.generateSecureUrl(newFile.id);
+    newFile.setSecureUrl(secureUrl);
     return newFile;
   }
 }

@@ -7,7 +7,8 @@ export class FileEntity {
     public readonly type: string,
     public readonly created_at: Date,
     public readonly updated_at: Date,
-    public readonly deleted_at: Date | null
+    public readonly deleted_at: Date | null,
+    public url?: string
   ) {};
 
   static createFromObj(data: any) : FileEntity {
@@ -25,5 +26,9 @@ export class FileEntity {
 
   getId() : string {
     return this.id;
+  }
+
+  setSecureUrl(url: string) {
+    this.url = url;
   }
 }
