@@ -28,6 +28,9 @@ import { PersonOrmEntity } from './person/infrastructure/orm/typeorm/person.orm-
 import { FilesModule } from './files/files.module';
 import { FileOrmEntity } from './files/infrastructure/orm/typeorm/file.orm.entity';
 import { AddDefaultImagesCommand } from './commands/add-default-images.command';
+import { LogsModule } from './logs/logs.module';
+import { LogOrmEntity } from './logs/infrastructure/orm/typeorm/log.orm.entity';
+
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -47,7 +50,7 @@ import { AddDefaultImagesCommand } from './commands/add-default-images.command';
 			database: process.env.DB_NAME || 'mydatabase',
 			entities: [UserOrmEntity, PermissionOrmEntity, 
 				RolOrmEntity, MagicLinkOrmEntity, PersonOrmEntity,
-				FileOrmEntity
+				FileOrmEntity, LogOrmEntity
 			],
 			synchronize: false	
 		}),
@@ -75,13 +78,14 @@ import { AddDefaultImagesCommand } from './commands/add-default-images.command';
 		EmailModule,
 		MagicLinkModule,
 		PersonModule,
-		FilesModule
+		FilesModule,
+		LogsModule
 	],
 	providers: [
 		AppService,
 		// COMMANDS
 		CreateSuperuserCommand,
-		AddDefaultImagesCommand
+		AddDefaultImagesCommand,
 	],
 	exports: [],
 })

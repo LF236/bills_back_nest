@@ -1,0 +1,25 @@
+import { Injectable } from '@nestjs/common';
+import { Request } from 'express';
+import { UAParser } from 'ua-parser-js';
+import { RequestContextInterface } from './request-context.interface';
+
+@Injectable()
+export class RequestContextFactory {
+  create(req: Request) : RequestContextInterface {
+    const parser = new UAParser(req.headers['user-agent']);
+    const ua = parser.getResult();
+
+    return {
+      ip: req.ip ?? null,
+      user_agent: req.headers['user-agent'] ?? null,
+      browser: ua.browser.name ?? null,
+      browser_version: ua.browser.version ?? null,
+      os: ua.os.name ?? null,
+      os_version: ua.os.version ?? null,
+      device: ua.device.type ?? 'Desktop',
+      method_http: req.method,
+      route: req.originalUrl,
+      request_id: (req.headers['x-request-id'] as string) ?? null,
+    }
+  }
+}
