@@ -13,6 +13,7 @@ import { User } from './domain/entities/user.entity';
 import { PersonGraphqlType } from 'src/person/interface/person.graphql-type';
 import { GetPersonByUserIdUseCase } from 'src/person/application/use-cases/get-person-by-user-id.use-case';
 import { GetUsersGraphQL } from './interface/graphql/get-users.graphql-type';
+import { GetMeUseCase } from './application/uses-cases/get-me.use-case';
 
 @Resolver(() => UserGraphQL)
 export class UserResolver {
@@ -20,7 +21,8 @@ export class UserResolver {
 		private readonly createUserUseCase: CreateUserUseCase,
 		private readonly findAllUsersUseCase: FindAllUsersUseCase,
 		private readonly findOneUserUseCase: FindOneUserUseCase,
-		private readonly getPersonByUerIdUseCase: GetPersonByUserIdUseCase
+		private readonly getPersonByUerIdUseCase: GetPersonByUserIdUseCase,
+		private readonly getMeUseCase: GetMeUseCase
 	) {};
 	
 	@Mutation(() => UserGraphQL)
@@ -48,8 +50,7 @@ export class UserResolver {
 	me(
 		@GetUserDecorator() user: User
 	) {
-		// console.log(user);
-		return user.getGraphQLType();
+		return this.getMeUseCase.execute(user);
 	}
 
 	@ResolveField(() => PersonGraphqlType, { nullable: true })

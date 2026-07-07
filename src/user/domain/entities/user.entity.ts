@@ -59,4 +59,8 @@ export class User {
 	getUserEntity() : User {
 		return this;
 	}
+
+	getUserName() : string {
+		return this.getUserName();
+	}
 }

@@ -5,6 +5,16 @@ import { RequestContextInterface } from './request-context.interface';
 
 @Injectable()
 export class RequestContextFactory {
+
+  private getRoute(req: Request) : string {
+    const isGql = req.originalUrl === '/graphql';
+    if(isGql) {
+      return req.body?.operationName ?? 'graphql'
+    } else {
+      return req.originalUrl
+    }
+  }
+
   create(req: Request) : RequestContextInterface {
     const parser = new UAParser(req.headers['user-agent']);
     const ua = parser.getResult();
@@ -18,7 +28,7 @@ export class RequestContextFactory {
       os_version: ua.os.version ?? null,
       device: ua.device.type ?? 'Desktop',
       method_http: req.method,
-      route: req.originalUrl,
+      route: this.getRoute(req),
       request_id: (req.headers['x-request-id'] as string) ?? null,
     }
   }
