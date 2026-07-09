@@ -1,6 +1,6 @@
 export class LogEntity {
   constructor(
-    private readonly id: string,
+    private readonly id: string | null,
     private readonly user_id: string,
     private readonly user_name: string,
     private readonly action: string,
@@ -21,7 +21,7 @@ export class LogEntity {
 
   static createFromObj(data: any): LogEntity {
     return new LogEntity(
-      data.id,
+      data.id ?? null,
       data.user_id,
       data.user_name,
       data.action,

@@ -10,7 +10,6 @@ export class LogsService {
     @Inject('LogRepository')
     private readonly logRepository: LogRepositoryPort,
     private readonly requestContextFactory: RequestContextFactory,
-
     private readonly context: RequestContextService
   ) {};
 
@@ -19,6 +18,6 @@ export class LogsService {
   ) : Promise<void> {
     const request : any = this.context.getRequest();
     const httpContext = this.requestContextFactory.create(request);
-    this.logRepository.saveLog(dto, httpContext);
+    await this.logRepository.saveLog(dto, httpContext);
   }
 }

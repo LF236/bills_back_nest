@@ -7,14 +7,14 @@ export class LogOrmEntity {
 
   @Column({
     type: 'uuid',
-    nullable: false
+    nullable: true,
   })
-  user_id: string;
+  user_id?: string | null;
 
   @Column({
     type: 'varchar',
     length: 255,
-    nullable: false
+    nullable: true
   })
   user_name: string;
 
@@ -112,4 +112,28 @@ export class LogOrmEntity {
     default: () => 'CURRENT_TIMESTAMP'
   })
   updated_at: Date;
+
+  @Column({
+    type: 'varchar',
+    nullable: true
+  })
+  browser: string | null;
+
+  @Column({
+    type: 'varchar',
+    nullable: true
+  })
+  browser_version: string | null;
+
+  @Column({
+    type: 'varchar',
+    nullable: true
+  })
+  os: string | null;
+
+  @Column({
+    type: 'varchar',
+    nullable: true
+  })
+  device: string | null
 }

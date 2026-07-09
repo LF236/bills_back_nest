@@ -1,5 +1,5 @@
 export class CreateLogDto {
-  user_id: string;
+  user_id: string | null;
   user_name: string;
   action: string;
   module: string;

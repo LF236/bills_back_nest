@@ -61,6 +61,6 @@ export class User {
 	}
 
 	getUserName() : string {
-		return this.getUserName();
+		return this.name;
 	}
 }

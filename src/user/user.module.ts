@@ -15,6 +15,7 @@ import { PersonModule } from 'src/person/person.module';
 import { CreateSuperUserUseCase } from './application/uses-cases/create-super-user.use-case';
 import { FilesModule } from 'src/files/files.module';
 import { GetMeUseCase } from './application/uses-cases/get-me.use-case';
+import { LogsModule } from 'src/logs/logs.module';
 
 @Module({
 	providers: [
@@ -38,6 +39,7 @@ import { GetMeUseCase } from './application/uses-cases/get-me.use-case';
 		forwardRef(() => MagicLinkModule),
 		forwardRef(() => FilesModule),
 		CommonModule,
+		LogsModule
 	],
 	exports: [
 		TypeOrmModule,

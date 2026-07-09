@@ -31,18 +31,22 @@ export class UserResolver {
 	}
 
 	@Query(() => GetUsersGraphQL, { name: 'users' })
+	@GplAuthDecorator('admin', 'default_user')
 	findAll(
 		@Args() paginationArgs: PaginationArgs,
-		@Args() searchArgs: SearchArgs
+		@Args() searchArgs: SearchArgs,
+		@GetUserDecorator() user: User
 	) {
-		return this.findAllUsersUseCase.execute(paginationArgs, searchArgs);
+		return this.findAllUsersUseCase.execute(paginationArgs, searchArgs, user);
 	}
 
 	@Query(() => UserGraphQL, { name: 'user' })
+	@GplAuthDecorator('admin', 'default_user')
 	findOne(
-		@Args('id', { type: () => String }, ParseUUIDPipe) id: string
+		@Args('id', { type: () => String }, ParseUUIDPipe) id: string,
+		@GetUserDecorator() user: User
 	) {
-		return this.findOneUserUseCase.execute(id);
+		return this.findOneUserUseCase.execute(id, user);
 	}
 
 	@Query(() => UserGraphQL, { name: 'me' })

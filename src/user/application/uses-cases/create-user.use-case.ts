@@ -8,6 +8,9 @@ import { CreatemagicLinkUseCase } from "src/magic-linik/application/use-cases/cr
 import { UuidGeneratorPort } from "src/common/domain/port/uuid-generator.port";
 import { SendValidationEmailUseCase } from "src/email/application/use-cases/send-validation-email.use-case";
 import { FileRepositoryPort } from "src/files/domain/ports/file-repository.port";
+import { User } from "src/user/domain/entities/user.entity";
+import { LogsService } from "src/logs/logs.service";
+import { Timer } from "src/common/domain/timing/timer";
 
 @Injectable()
 export class CreateUserUseCase {
@@ -21,10 +24,40 @@ export class CreateUserUseCase {
 		@Inject('UuidGeneratorPort')
 		private readonly uuidGenerator: UuidGeneratorPort,
 		private readonly sendValidationEmailUseCase: SendValidationEmailUseCase,
-		private readonly createMagicLinkUseCase: CreatemagicLinkUseCase
+		private readonly createMagicLinkUseCase: CreatemagicLinkUseCase,
+		private readonly logService: LogsService
 	) {};
 
+	async saveLog(duration = 0, err : any = null) {
+		if(!err) {
+      await this.logService.log({
+      	user_id: null,
+        user_name: 'guest_user',
+        action: 'CreateUser',
+        module: 'User',
+        resource: 'CreateUserUseCase',
+        description: 'Create-User',
+        result: 'success',
+        message_error: '',
+        duration: duration
+      });
+    } else {
+      await this.logService.log({
+        user_id: null,
+        user_name: 'guest_user',
+        action: 'CreateUser',
+        module: 'User',
+        resource: 'CreateUserUseCase',
+        description: 'Create-User',
+        result: 'error',
+        message_error: err.message ?? 'unknow',
+        duration: duration
+      });
+    }
+	}
+
 	async execute(data: CreateUserInput) : Promise<UserGraphQL> {
+		const timer = Timer.create();
 		const exists = await this.userRepository.findByEmail(data.email);
 		if (exists) {
 			throw new BadRequestException("User already exists with this email");
@@ -60,6 +93,8 @@ export class CreateUserUseCase {
 				'validate-email.template.js',
 				token.getToken()
 			);
+			
+			await this.saveLog(timer.stop(), null);
 		}
 		return createdUser.getGraphQLType();
 	}

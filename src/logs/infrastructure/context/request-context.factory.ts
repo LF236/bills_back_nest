@@ -16,6 +16,21 @@ export class RequestContextFactory {
   }
 
   create(req: Request) : RequestContextInterface {
+    if(!req) {
+      return {
+        ip: null,
+        user_agent: null,
+        browser: null,
+        browser_version: null,
+        os: null,
+        os_version: null,
+        device: null,
+        method_http: null,
+        route: null,
+        request_id: null
+      }
+    }
+
     const parser = new UAParser(req.headers['user-agent']);
     const ua = parser.getResult();
 

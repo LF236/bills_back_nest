@@ -5,6 +5,7 @@ import { Sex } from './domain/enums/sex.enum';
 import { PersonTypes } from './domain/enums/person-types.enum';
 import { RequesContextMiddleware } from './infraestructure/middlewares/request-context.middleware';
 import { RequestContextService } from './infraestructure/context/request-context.service';
+import { GraphqlRequestContextInterceptor } from './infraestructure/interceptors/graphql-request-context.interceptor';
 
 @Module({
     providers: [
@@ -12,11 +13,13 @@ import { RequestContextService } from './infraestructure/context/request-context
             provide: 'UuidGeneratorPort',
             useClass: UuidAdapter
         },
-        RequestContextService
+        RequestContextService,
+        GraphqlRequestContextInterceptor
     ],
     exports: [
         'UuidGeneratorPort',
-        RequestContextService
+        RequestContextService,
+        GraphqlRequestContextInterceptor
     ]
 })
 export class CommonModule implements NestModule {
@@ -25,15 +28,15 @@ export class CommonModule implements NestModule {
             name: 'Sex',
             description: 'Gender of a person'
         }),
-        registerEnumType(PersonTypes, {
-            name: 'PersonTypes',
-            description: 'Type of a person, either physical or moral'
-        })
+            registerEnumType(PersonTypes, {
+                name: 'PersonTypes',
+                description: 'Type of a person, either physical or moral'
+            })
     }
 
     configure(consumer: MiddlewareConsumer) {
-     consumer
-        .apply(RequesContextMiddleware)
-        .forRoutes('*')
+        consumer
+            .apply(RequesContextMiddleware)
+            .forRoutes('/graphql')
     }
 };

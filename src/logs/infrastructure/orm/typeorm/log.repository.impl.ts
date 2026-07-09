@@ -31,7 +31,11 @@ export class LogRepositoryImpl implements LogRepositoryPort {
       method_http: addionalData.method_http ?? null,
       route: addionalData.route ?? null,
       request_id: addionalData.request_id ?? null,
-      duration: dto.duration ?? null
+      duration: dto.duration ?? null,
+      browser: addionalData.browser ?? null,
+      browser_version: addionalData.browser_version ?? null,
+      os: addionalData.os ?? null,
+      device: addionalData.device ?? null
     });
 
     log = await this.repo.save(log);

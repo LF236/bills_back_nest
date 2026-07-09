@@ -30,6 +30,8 @@ import { FileOrmEntity } from './files/infrastructure/orm/typeorm/file.orm.entit
 import { AddDefaultImagesCommand } from './commands/add-default-images.command';
 import { LogsModule } from './logs/logs.module';
 import { LogOrmEntity } from './logs/infrastructure/orm/typeorm/log.orm.entity';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { GraphqlRequestContextInterceptor } from './common/infraestructure/interceptors/graphql-request-context.interceptor';
 
 @Module({
 	imports: [
@@ -60,9 +62,14 @@ import { LogOrmEntity } from './logs/infrastructure/orm/typeorm/log.orm.entity';
 			useFactory: async () => ({
 				autoSchemaFile: join(process.cwd(), 'src/schema.gpl'),
 				playground: false,		
+					context: ({ req }) => {
+            return {
+							req,
+            };
+        },
 				plugins: [
 					ApolloServerPluginLandingPageLocalDefault({ embed: true })
-				]
+				],
 			})
 		}),
 
@@ -86,6 +93,10 @@ import { LogOrmEntity } from './logs/infrastructure/orm/typeorm/log.orm.entity';
 		// COMMANDS
 		CreateSuperuserCommand,
 		AddDefaultImagesCommand,
+		{
+			provide: APP_INTERCEPTOR,
+			useClass: GraphqlRequestContextInterceptor
+		}
 	],
 	exports: [],
 })
