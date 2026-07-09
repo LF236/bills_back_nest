@@ -6,6 +6,7 @@ import { LogOrmEntity } from './infrastructure/orm/typeorm/log.orm.entity';
 import { RequestContextFactory } from './infrastructure/context/request-context.factory';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CommonModule } from 'src/common/common.module';
+import { AuditErrorInterceptor } from './infrastructure/interceptors/audit-error.interceptor';
 
 @Module({
   providers: [
@@ -15,6 +16,7 @@ import { CommonModule } from 'src/common/common.module';
     },
     LogsService,
     RequestContextFactory,
+    AuditErrorInterceptor
   ],
   imports: [
     TypeOrmModule.forFeature([ LogOrmEntity ]),

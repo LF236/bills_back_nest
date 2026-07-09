@@ -32,6 +32,7 @@ import { LogsModule } from './logs/logs.module';
 import { LogOrmEntity } from './logs/infrastructure/orm/typeorm/log.orm.entity';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { GraphqlRequestContextInterceptor } from './common/infraestructure/interceptors/graphql-request-context.interceptor';
+import { AuditErrorInterceptor } from './logs/infrastructure/interceptors/audit-error.interceptor';
 
 @Module({
 	imports: [
@@ -96,6 +97,10 @@ import { GraphqlRequestContextInterceptor } from './common/infraestructure/inter
 		{
 			provide: APP_INTERCEPTOR,
 			useClass: GraphqlRequestContextInterceptor
+		},
+		{
+			provide: APP_INTERCEPTOR,
+			useClass: AuditErrorInterceptor
 		}
 	],
 	exports: [],
