@@ -3,11 +3,13 @@ import { CreateUserInput } from "../dto/create-user.input";
 import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { IUserRepository } from "src/user/domain/interfaces/iuser.repository";
 import { IRolRepository } from "src/rols/domain/interface/irol.repository";
-import { SendEmailUseCase } from "src/email/application/use-cases/send-email.use-case";
 import { CreatemagicLinkUseCase } from "src/magic-linik/application/use-cases/create-magic-link.use-case";
 import { UuidGeneratorPort } from "src/common/domain/port/uuid-generator.port";
 import { SendValidationEmailUseCase } from "src/email/application/use-cases/send-validation-email.use-case";
 import { FileRepositoryPort } from "src/files/domain/ports/file-repository.port";
+import { User } from "src/user/domain/entities/user.entity";
+import { LogsService } from "src/logs/logs.service";
+import { Timer } from "src/common/domain/timing/timer";
 
 @Injectable()
 export class CreateUserUseCase {
@@ -21,10 +23,26 @@ export class CreateUserUseCase {
 		@Inject('UuidGeneratorPort')
 		private readonly uuidGenerator: UuidGeneratorPort,
 		private readonly sendValidationEmailUseCase: SendValidationEmailUseCase,
-		private readonly createMagicLinkUseCase: CreatemagicLinkUseCase
+		private readonly createMagicLinkUseCase: CreatemagicLinkUseCase,
+		private readonly logService: LogsService
 	) {};
 
-	async execute(data: CreateUserInput) : Promise<UserGraphQL> {
+	async saveLog(duration = 0, metadata: any = {}, user_id?: string | null, user_name?: string | null) {
+		await this.logService.log({
+			user_id: user_id ?? null,
+			user_name: user_name ?? 'guest_user',
+			action: 'CreateUser',
+			module: 'User',
+			resource: 'CreateUserUseCase',
+			description: 'Create-User',
+			result: 'success',
+			message_error: '',
+			duration: duration
+		}, { ...metadata });
+	}
+
+	async execute(data: CreateUserInput, user?: User | null) : Promise<UserGraphQL> {
+		const timer = Timer.create();
 		const exists = await this.userRepository.findByEmail(data.email);
 		if (exists) {
 			throw new BadRequestException("User already exists with this email");
@@ -45,8 +63,8 @@ export class CreateUserUseCase {
 			const token = await this.createMagicLinkUseCase.execute({
 				user_id: createdUser.getId(),
 				expires_at: new Date(Date.now() + 1000 * 60 * 15),
-				token: this.uuidGenerator.generate()
-			});
+				token: this.uuidGenerator.generate(),
+			}, user!!);
 
 			const avatarDefault = await this.fileRepository.getDefaultAvatar('user_avatar_any_default');
 			if(avatarDefault) {
@@ -58,8 +76,11 @@ export class CreateUserUseCase {
 				'Welcome to Our Service',
 				``,
 				'validate-email.template.js',
-				token.getToken()
+				token.getToken(),
+				user ?? null
 			);
+			
+			await this.saveLog(timer.stop(), data, user?.id, user?.getUserName());
 		}
 		return createdUser.getGraphQLType();
 	}

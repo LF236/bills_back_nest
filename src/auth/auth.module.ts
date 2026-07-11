@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GenerateJwtUseCase } from './application/use-cases/generate-jwt.use-case';
 import { JwtStrategy } from './infraestructure/strategies/jwt.strategy';
+import { LogsModule } from 'src/logs/logs.module';
 
 @Module({
 	controllers: [AuthController],
@@ -19,6 +20,7 @@ import { JwtStrategy } from './infraestructure/strategies/jwt.strategy';
 	imports: [
 		UserModule,
 		ConfigModule,
+		LogsModule,
 		PassportModule.register({
 			defaultStrategy: 'jwt'
 		}),

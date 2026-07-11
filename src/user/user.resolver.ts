@@ -13,6 +13,8 @@ import { User } from './domain/entities/user.entity';
 import { PersonGraphqlType } from 'src/person/interface/person.graphql-type';
 import { GetPersonByUserIdUseCase } from 'src/person/application/use-cases/get-person-by-user-id.use-case';
 import { GetUsersGraphQL } from './interface/graphql/get-users.graphql-type';
+import { GetMeUseCase } from './application/uses-cases/get-me.use-case';
+import { Audit } from 'src/logs/infrastructure/decorators/audit.decorator';
 
 @Resolver(() => UserGraphQL)
 export class UserResolver {
@@ -20,47 +22,78 @@ export class UserResolver {
 		private readonly createUserUseCase: CreateUserUseCase,
 		private readonly findAllUsersUseCase: FindAllUsersUseCase,
 		private readonly findOneUserUseCase: FindOneUserUseCase,
-		private readonly getPersonByUerIdUseCase: GetPersonByUserIdUseCase
+		private readonly getPersonByUerIdUseCase: GetPersonByUserIdUseCase,
+		private readonly getMeUseCase: GetMeUseCase
 	) {};
 	
 	@Mutation(() => UserGraphQL)
-	createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-		return this.createUserUseCase.execute(createUserInput);
+	@GplAuthDecorator('admin', 'default_user')
+	@Audit({
+		module: 'users',
+		action: 'Create User Admin',
+		resource: 'UserResolver',
+		description: 'Admin Create Account'
+	})
+	createUser(
+		@Args('createUserInput') createUserInput: CreateUserInput,
+		@GetUserDecorator() user: User
+	) {
+		return this.createUserUseCase.execute(createUserInput, user);
 	}
 
 	@Query(() => GetUsersGraphQL, { name: 'users' })
+	@GplAuthDecorator('admin', 'default_user')
+	@Audit({
+		module: 'users',
+		action: 'Get Users Admin',
+		resource: 'UserResolver',
+		description: 'Admin get users'
+	})
 	findAll(
 		@Args() paginationArgs: PaginationArgs,
-		@Args() searchArgs: SearchArgs
+		@Args() searchArgs: SearchArgs,
+		@GetUserDecorator() user: User
 	) {
-		return this.findAllUsersUseCase.execute(paginationArgs, searchArgs);
+		return this.findAllUsersUseCase.execute(paginationArgs, searchArgs, user);
 	}
 
 	@Query(() => UserGraphQL, { name: 'user' })
+	@GplAuthDecorator('admin', 'default_user')
+	@Audit({
+		module: 'users',
+		action: 'Get One User',
+		resource: 'UserResolver',
+		description: 'Admin get one user'
+	})
 	findOne(
-		@Args('id', { type: () => String }, ParseUUIDPipe) id: string
+		@Args('id', { type: () => String }, ParseUUIDPipe) id: string,
+		@GetUserDecorator() user: User
 	) {
-		return this.findOneUserUseCase.execute(id);
+		return this.findOneUserUseCase.execute(id, user);
 	}
 
 	@Query(() => UserGraphQL, { name: 'me' })
 	@GplAuthDecorator('admin', 'default_user')
+	@Audit({
+		module: 'users',
+		action: 'Get Me',
+		resource: 'UserResolver',
+		description: 'User get me information'
+	})
 	me(
 		@GetUserDecorator() user: User
 	) {
-		// console.log(user);
-		return user.getGraphQLType();
+		return this.getMeUseCase.execute(user);
 	}
 
 	@ResolveField(() => PersonGraphqlType, { nullable: true })
 	async person(
-		@Parent() user: UserGraphQL
+		@Parent() user: UserGraphQL,
 	) {
-		const person = await this.getPersonByUerIdUseCase.execute(user.id);
+		const person = await this.getPersonByUerIdUseCase.execute(user.id, user);
 		return person;
 	}
 
-	
 	@ResolveField(() => String, { nullable: true })
 	async avatarUrl(
 		@Parent() user: UserGraphQL,

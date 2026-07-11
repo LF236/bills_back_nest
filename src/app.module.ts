@@ -28,6 +28,12 @@ import { PersonOrmEntity } from './person/infrastructure/orm/typeorm/person.orm-
 import { FilesModule } from './files/files.module';
 import { FileOrmEntity } from './files/infrastructure/orm/typeorm/file.orm.entity';
 import { AddDefaultImagesCommand } from './commands/add-default-images.command';
+import { LogsModule } from './logs/logs.module';
+import { LogOrmEntity } from './logs/infrastructure/orm/typeorm/log.orm.entity';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { GraphqlRequestContextInterceptor } from './common/infraestructure/interceptors/graphql-request-context.interceptor';
+import { AuditErrorInterceptor } from './logs/infrastructure/interceptors/audit-error.interceptor';
+
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -47,7 +53,7 @@ import { AddDefaultImagesCommand } from './commands/add-default-images.command';
 			database: process.env.DB_NAME || 'mydatabase',
 			entities: [UserOrmEntity, PermissionOrmEntity, 
 				RolOrmEntity, MagicLinkOrmEntity, PersonOrmEntity,
-				FileOrmEntity
+				FileOrmEntity, LogOrmEntity
 			],
 			synchronize: false	
 		}),
@@ -57,9 +63,14 @@ import { AddDefaultImagesCommand } from './commands/add-default-images.command';
 			useFactory: async () => ({
 				autoSchemaFile: join(process.cwd(), 'src/schema.gpl'),
 				playground: false,		
+					context: ({ req }) => {
+            return {
+							req,
+            };
+        },
 				plugins: [
 					ApolloServerPluginLandingPageLocalDefault({ embed: true })
-				]
+				],
 			})
 		}),
 
@@ -75,13 +86,22 @@ import { AddDefaultImagesCommand } from './commands/add-default-images.command';
 		EmailModule,
 		MagicLinkModule,
 		PersonModule,
-		FilesModule
+		FilesModule,
+		LogsModule
 	],
 	providers: [
 		AppService,
 		// COMMANDS
 		CreateSuperuserCommand,
-		AddDefaultImagesCommand
+		AddDefaultImagesCommand,
+		{
+			provide: APP_INTERCEPTOR,
+			useClass: GraphqlRequestContextInterceptor
+		},
+		{
+			provide: APP_INTERCEPTOR,
+			useClass: AuditErrorInterceptor
+		}
 	],
 	exports: [],
 })

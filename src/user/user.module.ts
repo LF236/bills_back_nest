@@ -14,6 +14,8 @@ import { FindOneUserUseCase } from './application/uses-cases/find-one-user.use-c
 import { PersonModule } from 'src/person/person.module';
 import { CreateSuperUserUseCase } from './application/uses-cases/create-super-user.use-case';
 import { FilesModule } from 'src/files/files.module';
+import { GetMeUseCase } from './application/uses-cases/get-me.use-case';
+import { LogsModule } from 'src/logs/logs.module';
 
 @Module({
 	providers: [
@@ -26,7 +28,8 @@ import { FilesModule } from 'src/files/files.module';
 		CreateUserUseCase,
 		FindAllUsersUseCase,
 		FindOneUserUseCase,
-		CreateSuperUserUseCase
+		CreateSuperUserUseCase,
+		GetMeUseCase
 	],
 	imports: [
 		RolsModule,
@@ -36,6 +39,7 @@ import { FilesModule } from 'src/files/files.module';
 		forwardRef(() => MagicLinkModule),
 		forwardRef(() => FilesModule),
 		CommonModule,
+		LogsModule
 	],
 	exports: [
 		TypeOrmModule,

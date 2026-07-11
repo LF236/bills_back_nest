@@ -8,6 +8,7 @@ import { saveImageWithUserIdHelper } from './infrastructure/helpers/save-image-w
 import { CreateFileDto } from './application/dtos/create-file.dto';
 import { CreateFileUseCase } from './application/use-cases/create-file.use-case';
 import { GetAvatarUseCase } from './application/use-cases/get-avatar.use-case';
+import { Audit } from 'src/logs/infrastructure/decorators/audit.decorator';
 
 @Controller('files')
 export class FilesController {
@@ -18,6 +19,12 @@ export class FilesController {
 
   @Post('upload/avatar')
   @GplAuthDecorator('admin', 'default_user')
+  @Audit({
+    module: 'files',
+		action: 'Upload Avatar',
+		resource: 'FilesController',
+		description: 'Admin Upload Avatar File'
+  })
   @UseInterceptors(FileInterceptor('file', {
     fileFilter: imageValidatorHelper,
     storage: saveImageWithUserIdHelper,
@@ -39,18 +46,24 @@ export class FilesController {
       type: 'user_avatar'
     };
 
-    const fileCreated = await this.createFileUseCase.execute(data, user.id);
+    const fileCreated = await this.createFileUseCase.execute(data, user);
     return fileCreated;
   }
 
   @Get('/avatar/:id')
   @GplAuthDecorator()
+    @Audit({
+    module: 'files',
+		action: 'Get Avatar',
+		resource: 'FilesController',
+		description: 'Get Avatar File'
+  })
   async getFile(
     @Param('id', ParseUUIDPipe) id: string,
     @GetUserDecorator() user: User,
     @Res() res
   ) {
-    const path = await this.getAvatarUseCase.execute(id);
+    const path = await this.getAvatarUseCase.execute(id, user);
     
     res.sendFile(path);
   } 

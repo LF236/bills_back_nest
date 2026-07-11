@@ -1,15 +1,10 @@
 import { Controller, Post, Body, Get, UseGuards, Req, SetMetadata } from '@nestjs/common';
 import { SigInDto } from './application/dto/signin.dto';
 import { SignInUseCase } from './application/use-cases/signin.use-case';
-import { AuthGuard } from '@nestjs/passport';
-import { GetUserDecorator } from './infraestructure/decorators/get-user.decorator';
-import { User } from 'src/user/domain/entities/user.entity';
-import { UserRoleGuard } from './infraestructure/guards/user-role.guard';
-import { RoleProtectedDecorator } from './infraestructure/decorators/role-protected.decorator';
-import { AuthDecorator } from './infraestructure/decorators/auth.decorator';
 import { SingUpDto } from './application/dto/singup.dto';
 import { CreateUserUseCase } from 'src/user/application/uses-cases/create-user.use-case';
 import { CreateUserInput } from 'src/user/application/dto/create-user.input';
+import { Audit } from 'src/logs/infrastructure/decorators/audit.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -19,6 +14,12 @@ export class AuthController {
 	) {};
 
 	@Post('signin')
+	@Audit({
+		action: 'Auth Login',
+		module: 'Auth',
+		description: 'User-Login-Account',
+		resource: 'auth.controller'
+	})
 	signIn(
 		@Body() signInDto: SigInDto
 	) {
@@ -26,6 +27,12 @@ export class AuthController {
 	}
 
 	@Post('signup')
+	@Audit({
+		action: 'Auth Sigup',
+		module: 'Auth',
+		description: 'User-Create-Account',
+		resource: 'auth.controller'
+	})
 	signUp(
 		@Body() signUpDto: SingUpDto
 	) {
