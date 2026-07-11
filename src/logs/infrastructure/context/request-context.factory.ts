@@ -15,6 +15,15 @@ export class RequestContextFactory {
     }
   }
 
+  private getBody(req: Request) : any {
+    const isGql = req.originalUrl === '/graphql';
+    if(isGql) {
+      return {};
+    } else {
+      return req.body;
+    }
+  }
+
   create(req: Request) : RequestContextInterface {
     if(!req) {
       return {
@@ -27,7 +36,8 @@ export class RequestContextFactory {
         device: null,
         method_http: null,
         route: null,
-        request_id: null
+        request_id: null,
+        metadata: {}
       }
     }
 
@@ -45,6 +55,7 @@ export class RequestContextFactory {
       method_http: req.method,
       route: this.getRoute(req),
       request_id: (req.headers['x-request-id'] as string) ?? null,
+      metadata: this.getBody(req)
     }
   }
 }

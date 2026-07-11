@@ -29,6 +29,7 @@ export class AuditErrorInterceptor implements NestInterceptor {
       context.getType<'http' | 'graphql'>() === 'http'
         ? context.switchToHttp().getRequest()
         : GqlExecutionContext.create(context).getContext().req;
+
         
     return next.handle().pipe(
       catchError((error) => {
@@ -41,8 +42,8 @@ export class AuditErrorInterceptor implements NestInterceptor {
           resource: audit.resource,
           description: audit.description,
           result: 'error',
-          message_error: error.message
-        });
+          message_error: error.message,
+        }, { metadata: request.body });
 
         return throwError(() => error);
       })

@@ -10,6 +10,7 @@ import { UpdatePersonUseCase } from './application/use-cases/update-person.use-c
 import { GetPersonByUserIdUseCase } from './application/use-cases/get-person-by-user-id.use-case';
 import { forwardRef } from '@nestjs/common';
 import { FilesModule } from 'src/files/files.module';
+import { LogsModule } from 'src/logs/logs.module';
 
 @Module({
   providers: [
@@ -28,7 +29,8 @@ import { FilesModule } from 'src/files/files.module';
     TypeOrmModule.forFeature([ PersonOrmEntity ]),
     CommonModule,
     forwardRef(() => UserModule),
-    FilesModule
+    FilesModule,
+    LogsModule
   ],
   exports: [
     TypeOrmModule,

@@ -39,9 +39,8 @@ export class SignInUseCase {
         if(userByEmail.is_active === false) throw new UnauthorizedException('User is inactive');
         if(!bcrypt.compareSync(password, userByEmail.password)) throw new UnauthorizedException('Email or password invalid');
 
-        
         const token = await this.generateJwtUseCase.execute({ id: userByEmail.id });
-        this.saveLog(userByEmail.id, userByEmail.name, timer.stop());
+        await this.saveLog(userByEmail.id, userByEmail.name, timer.stop());
         return { token };
     }
 }

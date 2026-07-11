@@ -31,4 +31,12 @@ export class MaginLinkEntity {
     isUsed() : boolean {
         return this.used_at !== null;
     }
+
+    getData(): any {
+        return {
+            id: this.id,
+            token: this.token,
+            expired_at: this.expires_at
+        }
+    }
 }

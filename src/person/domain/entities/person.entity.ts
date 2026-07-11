@@ -34,4 +34,8 @@ export class Person {
     );
     return person;
   }
+
+  getId() {
+    return this.id;
+  }
 }

@@ -10,6 +10,7 @@ import { forwardRef } from '@nestjs/common';
 import { RequestMagicLinkUseCase } from './application/use-cases/request-magic-link.use-case';
 import { CommonModule } from 'src/common/common.module';
 import { EmailModule } from 'src/email/email.module';
+import { LogsModule } from 'src/logs/logs.module';
 
 @Module({
 	controllers: [MagicLinkController],
@@ -28,7 +29,8 @@ import { EmailModule } from 'src/email/email.module';
 		]),
 		forwardRef(() => UserModule),
 		CommonModule,
-		EmailModule
+		EmailModule,
+		LogsModule
 	],
 	exports: [
 		TypeOrmModule,

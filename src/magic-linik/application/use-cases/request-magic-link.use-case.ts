@@ -5,6 +5,8 @@ import { IUserRepository } from "src/user/domain/interfaces/iuser.repository";
 import { UuidGeneratorPort } from "src/common/domain/port/uuid-generator.port";
 import { SendValidationEmailUseCase } from "src/email/application/use-cases/send-validation-email.use-case";
 import { CreatemagicLinkUseCase } from "./create-magic-link.use-case";
+import { LogsService } from "src/logs/logs.service";
+import { Timer } from "src/common/domain/timing/timer";
 
 @Injectable()
 export class RequestMagicLinkUseCase {
@@ -16,11 +18,27 @@ export class RequestMagicLinkUseCase {
         @Inject('UuidGeneratorPort')
         private readonly uuidGenerator: UuidGeneratorPort,
         private readonly sendValidationEmailUseCase: SendValidationEmailUseCase,
-        private readonly createMagicLinkUseCase: CreatemagicLinkUseCase
-                
+        private readonly createMagicLinkUseCase: CreatemagicLinkUseCase,
+        private readonly logService: LogsService
     ) {};
 
+    async saveLog(user_id: string | null = null, user_name: string = '', time: number = 0, token_generated: string = '') {
+        await this.logService.log({
+            user_id: user_id,
+            user_name: user_name,
+            action: 'Generate Magic Link',
+            module: 'magin_link',
+            resource: 'RequestMagicLinkUseCase',
+            description: 'User create new token',
+            result: 'success',
+            duration: time
+        }, {
+            token_generated
+        })
+    }
+
     async execute(requestNewTokenDto: RequestNewTokenDto) {
+        const timer = Timer.create();
         const user = await this.userRepository.findByEmail(requestNewTokenDto.email);
         if(!user) {
             throw new BadRequestException('This request is invalid');
@@ -38,17 +56,19 @@ export class RequestMagicLinkUseCase {
         const token = await this.createMagicLinkUseCase.execute({
             user_id: user.getId(),
             expires_at: new Date(Date.now() + 1000 * 60 * 15),
-            token: this.uuidGenerator.generate()
-        });
+            token: this.uuidGenerator.generate(),
+        }, user);
 
         await this.sendValidationEmailUseCase.execute(
             user.getEmail(),
             'Renew your validation token',
             ``,
             'validate-email.template.js',
-            token.getToken()
+            token.getToken(),
+            user
         );
 
+        this.saveLog(user.id, user.getUserName(), timer.stop(), token.getToken());
         return {
             message: 'A new validation token has been sent to your email'
         }

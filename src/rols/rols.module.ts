@@ -9,6 +9,7 @@ import { FindOneRolUseCase } from './application/use-cases/find-one-rol.use-case
 import { UpdateRolUseCase } from './application/use-cases/update-rol.use-case';
 import { GetRolesUseCase } from './application/use-cases/get-roles.use-case';
 import { DeleteRolUseCase } from './application/use-cases/delete-rol.use-case';
+import { LogsModule } from 'src/logs/logs.module';
 
 @Module({
 	providers: [
@@ -28,7 +29,8 @@ import { DeleteRolUseCase } from './application/use-cases/delete-rol.use-case';
 	],
 	imports: [
 		TypeOrmModule.forFeature([RolOrmEntity]),
-		PermissionsModule
+		PermissionsModule,
+		LogsModule
 	],
 	exports: [
 		TypeOrmModule,

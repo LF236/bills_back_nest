@@ -11,4 +11,6 @@ export interface RequestContextInterface {
   method_http: string | null;
   route: string | null;
   request_id: string | null;
+
+  metadata?: Record<string, any>
 }

@@ -135,5 +135,11 @@ export class LogOrmEntity {
     type: 'varchar',
     nullable: true
   })
-  device: string | null
+  device: string | null;
+
+  @Column({
+    type: 'jsonb',
+    default: {}
+  })
+  metadata: Record<string, any>;
 }

@@ -8,6 +8,7 @@ import { UserModule } from 'src/user/user.module';
 import { GetAvatarUseCase } from './application/use-cases/get-avatar.use-case';
 import { CreateCleanFileUseCase } from './application/use-cases/create-clean-file.use-case';
 import { forwardRef } from '@nestjs/common';
+import { LogsModule } from 'src/logs/logs.module';
 
 
 @Module({
@@ -25,7 +26,8 @@ import { forwardRef } from '@nestjs/common';
 
   imports: [
     TypeOrmModule.forFeature([FileOrmEntity]),
-    forwardRef(() => UserModule)
+    forwardRef(() => UserModule),
+    LogsModule
   ],
 
   exports: [

@@ -15,9 +15,16 @@ export class LogsService {
 
   async log(
     dto: CreateLogDto,
+    additional_data: any = null
   ) : Promise<void> {
     const request : any = this.context.getRequest();
-    const httpContext = this.requestContextFactory.create(request);
+    let httpContext = this.requestContextFactory.create(request);
+    if(additional_data) {
+      httpContext['metadata'] = {
+        ...httpContext['metadata'],
+        ...additional_data
+      }
+    }
     await this.logRepository.saveLog(dto, httpContext);
   }
 }

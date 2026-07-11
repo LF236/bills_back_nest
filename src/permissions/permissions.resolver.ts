@@ -11,6 +11,10 @@ import { GetOnePermissionUseCase } from './application/uses-cases/get-one-permis
 import { UpdatePermissionInput } from './application/dto/inputs/update-permission.input';
 import { UpdatePermissionUseCase } from './application/uses-cases/update-permission.use-case';
 import { DeletePermissionUseCase } from './application/uses-cases/delete-permission.use-case';
+import { Audit } from 'src/logs/infrastructure/decorators/audit.decorator';
+import { GplAuthDecorator } from 'src/auth/infraestructure/decorators/gpl-auth.decorator';
+import { User } from 'src/user/domain/entities/user.entity';
+import { GetUserDecorator } from 'src/auth/infraestructure/decorators/get-user.decorator';
 
 @Resolver(() => PermissionGraphQL)
 export class PermissionsResolver {
@@ -23,18 +27,34 @@ export class PermissionsResolver {
 	) {};
 	
 	@Mutation(() => PermissionGraphQL)
+	@GplAuthDecorator('admin', 'default_user')
+	@Audit({
+		module: 'permissions',
+		action: 'Create Permission',
+		resource: 'PermissionResolver',
+		description: 'Admin Create Permission'
+	})
 	createPermission(
-		@Args('createPermissionInput') createPermissionInput: CreatePermissionInput
+		@Args('createPermissionInput') createPermissionInput: CreatePermissionInput,
+		@GetUserDecorator() user: User
 	) {
-		return this.createPermissionUseCase.execute(createPermissionInput);
+		return this.createPermissionUseCase.execute(createPermissionInput, user);
 	}
 
 	@Query(() => GetPermissionsGraphQL, { name: 'permissions' })
+	@GplAuthDecorator('admin', 'default_user')
+	@Audit({
+		module: 'permissions',
+		action: 'Get Permissions',
+		resource: 'PermissionResolver',
+		description: 'Admin Get Permissions'
+	})
 	async findAll(
 		@Args() paginationArgs: PaginationArgs,
-		@Args() searchArgs: SearchArgs
+		@Args() searchArgs: SearchArgs,
+		@GetUserDecorator() user: User
 	) {
-		const { items, total } = await this.getPermissionsUseCase.execute(paginationArgs, searchArgs);
+		const { items, total } = await this.getPermissionsUseCase.execute(paginationArgs, searchArgs, user);
 		return {
 			items: items,
 			total: total
@@ -42,24 +62,48 @@ export class PermissionsResolver {
 	}
 
 	@Query(() => PermissionGraphQL, { name: 'permission' })
+	@GplAuthDecorator('admin', 'default_user')
+	@Audit({
+		module: 'permissions',
+		action: 'Get One Permission',
+		resource: 'PermissionResolver',
+		description: 'Admin Get One Permissions'		
+	})
 	findOne(
-		@Args('id', { type: () => ID }, ParseUUIDPipe) id: string
+		@Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
+		@GetUserDecorator() user: User
 	) {
-		return this.getOnePermissionUseCase.execute(id);
+		return this.getOnePermissionUseCase.execute(id, user);
 	}
 
 	@Mutation(() => PermissionGraphQL)
+	@GplAuthDecorator('admin', 'default_user')
+	@Audit({
+		module: 'permissions',
+		action: 'Update Permission',
+		resource: 'PermissionResolver',
+		description: 'Admin Update Permission'				
+	})
 	updatePermission(
-		@Args('updatePermissionInput') updatePermissionInput: UpdatePermissionInput
+		@Args('updatePermissionInput') updatePermissionInput: UpdatePermissionInput,
+		@GetUserDecorator() user: User
 	) {
-		return this.updatePermissionUseCase.execute(updatePermissionInput);
+		return this.updatePermissionUseCase.execute(updatePermissionInput, user);
 	}
 	
 	@Mutation(() => Boolean)
+	@GplAuthDecorator('admin', 'default_user')
+	@Audit({
+		module: 'permissions',
+		action: 'Delete Permission',
+		resource: 'PermissionResolver',
+		description: 'Admin Delete Permission'				
+	})	
 	async removePermission(
-		@Args('id', { type: () => ID }, ParseUUIDPipe) id: string
+		@Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
+		@GetUserDecorator() user: User
 	) : Promise<Boolean> {
-		const isDeleted = await this.deletePermissionUseCase.execute(id);
+		const isDeleted = await this.deletePermissionUseCase.execute(id, user);
 		return isDeleted;
 	}
 }

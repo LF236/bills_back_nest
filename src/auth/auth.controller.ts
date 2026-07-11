@@ -14,6 +14,12 @@ export class AuthController {
 	) {};
 
 	@Post('signin')
+	@Audit({
+		action: 'Auth Login',
+		module: 'Auth',
+		description: 'User-Login-Account',
+		resource: 'auth.controller'
+	})
 	signIn(
 		@Body() signInDto: SigInDto
 	) {
@@ -22,7 +28,7 @@ export class AuthController {
 
 	@Post('signup')
 	@Audit({
-		action: 'Auth Login',
+		action: 'Auth Sigup',
 		module: 'Auth',
 		description: 'User-Create-Account',
 		resource: 'auth.controller'

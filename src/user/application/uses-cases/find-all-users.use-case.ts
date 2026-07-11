@@ -14,39 +14,25 @@ export class FindAllUsersUseCase {
         private readonly logService: LogsService
     ) {};
 
-    saveLog(user_id: string, user_name: string, duration = 0, err: any = null) {
-        if(!err) {
-            this.logService.log({
-                user_id,
-                user_name,
-                action: 'FindAllUsers',
-                module: 'User',
-                resource: 'FindAllUsersUseCase',
-                description: 'Find-All-Users',
-                result: 'success',
-                message_error: '',
-                duration: duration
-            })
-        } else {
-            this.logService.log({
-                user_id,
-                user_name,
-                action: 'FindAllUsers',
-                module: 'User',
-                resource: 'FindAllUsersUseCase',
-                description: 'Find-All-Users',
-                result: 'error',
-                message_error: err.message ?? 'unknow',
-                duration: duration
-            })
-        }
+    async saveLog(user_id: string, user_name: string, duration = 0, metadata: any) {
+        await this.logService.log({
+            user_id,
+            user_name,
+            action: 'FindAllUsers',
+            module: 'User',
+            resource: 'FindAllUsersUseCase',
+            description: 'Find-All-Users',
+            result: 'success',
+            message_error: '',
+            duration: duration
+        }, { ...metadata })
     }
 
     async execute(paginationArgs: PaginationArgs, searchArgs: SearchArgs, user: User) {
         const timer = Timer.create();
         const users = await this.userRepository.findAll(paginationArgs, searchArgs);
         const count = await this.userRepository.count(searchArgs);
-        this.saveLog(user.getId(), user.getUserName(), timer.stop(), null);
+        await this.saveLog(user.getId(), user.getUserName(), timer.stop(), { ...paginationArgs, ...searchArgs });
         return {
             users: users,
             total: count
