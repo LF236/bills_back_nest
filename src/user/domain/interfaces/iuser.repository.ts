@@ -14,4 +14,5 @@ export interface IUserRepository {
 	deleteAllUsers(): Promise<void>;
 	existsById(id: string): Promise<boolean>;
 	updateAvatar(id_file: string, user_id: string) : Promise<boolean>;
+	toggleUserStatus(user_id: string, status: boolean) : Promise<User>;
 }

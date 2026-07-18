@@ -111,6 +111,7 @@ type Mutation {
   updateBill(updateBillInput: UpdateBillInput!): Bill!
   removeBill(id: Int!): Bill!
   createUser(createUserInput: CreateUserInput!): UserGraphQL!
+  toggleUserStatus(toggleUserStatusInput: ToggleUserStatusInput!): UserGraphQL!
   createRol(createRolInput: CreateRolInput!): RolsGraphql!
   updateRol(updateRolInput: UpdateRolInput!): RolsGraphql!
   deleteRol(id: ID!): Boolean!
@@ -138,6 +139,11 @@ input CreateUserInput {
   name: String!
   password: String!
   confirmPassword: String!
+}
+
+input ToggleUserStatusInput {
+  id: ID!
+  status: Boolean!
 }
 
 input CreateRolInput {
