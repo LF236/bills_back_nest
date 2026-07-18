@@ -16,6 +16,7 @@ import { CreateSuperUserUseCase } from './application/uses-cases/create-super-us
 import { FilesModule } from 'src/files/files.module';
 import { GetMeUseCase } from './application/uses-cases/get-me.use-case';
 import { LogsModule } from 'src/logs/logs.module';
+import { ToggleUserStatusUseCase } from './application/uses-cases/toggle-user-status.use-case';
 
 @Module({
 	providers: [
@@ -29,7 +30,8 @@ import { LogsModule } from 'src/logs/logs.module';
 		FindAllUsersUseCase,
 		FindOneUserUseCase,
 		CreateSuperUserUseCase,
-		GetMeUseCase
+		GetMeUseCase,
+		ToggleUserStatusUseCase
 	],
 	imports: [
 		RolsModule,
