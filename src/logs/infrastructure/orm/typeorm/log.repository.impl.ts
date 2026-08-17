@@ -16,8 +16,21 @@ export class LogRepositoryImpl implements LogRepositoryPort {
     private readonly repo: Repository<LogOrmEntity>
   ) {};
 
-  findById(id: string): Promise<LogEntity | null> {
-    throw new Error('Method not implemented.');
+  async findById(id: string): Promise<LogEntity | null> {
+    const query = await this.repo.createQueryBuilder('logs')
+      .leftJoinAndSelect('logs.user', 'user')
+      .where('logs.id = :id', { id })
+      .getOne();
+
+    if(!query) return null;
+
+    const logEntity = LogEntity.createFromObj(query);
+    if(query.user) {
+      const userEntity = User.createFromObj(query.user);
+      logEntity.setUser(userEntity);
+    }
+
+    return logEntity;
   }
 
   async saveLog(dto: CreateLogDto, addionalData: any): Promise<LogEntity> {
