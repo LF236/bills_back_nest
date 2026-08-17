@@ -3,7 +3,6 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { IsOptional, Min } from "class-validator";
 
 @ArgsType()
-
 export class PaginationArgs {
 	@Field(() => Int, { nullable: true })
 	@IsOptional()
