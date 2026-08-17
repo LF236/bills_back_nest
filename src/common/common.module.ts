@@ -6,6 +6,7 @@ import { PersonTypes } from './domain/enums/person-types.enum';
 import { RequesContextMiddleware } from './infraestructure/middlewares/request-context.middleware';
 import { RequestContextService } from './infraestructure/context/request-context.service';
 import { GraphqlRequestContextInterceptor } from './infraestructure/interceptors/graphql-request-context.interceptor';
+import { CatalogLogTypes } from './domain/enums/catalog-log-types.enum';
 
 @Module({
     providers: [
@@ -28,10 +29,14 @@ export class CommonModule implements NestModule {
             name: 'Sex',
             description: 'Gender of a person'
         }),
-            registerEnumType(PersonTypes, {
-                name: 'PersonTypes',
-                description: 'Type of a person, either physical or moral'
-            })
+        registerEnumType(PersonTypes, {
+            name: 'PersonTypes',
+            description: 'Type of a person, either physical or moral'
+        }),
+        registerEnumType(CatalogLogTypes, {
+            name: 'CatalogLogTypes',
+            description: 'Supported log filter types'
+        })
     }
 
     configure(consumer: MiddlewareConsumer) {

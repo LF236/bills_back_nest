@@ -1,17 +1,15 @@
 import { ArgsType, Field, Int } from "@nestjs/graphql";
-import { FileInterceptor } from "@nestjs/platform-express";
 import { IsOptional, Min } from "class-validator";
 
 @ArgsType()
 
 export class PaginationArgs {
-	@Field(() => Int, { nullable: true })
+	@Field(() => Int, { nullable: true, defaultValue: 0 })
 	@IsOptional()
 	@Min(0)
 	offset?: number = 0;
-
 	
-	@Field(() => Int, { nullable: true })
+	@Field(() => Int, { nullable: true, defaultValue: 10 })
 	@IsOptional()
 	@Min(1)
 	limit?: number = 10;
@@ -19,4 +17,10 @@ export class PaginationArgs {
 	@Field(() => Boolean, { nullable: true })
 	@IsOptional()
 	paginate?: boolean = true;
+
+	constructor() {
+		this.offset = 0;
+		this.limit = 10;
+		this.paginate = true;
+	}
 }

@@ -1,3 +1,5 @@
+import { User } from "src/user/domain/entities/user.entity";
+
 export class LogEntity {
   constructor(
     private readonly id: string | null,
@@ -16,7 +18,9 @@ export class LogEntity {
     private readonly request_id: string | null,
     private readonly duration: number | null,
     private readonly created_at: Date | null,
-    private readonly updated_at: Date | null
+    private readonly updated_at: Date | null,
+    private readonly metadata: any | null,
+    private user: User | null
   ){};
 
   static createFromObj(data: any): LogEntity {
@@ -38,7 +42,12 @@ export class LogEntity {
       data.duration ?? null,
       data.created_at ?? null,
       data.updated_at ?? null,
+      data.metadata ?? null,
+      null
     );
   }
-  
+
+  setUser(user: User) {
+    this.user = user;
+  }
 }

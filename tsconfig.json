@@ -18,5 +18,6 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "jsx": "react-jsx",
-  }
+  },
+  "exclude": ["node_modules", "dist"]
 }

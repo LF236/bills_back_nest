@@ -7,5 +7,4 @@ export class SearchArgs {
 	@IsOptional()
 	@IsString()
 	search?: string;
-
 }
