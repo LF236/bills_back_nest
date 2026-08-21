@@ -12,7 +12,44 @@ services:
       - ./postgres_data:/var/lib/postgresql/data
     networks:
       - laravel-dev
+  redis:
+    image: redislabs/redismod
+    container_name: bills_redis
+    ports:
+      - 6379:6379
+    networks:
+      - laravel-dev
+  minio:
+    image: minio/minio
+    container_name: bills_minio
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    volumes:
+      - ./minio_data:/data
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - laravel-dev
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    container_name: bills_meilisearch
+    ports:
+      - "7700:7700"
+    volumes:
+      - ./meilisearch_data:/meili_data
+    environment:
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-masterKey}
+      MEILI_NO_ANALYTICS: "true"
+  
 networks:
   laravel-dev:
     driver: bridge
     external: true
+volumes:
+  minio_data:
+    driver: local
+  meilisearch_data:
+    driver: local

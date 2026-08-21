@@ -61,3 +61,5 @@ static/bills/*
 static/user/*
 static/user/**/*
 !static/user/.gitkeep
+meilisearch_data/
+minio_data/
