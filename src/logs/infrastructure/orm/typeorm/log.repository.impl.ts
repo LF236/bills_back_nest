@@ -65,14 +65,13 @@ export class LogRepositoryImpl implements LogRepositoryPort {
     limit = limit ?? 10;
     offset = offset ?? 0;
     paginate = paginate ?? true;
-
     const query = this.repo.createQueryBuilder('logs')
       .leftJoinAndSelect('logs.user', 'user');
     
     if(paginate) {
       query
         .take(limit)
-        .offset(offset);
+        .skip(offset);
     }
 
     if(searchArgs.search) {
