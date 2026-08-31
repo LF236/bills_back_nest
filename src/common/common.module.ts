@@ -7,6 +7,7 @@ import { RequesContextMiddleware } from './infraestructure/middlewares/request-c
 import { RequestContextService } from './infraestructure/context/request-context.service';
 import { GraphqlRequestContextInterceptor } from './infraestructure/interceptors/graphql-request-context.interceptor';
 import { CatalogLogTypes } from './domain/enums/catalog-log-types.enum';
+import { CryptoAdapter } from './infraestructure/adapters/crypto.adapter';
 
 @Module({
     providers: [
@@ -14,11 +15,16 @@ import { CatalogLogTypes } from './domain/enums/catalog-log-types.enum';
             provide: 'UuidGeneratorPort',
             useClass: UuidAdapter
         },
+        {
+            provide: 'CryptoGeneratorPort',
+            useClass: CryptoAdapter
+        },
         RequestContextService,
         GraphqlRequestContextInterceptor
     ],
     exports: [
         'UuidGeneratorPort',
+        'CryptoGeneratorPort',
         RequestContextService,
         GraphqlRequestContextInterceptor
     ]

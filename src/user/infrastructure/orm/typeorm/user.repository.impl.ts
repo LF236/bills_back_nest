@@ -115,6 +115,17 @@ export class UserOrmRepository implements IUserRepository {
 		return query.affected > 0;
 	}
 
+	async updatePassword(newPasswordHasshed: string, userId: string): Promise<boolean> {
+		const query = await this.repo.createQueryBuilder()
+			.update(UserOrmEntity)
+			.set({ password: newPasswordHasshed })
+			.where('id = :id', { id: userId })
+			.execute();
+			
+		if(!query.affected) return false;
+		return query.affected > 0;
+	}
+
 	async existsById(id: string): Promise<boolean> {
 		const userExists = await this.repo.createQueryBuilder('user')
 			.where('user.id = :id', { id })

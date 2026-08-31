@@ -15,6 +15,7 @@ import { GetPersonByUserIdUseCase } from 'src/person/application/use-cases/get-p
 import { GetUsersGraphQL } from './interface/graphql/get-users.graphql-type';
 import { GetMeUseCase } from './application/uses-cases/get-me.use-case';
 import { Audit } from 'src/logs/infrastructure/decorators/audit.decorator';
+import { ResetPasswordUserCase } from './application/uses-cases/reset-password.use-case';
 
 @Resolver(() => UserGraphQL)
 export class UserResolver {
@@ -23,7 +24,8 @@ export class UserResolver {
 		private readonly findAllUsersUseCase: FindAllUsersUseCase,
 		private readonly findOneUserUseCase: FindOneUserUseCase,
 		private readonly getPersonByUerIdUseCase: GetPersonByUserIdUseCase,
-		private readonly getMeUseCase: GetMeUseCase
+		private readonly getMeUseCase: GetMeUseCase,
+		private readonly resetPasswordUseCase: ResetPasswordUserCase
 	) {};
 	
 	@Mutation(() => UserGraphQL)
@@ -84,6 +86,21 @@ export class UserResolver {
 		@GetUserDecorator() user: User
 	) {
 		return this.getMeUseCase.execute(user);
+	}
+
+	@Mutation(() => Boolean)
+	@GplAuthDecorator('admin', 'default_user')
+	@Audit({
+		module: 'users',
+		action: 'Reset Password',
+		resource: 'UserResolver',
+		description: 'Admin reset user password'
+	})
+	adminRequestUserPassword(
+		@Args('id', { type: () => String }, ParseUUIDPipe) id: string,
+		@GetUserDecorator() user: User
+	) {
+		return this.resetPasswordUseCase.execute(id, user);
 	}
 
 	@ResolveField(() => PersonGraphqlType, { nullable: true })
