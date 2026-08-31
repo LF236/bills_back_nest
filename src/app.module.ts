@@ -34,6 +34,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { GraphqlRequestContextInterceptor } from './common/infraestructure/interceptors/graphql-request-context.interceptor';
 import { AuditErrorInterceptor } from './logs/infrastructure/interceptors/audit-error.interceptor';
 import { ExceptionsModule } from './exceptions/exceptions.module';
+import { RedisModule } from './shared/infrastructure/redis/redis.module';
 
 @Module({
 	imports: [
@@ -46,6 +47,7 @@ import { ExceptionsModule } from './exceptions/exceptions.module';
 		UserModule, 
 		AuthModule,
 		CommonModule,
+		RedisModule,
 		TypeOrmModule.forRoot({
 			type: 'postgres',
 			host: process.env.DB_HOST || 'localhost',
