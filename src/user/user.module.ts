@@ -16,6 +16,8 @@ import { CreateSuperUserUseCase } from './application/uses-cases/create-super-us
 import { FilesModule } from 'src/files/files.module';
 import { GetMeUseCase } from './application/uses-cases/get-me.use-case';
 import { LogsModule } from 'src/logs/logs.module';
+import { ResetPasswordUserCase } from './application/uses-cases/reset-password.use-case';
+import { RateLimiterModule } from 'src/shared/infrastructure/rate-limiter/rate-limiter.module';
 
 @Module({
 	providers: [
@@ -29,7 +31,8 @@ import { LogsModule } from 'src/logs/logs.module';
 		FindAllUsersUseCase,
 		FindOneUserUseCase,
 		CreateSuperUserUseCase,
-		GetMeUseCase
+		GetMeUseCase,
+		ResetPasswordUserCase
 	],
 	imports: [
 		RolsModule,
@@ -39,7 +42,8 @@ import { LogsModule } from 'src/logs/logs.module';
 		forwardRef(() => MagicLinkModule),
 		forwardRef(() => FilesModule),
 		CommonModule,
-		LogsModule
+		LogsModule,
+		RateLimiterModule
 	],
 	exports: [
 		TypeOrmModule,

@@ -14,4 +14,5 @@ export interface IUserRepository {
 	deleteAllUsers(): Promise<void>;
 	existsById(id: string): Promise<boolean>;
 	updateAvatar(id_file: string, user_id: string) : Promise<boolean>;
+	updatePassword(newPasswordHasshed: string, userId: string) : Promise<boolean>;
 }

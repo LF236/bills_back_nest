@@ -160,6 +160,7 @@ type Mutation {
   updateBill(updateBillInput: UpdateBillInput!): Bill!
   removeBill(id: Int!): Bill!
   createUser(createUserInput: CreateUserInput!): UserGraphQL!
+  adminRequestUserPassword(id: String!): Boolean!
   createRol(createRolInput: CreateRolInput!): RolsGraphql!
   updateRol(updateRolInput: UpdateRolInput!): RolsGraphql!
   deleteRol(id: ID!): Boolean!
