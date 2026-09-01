@@ -43,6 +43,8 @@ export class ApplicationExceptionFilter implements ExceptionFilter {
         return 409;
       case 'SERVICE_UNAVAILABLE':
         return 503;
+      case 'TOO_MANY_REQUESTS':
+        return 429;
       default:
         return 500;
     }

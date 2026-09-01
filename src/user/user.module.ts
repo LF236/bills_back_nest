@@ -17,6 +17,7 @@ import { FilesModule } from 'src/files/files.module';
 import { GetMeUseCase } from './application/uses-cases/get-me.use-case';
 import { LogsModule } from 'src/logs/logs.module';
 import { ResetPasswordUserCase } from './application/uses-cases/reset-password.use-case';
+import { RateLimiterModule } from 'src/shared/infrastructure/rate-limiter/rate-limiter.module';
 
 @Module({
 	providers: [
@@ -41,7 +42,8 @@ import { ResetPasswordUserCase } from './application/uses-cases/reset-password.u
 		forwardRef(() => MagicLinkModule),
 		forwardRef(() => FilesModule),
 		CommonModule,
-		LogsModule
+		LogsModule,
+		RateLimiterModule
 	],
 	exports: [
 		TypeOrmModule,
