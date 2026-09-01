@@ -15,6 +15,8 @@ import { GetPersonByUserIdUseCase } from 'src/person/application/use-cases/get-p
 import { GetUsersGraphQL } from './interface/graphql/get-users.graphql-type';
 import { GetMeUseCase } from './application/uses-cases/get-me.use-case';
 import { Audit } from 'src/logs/infrastructure/decorators/audit.decorator';
+import { ToggleUserStatusInput } from './application/dto/toggle-user-status.input';
+import { ToggleUserStatusUseCase } from './application/uses-cases/toggle-user-status.use-case';
 import { ResetPasswordUserCase } from './application/uses-cases/reset-password.use-case';
 
 @Resolver(() => UserGraphQL)
@@ -25,6 +27,7 @@ export class UserResolver {
 		private readonly findOneUserUseCase: FindOneUserUseCase,
 		private readonly getPersonByUerIdUseCase: GetPersonByUserIdUseCase,
 		private readonly getMeUseCase: GetMeUseCase,
+		private readonly toggleUserStatusUseCase: ToggleUserStatusUseCase,
 		private readonly resetPasswordUseCase: ResetPasswordUserCase
 	) {};
 	
@@ -86,6 +89,22 @@ export class UserResolver {
 		@GetUserDecorator() user: User
 	) {
 		return this.getMeUseCase.execute(user);
+	}
+
+	@Mutation(() => UserGraphQL, { name: 'toggleUserStatus' })
+	@GplAuthDecorator('admin', 'default_user')
+	@Audit({
+		module: 'users',
+		action: 'Toggle User Status',
+		resource: 'UserResolver',
+		description: 'Toggle enabled user'
+	})
+	async toggleUserStatus(
+		@Args('toggleUserStatusInput') toggleUserStatusInput: ToggleUserStatusInput,
+		@GetUserDecorator() user: User
+	) {
+		const toggleUser = await this.toggleUserStatusUseCase.execute(toggleUserStatusInput, user);
+		return toggleUser;
 	}
 
 	@Mutation(() => Boolean)

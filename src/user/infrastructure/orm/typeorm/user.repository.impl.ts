@@ -152,4 +152,15 @@ export class UserOrmRepository implements IUserRepository {
 
 		return true;
 	}
+
+	async toggleUserStatus(user_id: string, status: boolean): Promise<User> {
+		const updated = await this.repo.createQueryBuilder()
+			.update(UserOrmEntity)
+			.set({ is_active: status })
+			.where('id = :id', { id: user_id })
+			.execute();
+
+		const userUpdated = await this.findById(user_id);
+		return userUpdated!!;
+	}
 }

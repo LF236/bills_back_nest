@@ -15,6 +15,7 @@ export const AppDataSource = new DataSource({
 	username: process.env.DB_USER || 'postgres',
 	password: process.env.DB_PASSWORD || 'password',
 	database: process.env.DB_NAME || 'mydatabase',
+	ssl: process.env.DB_SSL === 'true',
 	entities: [UserOrmEntity, PermissionOrmEntity, RolOrmEntity, MagicLinkOrmEntity, PersonOrmEntity],
 	migrations: ['migrations/*.ts'],
 	synchronize: false

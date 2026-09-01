@@ -95,46 +95,6 @@ type GetPermissionsGraphQL {
   total: Int!
 }
 
-type LogGraphqlType {
-  id: ID!
-  user_id: String
-  user_name: String
-  action: String!
-  module: String!
-  resource: String!
-  description: String!
-  result: String!
-  message_error: String
-  ip: String
-  user_agent: String
-  method_http: String
-  route: String
-  request_id: String
-  duration: Float
-  created_at: DateTime!
-  updated_at: DateTime!
-  browser: String
-  browser_version: String
-  os: String
-  device: String
-  metadata: JSON!
-  user: UserGraphQL
-}
-
-"""
-The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
-scalar JSON
-
-type GetLogsGraphQL {
-  items: [LogGraphqlType!]!
-  total: Int!
-}
-
-type GetCatalogGraphQL {
-  values: [String!]!
-}
-
 type Query {
   bill(id: Int!): Bill!
   users(offset: Int = 0, limit: Int = 10, search: String): GetUsersGraphQL!
@@ -144,14 +104,6 @@ type Query {
   rol(id: ID!): RolsGraphql!
   permissions(offset: Int = 0, limit: Int = 10, paginate: Boolean = true, search: String): GetPermissionsGraphQL!
   permission(id: ID!): PermissionGraphQL!
-  logs(offset: Int = 0, limit: Int = 10, paginate: Boolean = true, search: String, action: String, module: String): GetLogsGraphQL!
-  calogs(type: CatalogLogTypes!): GetCatalogGraphQL!
-}
-
-"""Supported log filter types"""
-enum CatalogLogTypes {
-  ACTION
-  MODULE
 }
 
 type Mutation {
@@ -159,7 +111,7 @@ type Mutation {
   updateBill(updateBillInput: UpdateBillInput!): Bill!
   removeBill(id: Int!): Bill!
   createUser(createUserInput: CreateUserInput!): UserGraphQL!
-  adminRequestUserPassword(id: String!): Boolean!
+  toggleUserStatus(toggleUserStatusInput: ToggleUserStatusInput!): UserGraphQL!
   createRol(createRolInput: CreateRolInput!): RolsGraphql!
   updateRol(updateRolInput: UpdateRolInput!): RolsGraphql!
   deleteRol(id: ID!): Boolean!
@@ -187,6 +139,11 @@ input CreateUserInput {
   name: String!
   password: String!
   confirmPassword: String!
+}
+
+input ToggleUserStatusInput {
+  id: ID!
+  status: Boolean!
 }
 
 input CreateRolInput {
