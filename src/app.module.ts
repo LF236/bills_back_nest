@@ -33,6 +33,8 @@ import { LogOrmEntity } from './logs/infrastructure/orm/typeorm/log.orm.entity';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { GraphqlRequestContextInterceptor } from './common/infraestructure/interceptors/graphql-request-context.interceptor';
 import { AuditErrorInterceptor } from './logs/infrastructure/interceptors/audit-error.interceptor';
+import { ExceptionsModule } from './exceptions/exceptions.module';
+import { RedisModule } from './shared/infrastructure/redis/redis.module';
 
 @Module({
 	imports: [
@@ -40,10 +42,12 @@ import { AuditErrorInterceptor } from './logs/infrastructure/interceptors/audit-
 			isGlobal: true,
 			envFilePath: `.env`
 		}),
+		
 		BillModule, 
 		UserModule, 
 		AuthModule,
 		CommonModule,
+		RedisModule,
 		TypeOrmModule.forRoot({
 			type: 'postgres',
 			host: process.env.DB_HOST || 'localhost',
@@ -88,7 +92,8 @@ import { AuditErrorInterceptor } from './logs/infrastructure/interceptors/audit-
 		MagicLinkModule,
 		PersonModule,
 		FilesModule,
-		LogsModule
+		LogsModule,
+		ExceptionsModule
 	],
 	providers: [
 		AppService,

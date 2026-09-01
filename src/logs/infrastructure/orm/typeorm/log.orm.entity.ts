@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { UserOrmEntity } from 'src/user/infrastructure/orm/typeorm/user.orm-entity';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('logs')
 export class LogOrmEntity {
@@ -142,4 +143,10 @@ export class LogOrmEntity {
     default: {}
   })
   metadata: Record<string, any>;
+
+  @ManyToOne(() => UserOrmEntity, (user) => user.logs, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: UserOrmEntity;
 }

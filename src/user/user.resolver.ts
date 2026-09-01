@@ -17,6 +17,7 @@ import { GetMeUseCase } from './application/uses-cases/get-me.use-case';
 import { Audit } from 'src/logs/infrastructure/decorators/audit.decorator';
 import { ToggleUserStatusInput } from './application/dto/toggle-user-status.input';
 import { ToggleUserStatusUseCase } from './application/uses-cases/toggle-user-status.use-case';
+import { ResetPasswordUserCase } from './application/uses-cases/reset-password.use-case';
 
 @Resolver(() => UserGraphQL)
 export class UserResolver {
@@ -26,7 +27,8 @@ export class UserResolver {
 		private readonly findOneUserUseCase: FindOneUserUseCase,
 		private readonly getPersonByUerIdUseCase: GetPersonByUserIdUseCase,
 		private readonly getMeUseCase: GetMeUseCase,
-		private readonly toggleUserStatusUseCase: ToggleUserStatusUseCase
+		private readonly toggleUserStatusUseCase: ToggleUserStatusUseCase,
+		private readonly resetPasswordUseCase: ResetPasswordUserCase
 	) {};
 	
 	@Mutation(() => UserGraphQL)
@@ -103,6 +105,21 @@ export class UserResolver {
 	) {
 		const toggleUser = await this.toggleUserStatusUseCase.execute(toggleUserStatusInput, user);
 		return toggleUser;
+	}
+
+	@Mutation(() => Boolean)
+	@GplAuthDecorator('admin', 'default_user')
+	@Audit({
+		module: 'users',
+		action: 'Reset Password',
+		resource: 'UserResolver',
+		description: 'Admin reset user password'
+	})
+	adminRequestUserPassword(
+		@Args('id', { type: () => String }, ParseUUIDPipe) id: string,
+		@GetUserDecorator() user: User
+	) {
+		return this.resetPasswordUseCase.execute(id, user);
 	}
 
 	@ResolveField(() => PersonGraphqlType, { nullable: true })

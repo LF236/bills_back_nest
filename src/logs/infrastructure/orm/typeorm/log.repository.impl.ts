@@ -5,6 +5,10 @@ import { LogOrmEntity } from './log.orm.entity';
 import { Repository } from 'typeorm';
 import { LogEntity } from 'src/logs/domain/entities/LogEntity';
 import { CreateLogDto } from 'src/logs/application/dtos/create-log.dto';
+import { PaginationArgs } from 'src/common/application/dto/args/pagination.args';
+import { SearchArgs } from 'src/common/dtos/args/search.args';
+import { User } from 'src/user/domain/entities/user.entity';
+import { GetLogsFiltersArgs } from 'src/logs/application/dtos/args/get-logs-filters.args';
 @Injectable()
 export class LogRepositoryImpl implements LogRepositoryPort {
   constructor(
@@ -41,5 +45,84 @@ export class LogRepositoryImpl implements LogRepositoryPort {
 
     log = await this.repo.save(log);
     return LogEntity.createFromObj(log);
+  }
+
+  async findAll(paginationDto: PaginationArgs, searchArgs: SearchArgs, aditionalFilters: GetLogsFiltersArgs): Promise<LogEntity[]> {
+    let { limit, offset, paginate } = paginationDto;
+    limit = limit ?? 10;
+    offset = offset ?? 0;
+    paginate = paginate ?? true;
+
+    const query = this.repo.createQueryBuilder('logs')
+      .leftJoinAndSelect('logs.user', 'user');
+    
+    if(paginate) {
+      query
+        .take(limit)
+        .offset(offset);
+    }
+
+    if(searchArgs.search) {
+      query.andWhere('(logs.description) ILIKE :search OR (user.name) ILIKE :search', { search: `%${searchArgs.search}%` });
+    }
+
+    if(aditionalFilters.action) {
+      query.andWhere('(logs.action) ILIKE :action', { action: `${aditionalFilters.action}` });
+    }
+
+    if(aditionalFilters.module) {
+      query.andWhere('(logs.module) ILIKE :module', { module: `${aditionalFilters.module}` });
+    }
+
+    query.orderBy('logs.created_at', 'DESC');
+
+    const data = await query.getMany();
+    
+    if(data && data.length > 0) {
+      const logsEntities = data.map(log => {
+        const logEntity = LogEntity.createFromObj(log);
+        if(log.user) {
+          let userEntity = User.createFromObj(log.user);
+          logEntity.setUser(userEntity);
+        }
+
+        return logEntity;
+      });
+
+      return logsEntities;
+    }
+    
+    return [];
+  }
+
+  async count(searchArgs: SearchArgs, aditionalFilters: GetLogsFiltersArgs) : Promise<number> {
+    const { search } = searchArgs;
+    const query = this.repo.createQueryBuilder('logs')
+      .select('COUNT(logs.id)', 'count')
+      .leftJoin('logs.user', 'user');
+
+    if(search) {
+      query.andWhere('(logs.description) ILIKE :search OR (user.name) ILIKE :search', { search: `%${search}%` });
+    }
+    
+    if(aditionalFilters.module) {
+      query.andWhere('(logs.module) ILIKE :module', { module: `%${aditionalFilters.module}` });
+    }
+
+    if(aditionalFilters.action) {
+      query.andWhere('(logs.action) ILIKE :action', { action: `${aditionalFilters.action}` });
+    }
+
+    const result = await query.getRawOne();
+    return parseInt(result.count, 10);
+  }
+
+  async getCatalog(type: string): Promise<String[]> {
+    const query = this.repo.createQueryBuilder('logs')
+      .select(`DISTINCT logs.${type}`, type)
+      .where(`logs.${type} IS NOT NULL`)
+      .orderBy(`logs.${type}`, 'ASC');
+    const result = await query.getRawMany();
+    return result.map(item => item[type]);
   }
 }

@@ -3,4 +3,5 @@ import { EmailEntity } from "../entities/email.entity";
 export interface EmailServicePort {
     sendEmail(email: EmailEntity) : Promise<boolean>;
     sendValidateAccountEmail(email: EmailEntity, link: string) : Promise<boolean>;
+    sendEmailWithTemplate(email: EmailEntity, payload: any) : Promise<boolean>;
 }

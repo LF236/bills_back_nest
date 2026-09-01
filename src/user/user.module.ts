@@ -12,11 +12,13 @@ import { MagicLinkModule } from 'src/magic-linik/magic-link.module';
 import { forwardRef } from '@nestjs/common';
 import { FindOneUserUseCase } from './application/uses-cases/find-one-user.use-case';
 import { PersonModule } from 'src/person/person.module';
-import { CreateSuperUserUseCase } from './application/uses-cases/create-super-user.use-case';
 import { FilesModule } from 'src/files/files.module';
 import { GetMeUseCase } from './application/uses-cases/get-me.use-case';
 import { LogsModule } from 'src/logs/logs.module';
 import { ToggleUserStatusUseCase } from './application/uses-cases/toggle-user-status.use-case';
+import { ResetPasswordUserCase } from './application/uses-cases/reset-password.use-case';
+import { RateLimiterModule } from 'src/shared/infrastructure/rate-limiter/rate-limiter.module';
+import { CreateSuperUserUseCase } from './application/uses-cases/create-super-user.use-case';
 
 @Module({
 	providers: [
@@ -31,7 +33,8 @@ import { ToggleUserStatusUseCase } from './application/uses-cases/toggle-user-st
 		FindOneUserUseCase,
 		CreateSuperUserUseCase,
 		GetMeUseCase,
-		ToggleUserStatusUseCase
+		ToggleUserStatusUseCase,
+		ResetPasswordUserCase
 	],
 	imports: [
 		RolsModule,
@@ -41,7 +44,8 @@ import { ToggleUserStatusUseCase } from './application/uses-cases/toggle-user-st
 		forwardRef(() => MagicLinkModule),
 		forwardRef(() => FilesModule),
 		CommonModule,
-		LogsModule
+		LogsModule,
+		RateLimiterModule
 	],
 	exports: [
 		TypeOrmModule,
