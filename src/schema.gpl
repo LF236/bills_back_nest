@@ -145,6 +145,7 @@ type Query {
   permissions(offset: Int = 0, limit: Int = 10, paginate: Boolean = true, search: String): GetPermissionsGraphQL!
   permission(id: ID!): PermissionGraphQL!
   logs(offset: Int = 0, limit: Int = 10, paginate: Boolean = true, search: String, action: String, module: String): GetLogsGraphQL!
+  log(id: ID!): LogGraphqlType!
   calogs(type: CatalogLogTypes!): GetCatalogGraphQL!
 }
 
