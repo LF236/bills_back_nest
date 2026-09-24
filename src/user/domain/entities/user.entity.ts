@@ -9,6 +9,7 @@ export class User {
 		public readonly email: string,
 		public readonly password: string,
 		public readonly is_active: boolean,
+		public readonly created_at: Date,
 		public readonly verified_at?: Date,
 		public avatar_file_id?: string,
 		public roles?: Rol[],
@@ -23,6 +24,7 @@ export class User {
 			data.email,
 			data.password,
 			data.is_active,
+			data.created_at,
 			data.verified_at,
 			data.avatar_file_id
 		);
@@ -47,6 +49,7 @@ export class User {
 			this.email,
 			this.is_active,
 			this.roles ? this.roles.map( role => RolsGraphql.createFromObj(role) ) : [],
+			this.created_at,
 			this.avatar_file_id
 		);	
 	}
