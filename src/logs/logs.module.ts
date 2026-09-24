@@ -10,6 +10,7 @@ import { AuditErrorInterceptor } from './infrastructure/interceptors/audit-error
 import { LogsResolver } from './logs.resolver';
 import { GetLogsUseCase } from './application/use-cases/get-logs.use-case';
 import { GetCatalogLogUseCase } from './application/use-cases/get-catalog-log.use-case';
+import { GetLogUseCase } from './application/use-cases/get-log.use-case';
 
 @Module({
   providers: [
@@ -22,7 +23,8 @@ import { GetCatalogLogUseCase } from './application/use-cases/get-catalog-log.us
     RequestContextFactory,
     AuditErrorInterceptor,
     GetLogsUseCase,
-    GetCatalogLogUseCase
+    GetCatalogLogUseCase,
+    GetLogUseCase
   ],
   imports: [
     TypeOrmModule.forFeature([ LogOrmEntity ]),
