@@ -156,4 +156,24 @@ export class RolOrmRepositoryImpl implements IRolRepository {
         if(!rol) return null;
         return Rol.createFromObj(rol);
     }
+
+    async findByIds(ids: string[]): Promise<Rol[]> {
+        if (ids.length === 0) return [];
+
+        const rols = await this.repo.createQueryBuilder('rol')
+            .where('rol.id IN (:...ids)', { ids })
+            .getMany();
+
+        if(!rols || rols.length === 0) return [];
+        return rols.map(rol => Rol.createFromObj(rol));
+    }
+
+    async getAllNamesAndIds(): Promise<{ id: string; name: string; description: string | null; }[]> {
+        const rols = await this.repo.createQueryBuilder('rol')
+            .select(['rol.id', 'rol.name', 'rol.description'])
+            .where('rol.deleted_at IS NULL')
+            .getMany();
+
+        return rols.map(rol => ({ id: rol.id, name: rol.name, description: rol.description ?? null }));
+    }
 }

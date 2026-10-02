@@ -14,4 +14,6 @@ export interface IRolRepository {
     validateIfRolExistsByName(name: string) : Promise<boolean>;
     dropAllRols() : Promise<void>;
     findByName(name: string) : Promise<Rol | null>;
+    getAllNamesAndIds() : Promise<{id: string, name: string}[]>;
+    findByIds(ids: string[]) : Promise<Rol[]>;
 }

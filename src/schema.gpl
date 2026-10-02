@@ -91,6 +91,12 @@ type GetRolsGraphQL {
   total: Float!
 }
 
+type GetAllWithNameIdTypeGraphql {
+  id: ID!
+  name: String!
+  description: String
+}
+
 type GetPermissionsGraphQL {
   items: [PermissionGraphQL!]!
   total: Int!
@@ -142,6 +148,7 @@ type Query {
   user(id: String!): UserGraphQL!
   me: UserGraphQL!
   rols(offset: Int = 0, limit: Int = 10, search: String): GetRolsGraphQL!
+  allRolsWithIdName: [GetAllWithNameIdTypeGraphql!]!
   rol(id: ID!): RolsGraphql!
   permissions(offset: Int = 0, limit: Int = 10, paginate: Boolean = true, search: String): GetPermissionsGraphQL!
   permission(id: ID!): PermissionGraphQL!
@@ -162,6 +169,7 @@ type Mutation {
   removeBill(id: Int!): Bill!
   createUser(createUserInput: CreateUserInput!): UserGraphQL!
   toggleUserStatus(toggleUserStatusInput: ToggleUserStatusInput!): UserGraphQL!
+  updateUserRoles(updateUserRolesInput: UpdateUserRolesInput!): UserGraphQL!
   adminRequestUserPassword(id: String!): Boolean!
   createRol(createRolInput: CreateRolInput!): RolsGraphql!
   updateRol(updateRolInput: UpdateRolInput!): RolsGraphql!
@@ -195,6 +203,11 @@ input CreateUserInput {
 input ToggleUserStatusInput {
   id: ID!
   status: Boolean!
+}
+
+input UpdateUserRolesInput {
+  userId: ID!
+  rolesIds: [ID!]!
 }
 
 input CreateRolInput {

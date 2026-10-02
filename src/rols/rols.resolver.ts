@@ -18,6 +18,8 @@ import { GplAuthDecorator } from 'src/auth/infraestructure/decorators/gpl-auth.d
 import { Audit } from 'src/logs/infrastructure/decorators/audit.decorator';
 import { GetUserDecorator } from 'src/auth/infraestructure/decorators/get-user.decorator';
 import { User } from 'src/user/domain/entities/user.entity';
+import { GetAllWithNameIdTypeGraphql } from './interfaces/graphql/get-all-with-name-id-type';
+import { GetAllWithIdNameUseCase } from './application/use-cases/get-all-with-id-name.use-case';
 CreateRolInput;
 @Resolver(() => RolsGraphql)
 export class RolsResolver {
@@ -27,7 +29,8 @@ export class RolsResolver {
 		private readonly updateRolUseCase: UpdateRolUseCase,
 		private readonly getRolsUseCae: GetRolesUseCase,
 		private readonly deleteRolUseCase: DeleteRolUseCase,
-		private readonly permissionsLoader: PermissionsLoader
+		private readonly permissionsLoader: PermissionsLoader,
+		private readonly getAllWithIdNameUseCase: GetAllWithIdNameUseCase
 	) {};
 
 
@@ -60,6 +63,20 @@ export class RolsResolver {
 		@GetUserDecorator() user: User
 	) {
 		return this.getRolsUseCae.execute(paginationArgs, searchArgs, user);
+	}
+
+	@Query(() => [GetAllWithNameIdTypeGraphql], { name: 'allRolsWithIdName' })
+	@GplAuthDecorator('admin', 'default_user')
+	@Audit({
+		module: 'rols',
+		action: 'Get all Rols with Name and Id',
+		resource: 'RolsResolver',
+		description: 'Admin Get all Rols with Name and Id'
+	})
+	getAllRolsWithNameId(
+		@GetUserDecorator() user: User
+	) {
+		return this.getAllWithIdNameUseCase.execute(user);
 	}
 
 	@Query(() => RolsGraphql, { name: 'rol' })
