@@ -18,6 +18,8 @@ import { Audit } from 'src/logs/infrastructure/decorators/audit.decorator';
 import { ToggleUserStatusInput } from './application/dto/toggle-user-status.input';
 import { ToggleUserStatusUseCase } from './application/uses-cases/toggle-user-status.use-case';
 import { ResetPasswordUserCase } from './application/uses-cases/reset-password.use-case';
+import { UpdateUserRolesUseCase } from './application/uses-cases/update-user-roles.use-case';
+import { UpdateUserRolesInput } from './application/dto/update-user-roles.input';
 
 @Resolver(() => UserGraphQL)
 export class UserResolver {
@@ -28,7 +30,8 @@ export class UserResolver {
 		private readonly getPersonByUerIdUseCase: GetPersonByUserIdUseCase,
 		private readonly getMeUseCase: GetMeUseCase,
 		private readonly toggleUserStatusUseCase: ToggleUserStatusUseCase,
-		private readonly resetPasswordUseCase: ResetPasswordUserCase
+		private readonly resetPasswordUseCase: ResetPasswordUserCase,
+		private readonly updateUserRolesUseCase: UpdateUserRolesUseCase
 	) {};
 	
 	@Mutation(() => UserGraphQL)
@@ -105,6 +108,22 @@ export class UserResolver {
 	) {
 		const toggleUser = await this.toggleUserStatusUseCase.execute(toggleUserStatusInput, user);
 		return toggleUser;
+	}
+
+	@Mutation(() => UserGraphQL, { name: 'updateUserRoles' })
+	@GplAuthDecorator('admin', 'default_user')
+	@Audit({
+		module: 'users',
+		action: 'Update User Roles',
+		resource: 'UserResolver',
+		description: 'Admin update user roles'
+	})
+	async updateUserRoles(
+		@Args('updateUserRolesInput') updateUserRolesInput: UpdateUserRolesInput,
+		@GetUserDecorator() user: User
+	) {
+		const updatedUser = await this.updateUserRolesUseCase.execute(updateUserRolesInput, user);
+		return updatedUser;
 	}
 
 	@Mutation(() => Boolean)

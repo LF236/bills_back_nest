@@ -16,4 +16,5 @@ export interface IUserRepository {
 	updateAvatar(id_file: string, user_id: string) : Promise<boolean>;
 	toggleUserStatus(user_id: string, status: boolean) : Promise<User>;
 	updatePassword(newPasswordHasshed: string, userId: string) : Promise<boolean>;
+	updateRoles(userId: string, rolesIds: string[]) : Promise<User>;
 }

@@ -10,6 +10,7 @@ import { UpdateRolUseCase } from './application/use-cases/update-rol.use-case';
 import { GetRolesUseCase } from './application/use-cases/get-roles.use-case';
 import { DeleteRolUseCase } from './application/use-cases/delete-rol.use-case';
 import { LogsModule } from 'src/logs/logs.module';
+import { GetAllWithIdNameUseCase } from './application/use-cases/get-all-with-id-name.use-case';
 
 @Module({
 	providers: [
@@ -25,7 +26,8 @@ import { LogsModule } from 'src/logs/logs.module';
 		FindOneRolUseCase,
 		UpdateRolUseCase,
 		GetRolesUseCase,
-		DeleteRolUseCase
+		DeleteRolUseCase,
+		GetAllWithIdNameUseCase
 	],
 	imports: [
 		TypeOrmModule.forFeature([RolOrmEntity]),

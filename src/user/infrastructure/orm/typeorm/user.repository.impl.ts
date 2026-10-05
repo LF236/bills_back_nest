@@ -163,4 +163,19 @@ export class UserOrmRepository implements IUserRepository {
 		const userUpdated = await this.findById(user_id);
 		return userUpdated!!;
 	}
+
+	async updateRoles(userId: string, rolesIds: string[]): Promise<User> {
+		const user = await this.repo.findOne({ where: { id: userId }, relations: ['roles'] });
+		const currentRoleIds = user?.roles?.map(r => r.id) ?? [];
+
+		const relation = this.repo.createQueryBuilder()
+			.relation(UserOrmEntity, 'roles')
+			.of(userId);
+
+		if (currentRoleIds.length > 0) await relation.remove(currentRoleIds);
+		if (rolesIds.length > 0) await relation.add(rolesIds);
+
+		const userUpdated = await this.findById(userId);
+		return userUpdated!!;
+	}
 }
