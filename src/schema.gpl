@@ -142,6 +142,10 @@ type GetCatalogGraphQL {
   values: [String!]!
 }
 
+type AdminResendRenewEmailGraphqlType {
+  message: String!
+}
+
 type Query {
   bill(id: Int!): Bill!
   users(offset: Int = 0, limit: Int = 10, search: String): GetUsersGraphQL!
@@ -179,6 +183,7 @@ type Mutation {
   removePermission(id: ID!): Boolean!
   createPerson(createPersonInput: CreatePersonInput!): PersonGraphqlType!
   updatePerson(updatePersonInput: UpdatePersonInput!): PersonGraphqlType!
+  adminResendValidationEmail(userId: String!): AdminResendRenewEmailGraphqlType!
   seedDatabase: Boolean!
 }
 

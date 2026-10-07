@@ -11,17 +11,22 @@ import { RequestMagicLinkUseCase } from './application/use-cases/request-magic-l
 import { CommonModule } from 'src/common/common.module';
 import { EmailModule } from 'src/email/email.module';
 import { LogsModule } from 'src/logs/logs.module';
+import { AdminResendValidationEmailUseCase } from './application/use-cases/admin-resend-validation-email.use-case';
+import { MagicLinkResolver } from './magic-link.resolver';
+import { RateLimiterModule } from 'src/shared/infrastructure/rate-limiter/rate-limiter.module';
 
 @Module({
 	controllers: [MagicLinkController],
 	providers: [
+		MagicLinkResolver,
 		{
 			provide: 'MagicLinkRepository',
 			useClass: MaginLickOrmImpl
 		},
 		CreatemagicLinkUseCase,
 		ValidateMagicLinkUseCase,
-		RequestMagicLinkUseCase
+		RequestMagicLinkUseCase,
+		AdminResendValidationEmailUseCase
 	],
 	imports: [
 		TypeOrmModule.forFeature([
@@ -30,7 +35,8 @@ import { LogsModule } from 'src/logs/logs.module';
 		forwardRef(() => UserModule),
 		CommonModule,
 		EmailModule,
-		LogsModule
+		LogsModule,
+		RateLimiterModule
 	],
 	exports: [
 		TypeOrmModule,

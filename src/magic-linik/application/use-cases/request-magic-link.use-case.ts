@@ -27,7 +27,7 @@ export class RequestMagicLinkUseCase {
             user_id: user_id,
             user_name: user_name,
             action: 'Generate Magic Link',
-            module: 'magin_link',
+            module: 'magic_link',
             resource: 'RequestMagicLinkUseCase',
             description: 'User create new token',
             result: 'success',
@@ -68,7 +68,7 @@ export class RequestMagicLinkUseCase {
             user
         );
 
-        this.saveLog(user.id, user.getUserName(), timer.stop(), token.getToken());
+        await this.saveLog(user.id, user.getUserName(), timer.stop(), token.getToken());
         return {
             message: 'A new validation token has been sent to your email'
         }
