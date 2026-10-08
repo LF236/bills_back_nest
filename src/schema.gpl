@@ -44,6 +44,7 @@ type UserGraphQL {
   roles: [RolsGraphql!]!
   avatar_file_id: String
   created_at: DateTime!
+  verified_at: DateTime
   person: PersonGraphqlType
   avatarUrl: String
 }
