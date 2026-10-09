@@ -134,7 +134,7 @@ export class UserResolver {
 		resource: 'UserResolver',
 		description: 'Admin reset user password'
 	})
-	adminRequestUserPassword(
+	adminResetUserPassword(
 		@Args('id', { type: () => String }, ParseUUIDPipe) id: string,
 		@GetUserDecorator() user: User
 	) {
