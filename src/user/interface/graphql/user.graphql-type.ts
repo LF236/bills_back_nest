@@ -24,7 +24,10 @@ export class UserGraphQL {
 	@Field(() => Date)
 	created_at: Date;
 
-	constructor(id: string, name: string, email: string, is_active: boolean, roles: RolsGraphql[], created_at: Date, avatar_file_id?: string) {
+	@Field(() => Date, { nullable: true })
+	verified_at: Date | null;
+
+	constructor(id: string, name: string, email: string, is_active: boolean, roles: RolsGraphql[], created_at: Date, avatar_file_id?: string, verified_at?: Date) {
 		this.id = id;
 		this.email = email;
 		this.is_active = is_active;
@@ -32,5 +35,6 @@ export class UserGraphQL {
 		this.name = name;
 		this.avatar_file_id = avatar_file_id ?? null;
 		this.created_at = created_at;
+		this.verified_at = verified_at ?? null;
 	}
 }

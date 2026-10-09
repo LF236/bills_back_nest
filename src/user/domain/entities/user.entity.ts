@@ -50,7 +50,8 @@ export class User {
 			this.is_active,
 			this.roles ? this.roles.map( role => RolsGraphql.createFromObj(role) ) : [],
 			this.created_at,
-			this.avatar_file_id
+			this.avatar_file_id,
+			this.verified_at
 		);	
 	}
 

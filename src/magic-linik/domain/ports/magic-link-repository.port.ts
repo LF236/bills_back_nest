@@ -7,4 +7,5 @@ export interface MagicLinkRepositoryPort {
     markedTokenAsUsed(token: string) : Promise<boolean>;
     findLastTokenByUserId(user_id: string) : Promise<MaginLinkEntity | null>;
     dropAllToken(): Promise<void>;
+    countByUserIdSince(userId: string, since: number) : Promise<number>;
 }

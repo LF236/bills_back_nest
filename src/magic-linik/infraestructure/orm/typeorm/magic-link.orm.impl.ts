@@ -55,4 +55,14 @@ export class MaginLickOrmImpl implements MagicLinkRepositoryPort {
             .from(MagicLinkOrmEntity)
             .execute();
     }
+
+    async countByUserIdSince(userId: string, since: number) : Promise<number> {
+        const query = await this.repo.createQueryBuilder('magic_link')
+            .select('COUNT(*)', 'count')
+            .where('magic_link.user_id = :userId', { userId })
+            .andWhere('magic_link.created_at >= :since', { since: new Date(since) })
+            .getRawOne();
+
+        return parseInt(query.count, 10);
+    }
 }
