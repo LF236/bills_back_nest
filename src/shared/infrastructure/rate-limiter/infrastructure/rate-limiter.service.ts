@@ -15,7 +15,7 @@ export class RateLimiterService implements RateLimiterPort {
     if(count === 1) {
       await this.redis.expire(key, windowSeconds);
     }
-    console.log(personalizedMessage);
+
     if(count > limit) {
       throw new TooManyRequestsException(personalizedMessage || 'Limit of attemps aceeded. Try again');
     }
