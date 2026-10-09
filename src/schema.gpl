@@ -170,7 +170,7 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): UserGraphQL!
   toggleUserStatus(toggleUserStatusInput: ToggleUserStatusInput!): UserGraphQL!
   updateUserRoles(updateUserRolesInput: UpdateUserRolesInput!): UserGraphQL!
-  adminRequestUserPassword(id: String!): Boolean!
+  adminResetUserPassword(id: String!): Boolean!
   createRol(createRolInput: CreateRolInput!): RolsGraphql!
   updateRol(updateRolInput: UpdateRolInput!): RolsGraphql!
   deleteRol(id: ID!): Boolean!

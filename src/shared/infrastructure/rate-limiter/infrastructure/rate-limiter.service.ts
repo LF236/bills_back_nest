@@ -10,14 +10,14 @@ export class RateLimiterService implements RateLimiterPort {
     private readonly redis: Redis
   ) {};
 
-  async check(key: string, limit: number, windowSeconds: number): Promise<void> {
+  async check(key: string, limit: number, windowSeconds: number, personalizedMessage?: string): Promise<void> {
     const count = await this.redis.incr(key);
     if(count === 1) {
       await this.redis.expire(key, windowSeconds);
     }
 
     if(count > limit) {
-      throw new TooManyRequestsException('Limit of attemps aceeded. Try again');
+      throw new TooManyRequestsException(personalizedMessage || 'Limit of attemps aceeded. Try again');
     }
   }
 }

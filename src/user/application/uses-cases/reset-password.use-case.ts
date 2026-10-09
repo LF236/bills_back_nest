@@ -11,9 +11,12 @@ import { IUserRepository } from 'src/user/domain/interfaces/iuser.repository';
 
 @Injectable()
 export class ResetPasswordUserCase {
-  private static readonly RATE_LIMIT_KEY_PREFIX = 'rate_limit:admin_reset_password';
-  private static readonly RATE_LIMIT_MAX = 3;
-  private static readonly RATE_LIMIT_WINDOW = 10800;
+ 
+  private static readonly USER_RATE_LIMIT_KEY = 'admin_reset_password_user';
+  private static readonly ADMIN_RATE_LIMIT_KEY = 'admin_reset_password_admin';
+  private static readonly USER_RATE_LIMIT_MAX = 3;
+  private static readonly ADMIN_RATE_LIMIT_MAX = 10;
+  private static readonly RATE_LIMIT_WINDOW = 3600;
 
   constructor(
     private readonly logService: LogsService,
@@ -40,11 +43,21 @@ export class ResetPasswordUserCase {
   }
 
   async execute(userId: string, user: User) {
+    
     await this.rateLimiterService.check(
-      `${ResetPasswordUserCase.RATE_LIMIT_KEY_PREFIX}:${userId}`,
-      ResetPasswordUserCase.RATE_LIMIT_MAX,
-      ResetPasswordUserCase.RATE_LIMIT_WINDOW
+      `${ResetPasswordUserCase.USER_RATE_LIMIT_KEY}:${userId}`,
+      ResetPasswordUserCase.USER_RATE_LIMIT_MAX,
+      ResetPasswordUserCase.RATE_LIMIT_WINDOW,
+      'You have reached the limit of password reset attempts for this user. Please try again later.'
     );
+
+    await this.rateLimiterService.check(
+      `${ResetPasswordUserCase.ADMIN_RATE_LIMIT_KEY}:${user.getId()}`,
+      ResetPasswordUserCase.ADMIN_RATE_LIMIT_MAX,
+      ResetPasswordUserCase.RATE_LIMIT_WINDOW,
+      'You admin account has reached the limit of password reset attempts. Please try again later.'
+    );
+
     const timer = Timer.create();
     const userToChange = await this.userService.findById(userId);
     if(!userToChange) {
