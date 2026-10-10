@@ -20,6 +20,8 @@ import { ToggleUserStatusUseCase } from './application/uses-cases/toggle-user-st
 import { ResetPasswordUserCase } from './application/uses-cases/reset-password.use-case';
 import { UpdateUserRolesUseCase } from './application/uses-cases/update-user-roles.use-case';
 import { UpdateUserRolesInput } from './application/dto/update-user-roles.input';
+import { AdminCreateUserUseCase } from './application/uses-cases/admin-create-user.use-case';
+import { AdminCreateUserInput } from './application/dto/admin-create-user.input';
 
 @Resolver(() => UserGraphQL)
 export class UserResolver {
@@ -31,7 +33,8 @@ export class UserResolver {
 		private readonly getMeUseCase: GetMeUseCase,
 		private readonly toggleUserStatusUseCase: ToggleUserStatusUseCase,
 		private readonly resetPasswordUseCase: ResetPasswordUserCase,
-		private readonly updateUserRolesUseCase: UpdateUserRolesUseCase
+		private readonly updateUserRolesUseCase: UpdateUserRolesUseCase,
+		private readonly adminCreateUserUseCase: AdminCreateUserUseCase
 	) {};
 	
 	@Mutation(() => UserGraphQL)
@@ -47,6 +50,21 @@ export class UserResolver {
 		@GetUserDecorator() user: User
 	) {
 		return this.createUserUseCase.execute(createUserInput, user);
+	}
+
+	@Mutation(() => UserGraphQL)
+	@GplAuthDecorator('admin', 'default_user')
+	@Audit({
+		module: 'users',
+		action: 'Admin Create User',
+		resource: 'UserResolver',
+		description: 'Admin Create User with person entity'
+	})
+	adminCreateUser(
+		@Args('adminCreateUserInput') adminCreateUserInput: AdminCreateUserInput,
+		@GetUserDecorator() user: User
+	) {
+		return this.adminCreateUserUseCase.execute(adminCreateUserInput, user);
 	}
 
 	@Query(() => GetUsersGraphQL, { name: 'users' })

@@ -70,7 +70,7 @@ export class CreateSuperUserUseCase {
 
       await this.saveLog(timer.stop(), null)
       return createdUser.getUserEntity();
-    } catch (err) {
+    } catch (err: any) {
       await this.saveLog(timer.stop(), null);
       throw new Error(err.message);
     }
