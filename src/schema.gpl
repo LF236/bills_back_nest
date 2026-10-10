@@ -168,6 +168,7 @@ type Mutation {
   updateBill(updateBillInput: UpdateBillInput!): Bill!
   removeBill(id: Int!): Bill!
   createUser(createUserInput: CreateUserInput!): UserGraphQL!
+  adminCreateUser(adminCreateUserInput: AdminCreateUserInput!): UserGraphQL!
   toggleUserStatus(toggleUserStatusInput: ToggleUserStatusInput!): UserGraphQL!
   updateUserRoles(updateUserRolesInput: UpdateUserRolesInput!): UserGraphQL!
   adminRequestUserPassword(id: String!): Boolean!
@@ -198,6 +199,31 @@ input CreateUserInput {
   name: String!
   password: String!
   confirmPassword: String!
+}
+
+input AdminCreateUserInput {
+  email: String!
+  password: String!
+  name: String!
+  personData: AdminCreatePersonInput
+}
+
+input AdminCreatePersonInput {
+  first_name: String!
+  last_name: String!
+  second_last_name: String
+  sex: Sex!
+  birth_date: DateTime
+  curp: String
+  rfc: String
+  person_type: PersonTypes!
+  company_name: String
+}
+
+"""Type of a person, either physical or moral"""
+enum PersonTypes {
+  physical
+  moral
 }
 
 input ToggleUserStatusInput {
@@ -248,12 +274,6 @@ input CreatePersonInput {
   rfc: String
   person_type: PersonTypes!
   company_name: String
-}
-
-"""Type of a person, either physical or moral"""
-enum PersonTypes {
-  physical
-  moral
 }
 
 input UpdatePersonInput {

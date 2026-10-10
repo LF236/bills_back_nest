@@ -20,6 +20,7 @@ import { ResetPasswordUserCase } from './application/uses-cases/reset-password.u
 import { RateLimiterModule } from 'src/shared/infrastructure/rate-limiter/rate-limiter.module';
 import { CreateSuperUserUseCase } from './application/uses-cases/create-super-user.use-case';
 import { UpdateUserRolesUseCase } from './application/uses-cases/update-user-roles.use-case';
+import { AdminCreateUserUseCase } from './application/uses-cases/admin-create-user.use-case';
 
 @Module({
 	providers: [
@@ -36,7 +37,8 @@ import { UpdateUserRolesUseCase } from './application/uses-cases/update-user-rol
 		GetMeUseCase,
 		ToggleUserStatusUseCase,
 		ResetPasswordUserCase,
-		UpdateUserRolesUseCase
+		UpdateUserRolesUseCase,
+		AdminCreateUserUseCase
 	],
 	imports: [
 		RolsModule,

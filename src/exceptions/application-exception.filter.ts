@@ -45,6 +45,8 @@ export class ApplicationExceptionFilter implements ExceptionFilter {
         return 503;
       case 'TOO_MANY_REQUESTS':
         return 429;
+      case 'BAD_REQUEST_EXCEPTION':
+        return 400;
       default:
         return 500;
     }
